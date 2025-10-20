@@ -123,7 +123,7 @@ Contributions are welcome! If you have ideas for improvements, new tools, bug fi
   * Submit a pull request.
   * Join our [Discord server](https://discord.gg/KA66dHUF4P) to discuss.
 
-You can also donate to the project maintainers [here](https://hapara.fail/contribute).
+You can also find donation options [here](https://hapara.fail/contribute).
 
 -----
 
