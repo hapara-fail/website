@@ -5,6 +5,7 @@
 `hapara.fail` is dedicated to exposing the pervasive nature of student surveillance technology used in educational environments. We provide technical insights, practical tools, and resources to empower students and advocate for digital privacy. This repository contains the source code for the v2 website, built on Cloudflare Workers.
 
 **Live Site:** **[https://hapara.fail](https://hapara.fail)** (Update if needed)
+
 [![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/1wfyp.svg)](https://status.hapara.fail/)
 
 ---
