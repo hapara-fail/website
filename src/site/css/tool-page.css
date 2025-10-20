@@ -1,0 +1,242 @@
+/* Styles for gfu-tool.html and wifi-tool.html */
+:root {
+    /* Notification Colors */
+    --warning-glow-color: rgba(234, 179, 8, 0.6);
+    --notification-warning-bg-tint: rgba(234, 179, 8, 0.15);
+    --notification-warning-border-tint: rgba(234, 179, 8, 0.3);
+    --success-glow-color: rgba(34, 197, 94, 0.7);
+    --notification-success-bg-tint: rgba(34, 197, 94, 0.15);
+    --notification-success-border-tint: rgba(34, 197, 94, 0.3);
+}
+.parallax-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background: conic-gradient(from 180deg at 50% 50%, var(--accent-1) 0%, var(--accent-2) 30%, #0a091a 60%, var(--accent-1) 100%);
+    animation: rotateBgTool 40s linear infinite; filter: blur(120px); opacity: 0.3;
+}
+@keyframes rotateBgTool { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.tool-main-content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 20px 40px;
+}
+@media (max-width: 768px) {
+    .tool-main-content {
+        padding: 100px 12px 30px;
+    }
+}
+.wizard {
+    width: 100%;
+    max-width: 680px;
+    min-height: 520px;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+@media (max-width: 768px) {
+    .wizard {
+        border-radius: 12px;
+        min-height: 480px;
+    }
+}
+.wizard-progress {
+    display: flex;
+    padding: 20px 40px 0;
+    gap: 8px;
+    min-height: 24px;
+}
+.progress-step {
+    flex-grow: 1;
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 99px;
+    transition: background-color 0.4s ease;
+}
+.progress-step.completed { background-color: var(--accent-1); }
+.progress-step.active { background-color: var(--accent-2); }
+.wizard-steps {
+    position: relative;
+    flex-grow: 1;
+    padding: 30px 40px 40px;
+    display: flex;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    .wizard-steps {
+        padding: 25px 25px 30px;
+    }
+}
+.wizard-step {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(30px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s;
+}
+@media (max-width: 768px) {
+    .wizard-step {
+        left: 25px;
+        right: 25px;
+        gap: 15px;
+    }
+}
+.wizard-step.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition-delay: 0s;
+}
+.wizard-step.is-exiting {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+.wizard-step .step-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 10px;
+    color: var(--accent-1);
+}
+.wizard-step h2 { font-size: 2rem; font-weight: 800; margin-bottom: 5px; }
+.wizard-step .step-label { font-size: 0.9rem; font-weight: 600; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.05em; }
+.wizard-step p { color: var(--text-secondary); max-width: 450px; margin-left: auto; margin-right: auto; }
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--border-color);
+}
+@media (max-width: 768px) {
+    .wizard-nav {
+        padding: 15px 25px;
+    }
+}
+.wizard-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+}
+.wizard-btn:hover {
+    background-color: var(--surface);
+    color: var(--text-primary);
+}
+.wizard-btn-primary {
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    border: none;
+    color: var(--text-primary);
+}
+.wizard-btn-primary:hover {
+     box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+.main-footer {
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+}
+.notification-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+@keyframes subtleGlow {
+    0%, 100% { box-shadow: 0 0 18px -6px var(--glow-color, #000); }
+    50% { box-shadow: 0 0 28px 2px var(--glow-color, #000); }
+}
+.notification {
+    color: var(--text-primary);
+    padding: 12px 18px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 320px;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+.notification.warning, .notification.error {
+    background: var(--notification-warning-bg-tint);
+    border: 1px solid var(--notification-warning-border-tint);
+    --glow-color: var(--warning-glow-color);
+    animation: subtleGlow 3s ease-in-out infinite;
+}
+.notification.success {
+    background: var(--notification-success-bg-tint);
+    border: 1px solid var(--notification-success-border-tint);
+    --glow-color: var(--success-glow-color);
+    animation: subtleGlow 3s ease-in-out infinite;
+}
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+.notification-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: 2px;
+}
+.notification.warning .notification-icon, .notification.error .notification-icon { color: var(--warning-glow-color); }
+.notification.success .notification-icon { color: var(--success-glow-color); }
+.notification-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.notification-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+.notification-message {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+.notification-message code { word-break: break-all; }
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0 0 8px;
+    flex-shrink: 0;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.notification-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}

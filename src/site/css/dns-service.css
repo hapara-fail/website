@@ -1,0 +1,251 @@
+/* Styles for dns-service.html */
+#setup .container {
+    text-align: center;
+}
+.page-hero {
+    padding-top: 180px;
+    padding-bottom: 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+@media (max-width: 768px) {
+    .page-hero {
+        padding-top: 140px;
+        padding-bottom: 80px;
+    }
+}
+.page-hero h1 {
+    font-size: clamp(3rem, 9vw, 5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+.page-hero p {
+    max-width: 650px;
+    margin: 0 auto 2.5rem;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    color: var(--text-secondary);
+}
+@media (max-width: 768px) {
+    .page-hero .container {
+        padding: 0 8px;
+    }
+}
+.dns-address-box {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 25px;
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 1.2rem;
+}
+@media (max-width: 600px) {
+    .dns-address-box {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+}
+.dns-address-box code {
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--accent-2);
+    font-size: 1.3rem;
+}
+.benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 768px) { .benefits-grid { grid-template-columns: 1fr 1fr; } }
+.benefit-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: var(--bg-offset);
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.benefit-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-1);
+    box-shadow: 0 0 35px rgba(82, 74, 242, 0.2);
+}
+.benefit-card .icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    color: var(--accent-1);
+}
+.benefit-card h3 { font-size: 1.4rem; margin-bottom: 8px; }
+.benefit-card p { color: var(--text-secondary); }
+/* Tabs scroll system */
+.tabs-scroll-wrapper {
+    position: relative;
+    margin-bottom: 40px;
+}
+.tabs-nav {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+    justify-content: center;
+}
+@media (max-width: 768px) {
+    .tabs-scroll-wrapper { margin-bottom: 30px; }
+    .tabs-nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0 36px; /* leave space for arrows */
+    }
+    .tabs-nav::-webkit-scrollbar { display: none; }
+
+    .tabs-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        background: var(--bg-offset);
+        color: var(--text-secondary);
+        cursor: pointer;
+        z-index: 20;
+        opacity: 0.95;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .tabs-arrow[hidden] { display: none; }
+    .tabs-arrow:active { transform: translateY(-50%) scale(0.97); }
+    .tabs-arrow--left { left: 0; }
+    .tabs-arrow--right { right: 0; }
+}
+.tab-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+.tab-button:hover { color: var(--text-primary); }
+.tab-button.active { color: var(--accent-2); }
+@media (max-width: 768px) {
+    .tab-button {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}
+.tab-underline {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    background-color: var(--accent-2);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.tabs-content-wrapper { position: relative; min-height: 320px; margin-bottom: 40px; }
+@media (max-width: 768px) {
+    .tabs-content-wrapper {
+        min-height: 400px;
+        margin-bottom: 60px;
+    }
+}
+.tab-content {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
+    visibility: hidden;
+    transition: transform 0.4s ease, opacity 0.4s ease, visibility 0s 0.4s;
+}
+.tab-content.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateX(0);
+    transition-delay: 0s;
+}
+.tab-content.slide-from-right { transform: translateX(30px); }
+.tab-content.slide-from-left { transform: translateX(-30px); }
+.instructions-panel {
+    background-color: var(--bg-offset);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 30px 40px;
+    color: var(--text-secondary);
+}
+@media (max-width: 768px) {
+    .instructions-panel {
+        padding: 20px 25px;
+    }
+}
+.instructions-panel p { margin-bottom: 20px; }
+.instructions-panel ol {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+.instructions-panel strong { color: var(--text-primary); }
+.instructions-panel code {
+    font-family: monospace;
+    background-color: var(--surface);
+    color: var(--accent-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+.chromeos-method { display: none; }
+.chromeos-method.active {
+    display: block;
+    animation: subtleSlideUpFadeIn 0.5s ease-out;
+}
+@keyframes subtleSlideUpFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.method-switch-button {
+    background: none;
+    border: 1px solid var(--accent-1);
+    color: var(--accent-1);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.method-switch-button:hover {
+    background-color: var(--accent-1);
+    color: var(--text-primary);
+}
+.os-detection-note {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--text-secondary);
+}
+.main-footer { 
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+}

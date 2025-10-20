@@ -1,0 +1,270 @@
+/* Styles for about.html */
+.container {
+    text-align: center;
+}
+#surveillance {
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+}
+#mission {
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+}
+#team {
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+}
+.page-hero {
+    padding-top: 180px;
+    padding-bottom: 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+@media (max-width: 768px) {
+    .page-hero {
+        padding-top: 140px;
+        padding-bottom: 80px;
+    }
+}
+.page-hero h1 {
+    font-size: clamp(3rem, 9vw, 5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+.page-hero p {
+    max-width: 750px;
+    margin: 0 auto;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    color: var(--text-secondary);
+}
+@media (max-width: 768px) {
+    .page-hero .container {
+        padding: 0 8px;
+    }
+}
+.harm-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 768px) {
+    .harm-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+    .harm-grid {
+        gap: 20px;
+    }
+}
+.harm-card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 30px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+@media (max-width: 767px) {
+    .harm-card {
+        padding: 22px;
+    }
+}
+.harm-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--accent-1);
+    box-shadow: 0 0 35px rgba(82, 74, 242, 0.25);
+}
+.harm-card .icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    color: var(--accent-2);
+    flex-shrink: 0;
+}
+.harm-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+.harm-card p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    flex-grow: 1;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 960px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 767px) {
+    .product-grid {
+        gap: 20px;
+    }
+}
+.product-card {
+    background: var(--bg-offset);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+@media (max-width: 767px) {
+    .product-card {
+        padding: 22px;
+    }
+}
+.product-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--accent-2);
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.25);
+}
+.product-logo {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+.product-card p { color: var(--text-secondary); }
+.product-card .description { flex-grow: 1; }
+.jarring-text {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.jarring-text span { color: var(--accent-2); }
+.source-link { margin-top: 20px; font-size: 0.8rem; }
+.source-link a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease;
+}
+.source-link a:hover { color: var(--accent-1); }
+.source-link a svg { width: 12px; height: 12px; flex-shrink: 0; }
+.philosophy-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    align-items: center;
+}
+.philosophy-item + .philosophy-item { margin-top: 60px; }
+.philosophy-item .number { display: none; }
+.philosophy-item h3 { font-size: 1.6rem; margin-bottom: 8px; color: var(--text-primary); }
+.philosophy-item p { color: var(--text-secondary); font-size: 1.05rem; }
+@media (min-width: 768px) {
+    .philosophy-item {
+        grid-template-columns: 60px 1fr;
+        gap: 30px;
+    }
+    .philosophy-item .number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent-1);
+        line-height: 1;
+        text-align: center;
+    }
+}
+.pledge-list { list-style: none; margin-top: 40px; }
+.pledge-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+}
+.pledge-list li:hover { 
+    transform: translateX(5px);
+}
+.pledge-list li + li { margin-top: 25px; }
+.pledge-list svg {
+    width: 24px;
+    height: 24px;
+    color: var(--accent-1);
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+.pledge-list span { color: var(--text-primary); font-weight: 600; }
+.team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 50px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+@media (min-width: 768px) {
+    .team-grid { grid-template-columns: 1fr 1fr; }
+}
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--surface);
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.team-member:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--accent-2);
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.35);
+}
+.team-pfp {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid var(--accent-2);
+}
+.team-member h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 4px; }
+.team-member .role {
+    color: var(--accent-2);
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+.team-member p { color: var(--text-secondary); font-size: 0.95rem; }
+.team-contact-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+.team-contact-links a {
+    color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.team-contact-links a:hover {
+    color: var(--accent-2);
+    background: rgba(168, 85, 247, 0.1);
+    transform: translateY(-2px) scale(1.05);
+}
+.team-contact-links svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}

@@ -1,0 +1,13 @@
+{
+  "name": "hapara-fail-worker",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "preview": "wrangler dev --remote",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "wrangler": "^4.43.0"
+  }
+}

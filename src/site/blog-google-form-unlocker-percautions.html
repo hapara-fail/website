@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Using the Google Form Unlocker Safely | hapara.fail Blog</title>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="hapara.fail" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/universal.css">
+    <link rel="stylesheet" href="/css/article.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
+        <button class="hamburger-menu" aria-label="Open navigation menu" aria-controls="site-drawer" aria-expanded="false">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </button>
+    </header>
+
+    <div class="nav-overlay" data-nav-overlay hidden></div>
+    <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
+
+    <main>
+        <section class="article-hero">
+            <div class="parallax-bg"></div>
+            <div class="container reveal-item reveal-up">
+                <h1 class="gradient-text">Using the Google Form Unlocker Safely</h1>
+                <div class="article-meta">
+                    By <span>a9x</span> &bull; Published on October 14, 2025
+                </div>
+            </div>
+        </section>
+
+        <article class="article-body container">
+            <div class="reveal-item reveal-up">
+                <p>Our Google Form Unlocker works by cleverly bypassing the initial "locked mode" lobby, a security measure that relies entirely on your browser to enforce the rules. However, once you're inside the form, you're not entirely in the clear. The form page itself contains active scripts that watch for specific user behaviors. This post will cover the risks and the essential precautions you must take to avoid detection and keep the form functional.</p>
+            </div>
+            
+            <div class="reveal-item reveal-up">
+                <h2>Understanding the Risks</h2>
+                <p>Bypassing the lock is only half the battle. You also need to avoid two key tripwires: server-side notifications and client-side visibility checks.</p>
+                
+                <h3>1. Detection by the Form Owner</h3>
+                <p>Every time you use the unlocker, it sends a request to Google's servers to fetch the form content. If you do this multiple times for the same form—for example, if you close the tab and try to unlock it again—the server may interpret these as separate attempts to start the quiz. This can automatically trigger an email notification to the form's owner (your teacher). <strong>This is the most significant risk of detection.</strong></p>
+
+                <h3>2. The Form Going Blank</h3>
+                <p>The second risk comes from scripts running inside the form's webpage. Google has built-in features to detect when a user navigates away from the form. If the browser tab containing the form becomes completely hidden, an event called <code>visibilitychanged</code> can fire.</p>
+                <blockquote>Think of the form tab as having a digital tripwire. If the tab becomes completely hidden—by minimizing the window, switching to another full-screen application, or changing tabs in the same window—you trip the wire. When this happens, Google's script can instantly clear all your answers or terminate your session, leaving you with a blank page.</blockquote>
+                <p>Once the form goes blank, you are unable to answer questions or submit your work, and you may have to start over, increasing the risk of detection.</p>
+            </div>
+
+            <div class="reveal-item reveal-up">
+                <h2>Essential Precautions: The Split-Screen Method</h2>
+                <p>The golden rule is simple: <strong>never let the form tab become completely hidden.</strong> The safest and most effective way to achieve this is by using a split-screen setup with a second, separate browser window. Follow these steps precisely:</p>
+                <ul>
+                    <li><strong>Before You Start:</strong> Open a completely separate browser window (e.g., File > New Window), not just a new tab.</li>
+                    <li><strong>Arrange Your Windows:</strong> Resize both windows—the one you'll use for the unlocked form and your second one—so that each takes up about half of your screen. This allows you to keep the form tab constantly visible while using the other window for research or other tasks.</li>
+                    <li><strong>Browse in the Second Window:</strong> All other browsing activity should occur in your second window. Avoid making this second window full-screen, as it will cover the form and trigger the visibility lock.</li>
+                    <li><strong>Be Ready to Maximize:</strong> If a teacher or proctor comes nearby, you can quickly maximize the form window to fill the entire screen using the F11 key or the standard maximize button. Because you aren't hiding the tab, this action is safe.</li>
+                </ul>
+                <p>By keeping the form partially visible at all times, you prevent the <code>visibilitychanged</code> event from firing, ensuring your session remains active and your answers are safe.</p>
+            </div>
+            
+            <div class="reveal-item reveal-up">
+                <h2>Conclusion</h2>
+                <p>The Google Form Unlocker is a powerful tool for reclaiming control over your device during tests. However, its effectiveness relies on understanding its limitations. The initial bypass gets you through the front door, but you must remain mindful of the security measures operating inside. By following the split-screen precaution, you can navigate these risks, keeping your form active and avoiding unwanted attention.</p>
+
+                <a href="/blog" class="back-link">&larr; Back to Blog</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://discord.gg/KA66dHUF4P" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/></svg></a>
+                <a href="https://github.com/hapara-fail" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                <a href="mailto:support@hapara.fail" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            </div>
+            <div class="nav-footer-text">Made with 💖</div>
+        </div>
+    </footer>
+    
+    <div class="cookie-notice" id="cookieNotice" role="dialog" aria-live="polite" aria-label="Cookie notice">
+        <div class="cookie-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true"><title>Cookie SVG Icon</title><path fill="currentColor" d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08"/></svg>
+            <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
+        </div>
+        <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
+    </div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/scroll-reveal.js"></script>
+    <script src="/js/cookie-notice.js"></script>
+
+</body>
+</html>

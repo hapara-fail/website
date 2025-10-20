@@ -1,0 +1,114 @@
+/* Styles for contribute.html */
+main .content-section:nth-of-type(even) {
+    background-color: var(--bg-offset);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+.page-hero {
+    padding-top: 180px; padding-bottom: 120px;
+    text-align: center; position: relative;
+    overflow: hidden;
+}
+@media (max-width: 768px) {
+    .page-hero {
+        padding-top: 140px;
+        padding-bottom: 80px;
+    }
+}
+.page-hero h1 { font-size: clamp(3rem, 9vw, 5rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+.page-hero p { max-width: 750px; margin: 0 auto; font-size: clamp(1.05rem, 2.5vw, 1.2rem); color: var(--text-secondary); }
+@media (max-width: 768px) {
+    .page-hero .container {
+        padding: 0 8px;
+    }
+}
+.contribution-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+@media (min-width: 768px) {
+    .contribution-grid { grid-template-columns: repeat(2, 1fr); }
+    .contribution-grid .full-width { grid-column: 1 / -1; }
+}
+@media (max-width: 767px) {
+    .contribution-grid {
+        gap: 20px;
+    }
+}
+.contribution-card {
+    background: var(--bg-dark); border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 30px; text-align: left;
+    display: flex; flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    min-width: 0;
+}
+@media (max-width: 767px) {
+    .contribution-card {
+        padding: 20px;
+    }
+}
+.contribution-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-1);
+    box-shadow: 0 0 35px rgba(82, 74, 242, 0.2);
+}
+.contribution-card .icon { width: 40px; height: 40px; margin-bottom: 20px; color: var(--accent-2); }
+.contribution-card h3 { font-size: 1.5rem; margin-bottom: 12px; }
+.contribution-card p { color: var(--text-secondary); font-size: 1rem; flex-grow: 1; margin-bottom: 20px; }
+.crypto-list { list-style: none; display: flex; flex-direction: column; gap: 15px; margin-top: 15px; min-width: 0; }
+@media (max-width: 767px) {
+    .crypto-list {
+        gap: 12px;
+    }
+}
+.crypto-item {
+    display: flex; align-items: center; gap: 15px;
+    background-color: var(--bg-offset); border: 1px solid var(--border-color);
+    border-radius: 8px; padding: 12px 15px;
+    min-width: 0;
+    overflow: visible;
+}
+@media (max-width: 768px) {
+    .crypto-item {
+        gap: 8px;
+        padding: 10px;
+    }
+}
+.crypto-item strong { color: var(--text-primary); font-weight: 600; font-size: 1rem; flex-shrink: 0; }
+@media (max-width: 768px) {
+    .crypto-item strong {
+        font-size: 0.9rem;
+        min-width: 40px;
+    }
+}
+.crypto-address {
+    font-family: monospace; color: var(--text-secondary); font-size: 0.9rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0; flex-grow: 1;
+}
+@media (max-width: 768px) {
+    .crypto-address {
+        font-size: 0.75rem;
+    }
+}
+.os-card {
+    padding: 50px 40px; background: linear-gradient(145deg, var(--bg-offset), var(--bg-dark));
+    border: 1px solid var(--border-color); border-radius: 16px; text-align: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.os-card h2 { 
+    font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 20px; line-height: 1.2; 
+}
+.os-card p { 
+    max-width: 600px; margin: 0 auto 30px auto; font-size: 1.1rem; color: var(--text-secondary); 
+}
+.os-card .cta-button { margin-top: 0; align-self: center; }
+@media (max-width: 768px) {
+    .os-card {
+        padding: 35px 25px;
+    }
+    .os-card h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
+    .os-card p {
+        font-size: 1rem;
+    }
+}
+.main-footer { background-color: var(--bg-offset); border-top: 1px solid var(--border-color); }
