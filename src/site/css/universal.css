@@ -132,13 +132,21 @@ body {
     color: var(--text-primary); text-decoration: none;
     background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
     border-radius: 99px; transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center; align-self: flex-start;
+    text-align: center; align-self: flex-start; border: none; font-family: 'Poppins', sans-serif;
 }
 .cta-button:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 .cta-button svg { width: 20px; height: 20px; }
+.cta-button--disabled, .cta-button--disabled:hover {
+    background: rgba(160, 160, 204, 0.2);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+}
 
 /* -- Copy Button (Crypto Addresses) -- */
 .copy-btn {
