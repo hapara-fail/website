@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hapara-fail/website)
 
-`hapara.fail` is dedicated to exposing the pervasive nature of student surveillance technology used in educational environments. We provide technical insights, practical tools, and resources to empower students and advocate for digital privacy. This repository contains the source code for the v2 website, built on Cloudflare Workers.
+hapara.fail is dedicated to exposing the pervasive nature of student surveillance technology used in educational environments. We provide technical insights, practical tools, and resources to empower students and advocate for digital privacy. This repository contains the source code for the v2 website, built on Cloudflare Workers.
 
 **Live Site:** **[https://www.hapara.fail](https://www.hapara.fail)**
 
@@ -12,7 +12,7 @@
 
 ## 🚀 Project Overview
 
-This iteration of `hapara.fail` delivers a fast, modern, and privacy-respecting platform featuring:
+This iteration of hapara.fail delivers a fast, modern, and privacy-respecting platform featuring:
 
 * **Educational Content:** In-depth blog posts and technical write-ups explaining how edtech surveillance works.
 * **Privacy Tools:** Interactive tools designed to bypass certain restrictions or reveal hidden information (e.g., DNS Service, Google Form Unlocker, WiFi Password Extractor).
@@ -85,18 +85,16 @@ This iteration of `hapara.fail` delivers a fast, modern, and privacy-respecting 
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/hapara-fail/website](https://github.com/hapara-fail/website) # Replace with your repo URL
+    git clone https://github.com/hapara-fail/website.git
     cd website
     ```
 2.  **Install dependencies:**
     ```bash
     npm install
-    # or: yarn install
     ```
 3.  **Start the local development server:**
     ```bash
     npm run dev
-    # or: yarn dev
     ```
     This command uses Wrangler to build the Worker and serve the site locally, typically at `http://127.0.0.1:8787`.
 
@@ -107,9 +105,7 @@ This iteration of `hapara.fail` delivers a fast, modern, and privacy-respecting 
 Ensure you have Wrangler installed and configured (`wrangler login`).
 
 ```bash
-# Deploy to your Cloudflare account
 npm run deploy
-# or: yarn deploy
 ```
 
 This command will build the project and deploy it to the Cloudflare Workers environment specified in `wrangler.toml`.
