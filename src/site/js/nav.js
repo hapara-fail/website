@@ -353,4 +353,66 @@ function buildFooterMarkup() {
             }
         });
     });
+
+    // ====== Scroll Header Show/Hide ======
+    // Auto-hide header on scroll down, show on scroll up or at top
+    const header = document.querySelector('.main-header');
+    if (header) {
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        const scrollThreshold = 50; // Minimum distance before triggering hide/show
+        const scrollSpeed = 10; // Speed threshold to detect "fast" scrolling
+
+        // Add class to manage header visibility
+        header.classList.add('header-scrolling');
+
+        // Add transition styles if not already defined
+        if (!document.querySelector('#header-scroll-styles')) {
+            const style = document.createElement('style');
+            style.id = 'header-scroll-styles';
+            style.textContent = `
+                .main-header.header-scrolling {
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                .main-header.header-hidden {
+                    transform: translateX(-50%) translateY(calc(-100% - 30px));
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function updateHeader() {
+            const currentScrollY = window.scrollY;
+            const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+
+            // Always show header at the very top
+            if (currentScrollY <= scrollThreshold) {
+                header.classList.remove('header-hidden');
+            }
+            // Hide when scrolling down fast
+            else if (currentScrollY > lastScrollY && scrollDifference > scrollSpeed) {
+                header.classList.add('header-hidden');
+            }
+            // Show when scrolling up fast
+            else if (currentScrollY < lastScrollY && scrollDifference > scrollSpeed) {
+                header.classList.remove('header-hidden');
+            }
+
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }
+
+        // Listen to scroll events
+        window.addEventListener('scroll', requestTick, { passive: true });
+
+        // Initial check
+        updateHeader();
+    }
 })();

@@ -1,6 +1,17 @@
 {
+  "id": "/",
   "name": "hapara.fail",
   "short_name": "hapara.fail",
+  "description": "Expose and counter edtech surveillance. Tools, research, and a custom DNS to block Hapara, GoGuardian, and more. Protect student privacy and reclaim autonomy.",
+  "lang": "en-US",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "/images/web-app-manifest-192x192.png",
@@ -15,7 +26,34 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "DNS Blocklist Guide",
+      "short_name": "DNS Guide",
+      "description": "Follow the hardened DNS setup to block Hapara, GoGuardian, and similar surveillance tools.",
+      "url": "/blog-dns.html",
+      "icons": [
+        {
+          "src": "/images/web-app-manifest-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Terms & Usage",
+      "short_name": "Terms",
+      "description": "Review the project terms of service and how we expect the tools to be used.",
+      "url": "/tos.html",
+      "icons": [
+        {
+          "src": "/images/web-app-manifest-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
 }

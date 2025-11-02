@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "hapara-fail",
+  "main": "src/worker.ts",
+  "compatibility_date": "2025-11-02",
+  "assets": {
+    "directory": "src/site",
+    "binding": "ASSETS"
+  },
+  // Define Worker environment variables here
+  "vars": {}
+}
+
