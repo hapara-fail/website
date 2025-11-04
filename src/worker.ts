@@ -4,6 +4,14 @@ export interface Env {
   ASSETS: Fetcher;
 }
 
+const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
+  ['/bypass', '/services/dns'],
+  ['/forms', '/tool/gfu'],
+  ['/wifi', '/tool/wifi'],
+  ['/discord', 'https://discord.gg/KA66dHUF4P'],
+  ['/github', 'https://github.com/hapara-fail'],
+]);
+
 const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/', 'index.html'],
   ['/about', 'about.html'],
@@ -49,6 +57,19 @@ export default {
         headers: {
           'Allow': 'GET, HEAD',
           'Content-Type': 'text/plain; charset=utf-8'
+        }
+      });
+      setSecurityHeaders(resp.headers);
+      return resp;
+    }
+
+    // Check if this is a redirect
+    const redirectTarget = REDIRECT_MAP.get(path);
+    if (redirectTarget) {
+      const resp = new Response(null, {
+        status: 301,
+        headers: {
+          'Location': redirectTarget
         }
       });
       setSecurityHeaders(resp.headers);
