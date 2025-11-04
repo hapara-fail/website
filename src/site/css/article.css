@@ -109,9 +109,24 @@
 .article-body li::marker { color: var(--accent-1); }
 .article-body strong { color: var(--text-primary); font-weight: 600; }
 .article-body .back-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     margin-top: 4rem;
     font-weight: 600;
+    transition: transform 0.2s ease;
+}
+.article-body .back-link::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M9 3l-4 4 4 4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M9 3l-4 4 4 4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.article-body .back-link:hover {
+    transform: translateX(-4px);
 }
 .article-body .credits {
     margin-top: 4rem;
