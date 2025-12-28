@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Always update height even if same tab to be safe (e.g. on resize)
         const newActiveContent = document.getElementById(targetId);
 
-        if (newActiveButton) {
-            // Scroll into view logic
+        if (newActiveButton && !isInitial) {
+            // Scroll into view logic - only when user manually switches tabs
             newActiveButton.scrollIntoView({
                 behavior: 'smooth',
                 block: 'nearest',

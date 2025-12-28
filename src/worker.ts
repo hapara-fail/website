@@ -6,6 +6,7 @@ export interface Env {
 
 const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
+  ['/dns', '/services/dns'],
   ['/forms', '/tool/gfu'],
   ['/wifi', '/tool/wifi'],
   ['/discord', 'https://discord.gg/KA66dHUF4P'],
