@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DNS Service | hapara.fail</title>
-    <meta name="description" content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux.">
+    <meta name="description"
+        content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux.">
     <link rel="canonical" href="https://www.hapara.fail/services/dns" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="hapara.fail" />
     <meta property="og:title" content="DNS Service | hapara.fail" />
-    <meta property="og:description" content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux." />
+    <meta property="og:description"
+        content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux." />
     <meta property="og:url" content="https://www.hapara.fail/services/dns" />
     <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
     <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="DNS Service | hapara.fail" />
-    <meta name="twitter:description" content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux." />
+    <meta name="twitter:description"
+        content="Free DNS that blocks Hapara, GoGuardian, Securly and more. Step-by-step setup for ChromeOS, Windows, macOS, iOS, Android, and Linux." />
     <meta name="twitter:image" content="https://www.hapara.fail/images/og-twitter.png" />
     <meta name="twitter:image:alt" content="hapara.fail wordmark on dark background." />
     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
@@ -58,11 +62,13 @@
         }
     </script>
 </head>
+
 <body>
 
     <header class="main-header">
         <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
-        <button class="hamburger-menu" aria-label="Open navigation menu" aria-controls="site-drawer" aria-expanded="false">
+        <button class="hamburger-menu" aria-label="Open navigation menu" aria-controls="site-drawer"
+            aria-expanded="false">
             <span class="line"></span><span class="line"></span><span class="line"></span>
         </button>
     </header>
@@ -75,36 +81,56 @@
             <div class="parallax-bg"></div>
             <div class="container reveal-item reveal-up">
                 <h1 class="gradient-text">Take Back Your Network</h1>
-                <p>Use our free, custom-configured DNS service to disable invasive school spyware and bypass restrictive web filters with a single change to your network settings.</p>
+                <p>Use our free, custom-configured DNS service to disable invasive school spyware and bypass restrictive
+                    web filters with a single change to your network settings.</p>
                 <div class="dns-address-box">
                     <span>Our DNS Address:</span>
-                    <code>34.23.12.208</code>
+                    <button id="view-ips-btn" class="cta-button" style="padding: 8px 20px; font-size: 0.95rem;">View
+                        IPs</button>
+                    <!-- <code>34.23.12.208</code> REMOVED -->
                 </div>
             </div>
         </section>
 
-        <section class="content-section" style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color);">
+        <section class="content-section"
+            style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color);">
             <div class="container">
                 <div class="benefits-grid">
                     <div class="benefit-card reveal-item reveal-up" style="transition-delay: 0.1s;">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286Z" /></svg>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286Z" />
+                        </svg>
                         <div>
                             <h3>Block Spyware</h3>
-                            <p>Our service maintains a real-time blocklist of servers used by GoGuardian, Hapara, Securly, and more. If their software can't phone home, it can't watch you.</p>
+                            <p>Our service maintains a real-time blocklist of servers used by GoGuardian, Hapara,
+                                Securly, and more. If their software can't phone home, it can't watch you.</p>
                         </div>
                     </div>
                     <div class="benefit-card reveal-item reveal-up" style="transition-delay: 0.2s;">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                        </svg>
                         <div>
                             <h3>Bypass Filters</h3>
-                            <p>By routing your DNS requests through our servers instead of your school's, you sidestep their category-based web filters, unlocking access to a more open internet.</p>
+                            <p>By routing your DNS requests through our servers instead of your school's, you sidestep
+                                their category-based web filters, unlocking access to a more open internet.</p>
                         </div>
                     </div>
                     <div class="benefit-card reveal-item reveal-up" style="transition-delay: 0.3s;">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
                         <div>
                             <h3>Block Ads</h3>
-                            <p>Our DNS includes the comprehensive Hagezi blocklist, automatically blocking ads, trackers, and malicious domains for a cleaner, faster, and safer browsing experience.</p>
+                            <p>Our DNS includes the comprehensive Hagezi blocklist, automatically blocking ads,
+                                trackers, and malicious domains for a cleaner, faster, and safer browsing experience.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -116,12 +142,15 @@
                 <div class="section-header">
                     <h2 class="gradient-text">Instructions</h2>
                 </div>
-                
+
                 <div id="os-detection-message" class="os-detection-note"></div>
-                
+
                 <div class="tabs-scroll-wrapper">
                     <button class="tabs-arrow tabs-arrow--left" type="button" aria-label="Scroll tabs left" hidden>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
                     </button>
                     <div class="tabs-nav">
                         <button class="tab-button" data-target="chromeos">ChromeOS</button>
@@ -133,92 +162,153 @@
                         <div class="tab-underline"></div>
                     </div>
                     <button class="tabs-arrow tabs-arrow--right" type="button" aria-label="Scroll tabs right" hidden>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
                     </button>
                 </div>
 
                 <div class="tabs-content-wrapper">
                     <div id="chromeos" class="tab-content">
                         <div class="instructions-panel">
-                            <div id="chromeos-method1" class="chromeos-method active">
-                                <p><strong>Method 1: Standard Settings</strong> (For personal or unmanaged Chromebooks)</p>
-                                <ol>
-                                    <li>Click the time in the bottom-right, then click the <strong>Settings gear ⚙️</strong>.</li>
-                                    <li>Go to <strong>Network</strong> &rarr; <strong>Wi-Fi</strong>, and click the <strong>></strong> arrow next to your current network.</li>
-                                    <li>Expand the <strong>Network</strong> section.</li>
-                                    <li>Under "Name servers," select <strong>Custom name servers</strong>.</li>
-                                    <li>Enter <code>34.23.12.208</code> in all available name server fields.</li>
-                                </ol>
-                                <button id="show-method2-btn" class="method-switch-button">Settings Blocked? Try This Instead</button>
-                            </div>
-                            <div id="chromeos-method2" class="chromeos-method">
-                                <p><strong>Method 2: Network Internals</strong> (For managed or locked-down Chromebooks)</p>
-                                <ol>
-                                    <li>Open a new tab and go to <code>chrome://network</code>.</li>
-                                    <li>Click your current Wi-Fi network's name from the list. If the list is empty, click "Render Network Select". If your network isn't visible, click the empty area under the list.</li>
-                                    <li>In the pop-up window, scroll down to the <strong>Name Servers</strong> section.</li>
-                                    <li>Change the setting from "Automatic name servers" to <strong>Custom name servers</strong>.</li>
-                                    <li>Enter <code>34.23.12.208</code> in all available text boxes.</li>
-                                </ol>
-                                <button id="show-method1-btn" class="method-switch-button">Go Back to Method 1</button>
-                            </div>
+                            <p><strong>Method 1: Standard Settings</strong> (For personal or unmanaged Chromebooks)</p>
+                            <ol>
+                                <li>Click the time in the bottom-right, then click the <strong>Settings gear
+                                        ⚙️</strong>.</li>
+                                <li>Go to <strong>Network</strong> &rarr; <strong>Wi-Fi</strong>, and click the
+                                    <strong>></strong> arrow next to your current network.
+                                </li>
+                                <li>Expand the <strong>Network</strong> section.</li>
+                                <li>Under "Name servers," select <strong>Custom name servers</strong>.</li>
+                                <li>Enter <code>34.23.12.208</code> in all available name server fields.</li>
+                            </ol>
+                            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p><strong>Method 2: Network Internals</strong> (For when settings are blocked)
+                            </p>
+                            <ol>
+                                <li>Open a new tab and go to <code>chrome://network</code>.</li>
+                                <li>Select <strong>Network Select</strong> from the top navigation bar.</li>
+                                <li>Click "Render Network Select", then click on the <strong>+</strong> symbol directly
+                                    below it or select another network.</li>
+                                <li>In the pop-up window, scroll down to the <strong>Name servers</strong> section.
+                                </li>
+                                <li>Change the setting from "Automatic name servers" to <strong>Custom name
+                                        servers</strong>.</li>
+                                <li>Enter <code>34.23.12.208</code> in all available text boxes.</li>
+                            </ol>
                         </div>
                     </div>
                     <div id="windows" class="tab-content">
-                         <div class="instructions-panel">
+                        <div class="instructions-panel">
+                            <p><strong>Recommended: Secure DNS (DNS-over-HTTPS)</strong></p>
+                            <p>Windows 10 Build 19628 and higher support DNS-over-HTTPS natively.</p>
                             <ol>
-                                <li>Open <strong>Control Panel</strong>, then go to <strong>Network and Internet</strong> &rarr; <strong>Network and Sharing Center</strong>.</li>
-                                <li>Click <strong>Change adapter settings</strong> on the left.</li>
-                                <li>Right-click your active connection (Wi-Fi or Ethernet) and select <strong>Properties</strong>.</li>
-                                <li>Select <strong>Internet Protocol Version 4 (TCP/IPv4)</strong> and click <strong>Properties</strong>.</li>
-                                <li>Select "Use the following DNS server addresses".</li>
-                                <li>Enter <code>34.23.12.208</code> in the <strong>Preferred DNS server</strong> box. If an "Alternate DNS server" box is available, enter the same address there as well.</li>
+                                <li>Open <strong>Settings</strong> &rarr; <strong>Network & Internet</strong> &rarr;
+                                    <strong>Status</strong>.
+                                </li>
+                                <li>Click <strong>Properties</strong> for your active connection.</li>
+                                <li>Scroll to <strong>DNS Settings</strong> and click <strong>Edit</strong>.</li>
+                                <li>Select <strong>Manual</strong> and enable <strong>IPv4</strong>.</li>
+                                <li><strong>Preferred DNS:</strong> <code>34.23.12.208</code></li>
+                                <li><strong>DNS over HTTPS:</strong> On (Automatic template) or use
+                                    <code>https://dns.hapara.fail/dns-query</code> if manual input is required.
+                                </li>
+                            </ol>
+                            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p><strong>Standard IPv4 Setup</strong></p>
+                            <ol>
+                                <li>Open <strong>Control Panel</strong> through Start menu or Windows search.</li>
+                                <li>Go to <strong>Network and Internet</strong> category and then to <strong>Network and
+                                        Sharing Center</strong>.</li>
+                                <li>In the left panel, click "Change adapter settings".</li>
+                                <li>Right-click your active connection and select <strong>Properties</strong>.</li>
+                                <li>Find "Internet Protocol Version 4 (TCP/IPv4)" (or, for IPv6, "Internet Protocol
+                                    Version 6 (TCP/IPv6)") in the list, select it and then click on
+                                    <strong>Properties</strong> again.
+                                </li>
+                                <li>Choose "Use the following DNS server addresses" and enter <code>34.23.12.208</code>.
+                                </li>
                             </ol>
                         </div>
                     </div>
                     <div id="macos" class="tab-content">
                         <div class="instructions-panel">
+                            <p><strong>Recommended: Secure DNS</strong></p>
+                            <p>macOS Big Sur and higher support DNS-over-TLS and DNS-over-HTTPS natively via
+                                configuration profiles. Generate a profile pointing to
+                                <code>https://dns.hapara.fail/dns-query</code> (DoH) or <code>dns.hapara.fail</code>
+                                (DoT).
+                            </p>
+                            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p><strong>Standard IPv4 Setup</strong></p>
                             <ol>
-                                <li>Open <strong>System Settings</strong> and go to the <strong>Network</strong> section.</li>
-                                <li>Select your active connection (e.g., Wi-Fi) and click the <strong>Details...</strong> button.</li>
-                                <li>Go to the <strong>DNS</strong> tab on the left.</li>
-                                <li>Remove any existing addresses in the list with the <strong>-</strong> button.</li>
-                                <li>Click the <strong>+</strong> button under DNS Servers and enter <code>34.23.12.208</code>. Click <strong>OK</strong>.</li>
+                                <li>Click the Apple icon and go to <strong>System Preferences</strong>.</li>
+                                <li>Click <strong>Network</strong>.</li>
+                                <li>Select the first connection in your list and click <strong>Advanced</strong>.</li>
+                                <li>Select the <strong>DNS</strong> tab and enter <code>34.23.12.208</code>.
+                                </li>
                             </ol>
                         </div>
                     </div>
                     <div id="ios" class="tab-content">
-                         <div class="instructions-panel">
+                        <div class="instructions-panel">
+                            <p><strong>Recommended: Secure DNS</strong></p>
+                            <p>iOS 14 and higher support DNS-over-TLS and DNS-over-HTTPS natively via configuration
+                                profiles. Generate a profile pointing to <code>https://dns.hapara.fail/dns-query</code>
+                                (DoH) or <code>dns.hapara.fail</code> (DoT).</p>
+                            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p><strong>Standard IPv4 Setup</strong></p>
                             <ol>
-                                <li>Open <strong>Settings</strong> and tap on <strong>Wi-Fi</strong>.</li>
-                                <li>Tap the blue "i" icon next to your connected network.</li>
-                                <li>Scroll down and tap <strong>Configure DNS</strong>.</li>
-                                <li>Select <strong>Manual</strong> and remove any existing DNS servers.</li>
-                                <li>Tap <strong>Add Server</strong>, enter <code>34.23.12.208</code>, and tap <strong>Save</strong>.</li>
+                                <li>From the home screen, tap <strong>Settings</strong>.</li>
+                                <li>Choose <strong>Wi-Fi</strong> in the left menu (it is impossible to configure DNS
+                                    for mobile networks).</li>
+                                <li>Tap on the name of the currently active network.</li>
+                                <li>In the <strong>DNS</strong> field enter <code>34.23.12.208</code>.
+                                </li>
                             </ol>
                         </div>
                     </div>
                     <div id="android" class="tab-content">
                         <div class="instructions-panel">
-                             <p><strong>Note:</strong> Steps may vary. Our DNS does not yet support the "Private DNS" feature.</p>
-                             <ol>
-                                <li>Open <strong>Settings</strong> and go to <strong>Network & internet</strong> &rarr; <strong>Wi-Fi</strong>.</li>
-                                <li>Tap the gear icon ⚙️ next to your network, then tap the pencil icon ✏️ to edit.</li>
-                                <li>Expand <strong>Advanced options</strong> and change "IP settings" to <strong>Static</strong>.</li>
-                                <li>Scroll down to the <strong>DNS 1</strong> field and enter <code>34.23.12.208</code>.</li>
-                                <li>In the <strong>DNS 2</strong> field, enter the same address: <code>34.23.12.208</code>. Tap <strong>Save</strong>.</li>
+                            <p><strong>Recommended: Private DNS (Android 9+)</strong></p>
+                            <p>Android 9 supports DNS-over-TLS natively.</p>
+                            <ol>
+                                <li>Go to <strong>Settings</strong> &rarr; <strong>Network & internet</strong> &rarr;
+                                    <strong>Advanced</strong> &rarr; <strong>Private DNS</strong>.
+                                </li>
+                                <li>Enter <code>dns.hapara.fail</code>.</li>
+                            </ol>
+                            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                            <p><strong>Standard IPv4 Setup</strong></p>
+                            <ol>
+                                <li>From the Android Menu home screen, tap <strong>Settings</strong>.</li>
+                                <li>Tap <strong>Wi-Fi</strong> on the menu. The screen listing all of the available
+                                    networks will be shown (it is impossible to set custom DNS for mobile connection).
+                                </li>
+                                <li>Long press the network you're connected to, and tap <strong>Modify Network</strong>.
+                                </li>
+                                <li>On some devices, you may need to check the box for <strong>Advanced</strong> to see
+                                    further settings. To adjust your Android DNS settings, you will need to switch the
+                                    IP settings from <strong>DHCP</strong> to <strong>Static</strong>.</li>
+                                <li>Change <strong>DNS 1</strong> to <code>34.23.12.208</code> and <strong>DNS
+                                        2</strong> to <code>0.0.0.0</code>.</li>
                             </ol>
                         </div>
                     </div>
                     <div id="linux" class="tab-content">
                         <div class="instructions-panel">
-                            <p>Steps vary by distribution. These are general instructions for modern desktops using NetworkManager (Ubuntu, Fedora, etc.).</p>
+                            <p>Steps vary by distribution. These are general instructions for modern desktops using
+                                NetworkManager (Ubuntu, Fedora, etc.).</p>
                             <ol>
-                                <li>Open <strong>Settings</strong> and navigate to the <strong>Network</strong> or <strong>Connections</strong> section.</li>
+                                <li>Open <strong>Settings</strong> and navigate to the <strong>Network</strong> or
+                                    <strong>Connections</strong> section.
+                                </li>
                                 <li>Find your active connection and click the gear icon ⚙️ to edit its settings.</li>
                                 <li>Go to the <strong>IPv4</strong> tab.</li>
                                 <li>Disable the "Automatic" toggle next to DNS.</li>
-                                <li>In the DNS entry field, enter <code>34.23.12.208</code>. Remove any other entries. Click <strong>Apply</strong>.</li>
+                                <li>In the DNS entry field, enter <code>34.23.12.208</code>. Remove any other entries.
+                                    Click <strong>Apply</strong>.</li>
                             </ol>
                         </div>
                     </div>
@@ -230,21 +320,108 @@
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-links">
-                <a href="https://discord.gg/KA66dHUF4P" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/></svg></a>
-                <a href="https://github.com/hapara-fail" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
-                <a href="mailto:support@hapara.fail" aria-label="Contact via Email"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+                <a href="https://discord.gg/KA66dHUF4P" target="_blank" rel="noopener noreferrer"
+                    aria-label="Discord"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z" />
+                    </svg></a>
+                <a href="https://github.com/hapara-fail" target="_blank" rel="noopener noreferrer"
+                    aria-label="GitHub"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg></a>
+                <a href="mailto:support@hapara.fail" aria-label="Contact via Email"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg></a>
             </div>
-            <p class="footer-copy">&copy; 2025 hapara.fail<br>People over profits.</p>
-            <p class="footer-legal"><a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • <a href="https://license.hapara.fail/">License</a> • <a href="https://status.hapara.fail/">Status</a></p>
+            <p class="footer-copy">&copy; 2026 hapara.fail<br>People over profits.</p>
+            <p class="footer-legal"><a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • <a
+                    href="https://license.hapara.fail/">License</a> • <a href="https://status.hapara.fail/">Status</a>
+            </p>
         </div>
     </footer>
-    
+
     <div class="cookie-notice" id="cookieNotice" role="dialog" aria-live="polite" aria-label="Cookie notice">
         <div class="cookie-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true"><title>Cookie SVG Icon</title><path fill="currentColor" d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true">
+                <title>Cookie SVG Icon</title>
+                <path fill="currentColor"
+                    d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08" />
+            </svg>
             <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
         </div>
         <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
+    </div>
+
+    <!-- DNS Info Modal -->
+    <div id="dns-modal-overlay" class="dns-modal-overlay" hidden>
+        <div class="dns-modal" role="dialog" aria-modal="true" aria-labelledby="dns-modal-title">
+            <button id="dns-modal-close" class="dns-modal-close" aria-label="Close modal">&times;</button>
+
+            <!-- Step 1: ToS -->
+            <div id="dns-step-tos" class="dns-step">
+                <h3 id="dns-modal-title" class="dns-modal-title">Terms of Service</h3>
+                <p class="dns-modal-text">
+                    By using hapara.fail DNS, you agree to our <a href="/terms" target="_blank">Terms of Service</a> and
+                    <a href="/privacy" target="_blank">Privacy Policy</a>.
+                    Misuse or abuse of the service may result in your IP being blocked.
+                </p>
+                <label class="dns-checkbox-wrapper" for="tos-agreement-checkbox">
+                    <input type="checkbox" id="tos-agreement-checkbox">
+                    <span class="dns-custom-checkbox">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="dns-checkbox-label">I agree to the Terms and Privacy Policy</span>
+                </label>
+                <button id="tos-proceed-btn" class="cta-button cta-button--disabled" disabled>Proceed</button>
+            </div>
+
+            <!-- Step 2: IPs -->
+            <div id="dns-step-info" class="dns-step" hidden>
+                <h3 class="dns-modal-title">DNS Configuration</h3>
+
+                <div class="dns-location-tag">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    South Carolina, USA
+                </div>
+
+                <div class="dns-info-group">
+                    <label>IPv4 Address</label>
+                    <div class="dns-copy-row">
+                        <code id="dns-ipv4">34.23.12.208</code>
+                        <button class="copy-btn" aria-label="Copy IPv4" data-copy-target="#dns-ipv4">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span class="copied-message">Copied!</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dns-info-group">
+                    <label>DoH / DoT / DoQ</label>
+                    <div class="dns-copy-row">
+                        <code style="font-size: 0.9em;" id="dns-doh">https://dns.hapara.fail/dns-query</code>
+                        <button class="copy-btn" aria-label="Copy DoH" data-copy-target="#dns-doh">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span class="copied-message">Copied!</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/js/nav.js" defer></script>
@@ -252,4 +429,5 @@
     <script src="/js/cookie-notice.js"></script>
 
 </body>
+
 </html>

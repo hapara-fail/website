@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabButtonsArray = Array.from(tabButtons);
     const tabContents = document.querySelectorAll('.tab-content');
     const tabUnderline = document.querySelector('.tab-underline');
+    const tabsWrapper = document.querySelector('.tabs-content-wrapper');
     const osDetectionMessage = document.getElementById('os-detection-message');
 
     const moveUnderline = (targetTab) => {
@@ -34,13 +35,38 @@ document.addEventListener('DOMContentLoaded', () => {
         tabUnderline.style.transform = `translateX(${newLeft}px)`;
     };
 
+    const updateContainerHeight = (contentElement) => {
+        if (!tabsWrapper || !contentElement) return;
+        // Use a small timeout to allow for DOM updates/animations if needed, 
+        // though immediate is usually better for responsiveness.
+        // We get the height of the content plus padding/border if any.
+        // Since .tab-content is absolute, we need to explicitly set wrapper height.
+        const height = contentElement.scrollHeight;
+        tabsWrapper.style.height = `${height}px`;
+    };
+
     const setActiveTab = (targetId, isInitial = false) => {
         const currentActiveButton = document.querySelector('.tab-button.active');
         const newActiveButton = document.querySelector(`.tab-button[data-target="${targetId}"]`);
-        if (currentActiveButton === newActiveButton) return;
-        
-        const currentActiveContent = document.querySelector('.tab-content.active');
+
+        // Always update height even if same tab to be safe (e.g. on resize)
         const newActiveContent = document.getElementById(targetId);
+
+        if (newActiveButton) {
+            // Scroll into view logic
+            newActiveButton.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+
+        if (currentActiveButton === newActiveButton) {
+            if (newActiveContent) updateContainerHeight(newActiveContent);
+            return;
+        }
+
+        const currentActiveContent = document.querySelector('.tab-content.active');
 
         tabButtons.forEach(btn => btn.classList.remove('active'));
         if (newActiveButton) newActiveButton.classList.add('active');
@@ -50,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentIndex = tabButtonsArray.indexOf(currentActiveButton);
             const newIndex = tabButtonsArray.indexOf(newActiveButton);
             const directionClass = newIndex > currentIndex ? 'slide-from-right' : 'slide-from-left';
-            
+
             currentActiveContent.classList.add('is-exiting');
             newActiveContent.classList.add(directionClass);
 
@@ -63,12 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (newActiveContent) {
             newActiveContent.classList.add('active');
         }
+
+        if (newActiveContent) {
+            // Update height immediately
+            updateContainerHeight(newActiveContent);
+        }
     };
 
     tabButtons.forEach(tab => {
         tab.addEventListener('click', () => setActiveTab(tab.dataset.target));
     });
-    
+
     function detectOS() {
         const userAgent = navigator.userAgent.toLowerCase();
         const platform = navigator.platform.toLowerCase();
@@ -85,39 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const detectedOS = detectOS();
         let targetTabId = 'chromeos';
         let message = "We couldn't automatically detect your OS. Please select it from the list.";
-        
+
         if (detectedOS) {
             targetTabId = detectedOS;
             const osMap = { chromeos: 'ChromeOS', windows: 'Windows', macos: 'macOS', ios: 'iOS / iPadOS', android: 'Android', linux: 'Linux' };
             message = `We've detected you're on <strong>${osMap[detectedOS]}</strong> and have selected the relevant instructions for you.`;
         }
-        
+
         setActiveTab(targetTabId, true);
         if (osDetectionMessage) osDetectionMessage.innerHTML = message;
     }
-    
+
     initializeTabs();
 
-    // --- CHROMEOS METHOD SWITCHER ---
-    const method1Div = document.getElementById('chromeos-method1');
-    const method2Div = document.getElementById('chromeos-method2');
-    const showMethod2Btn = document.getElementById('show-method2-btn');
-    const showMethod1Btn = document.getElementById('show-method1-btn');
 
-    const switchMethods = (showDiv, hideDiv) => {
-        hideDiv.classList.remove('active');
-        showDiv.classList.add('active');
-    };
-
-    if (showMethod2Btn) {
-        showMethod2Btn.addEventListener('click', () => switchMethods(method2Div, method1Div));
-    }
-    if (showMethod1Btn) {
-        showMethod1Btn.addEventListener('click', () => switchMethods(method1Div, method2Div));
-    }
 
     // --- MOBILE ARROWS + FADES SYSTEM ---
-    const tabsWrapper = document.querySelector('.tabs-scroll-wrapper');
+    // tabsWrapper is already declared above
     const leftArrow = document.querySelector('.tabs-arrow--left');
     const rightArrow = document.querySelector('.tabs-arrow--right');
 
@@ -153,6 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeButton = document.querySelector('.tab-button.active');
         if (activeButton) moveUnderline(activeButton);
         updateArrowsAndFades();
+
+        // Recalculate height on resize
+        const activeContent = document.querySelector('.tab-content.active');
+        if (activeContent) updateContainerHeight(activeContent);
     };
 
     if (tabsNav) {
@@ -161,4 +180,152 @@ document.addEventListener('DOMContentLoaded', () => {
         // initial state
         updateArrowsAndFades();
     }
+
+    // --- DNS MODAL LOGIC ---
+    const viewIpsBtn = document.getElementById('view-ips-btn');
+    const modalOverlay = document.getElementById('dns-modal-overlay');
+    const modalCloseBtn = document.getElementById('dns-modal-close');
+    const stepTos = document.getElementById('dns-step-tos');
+    const stepInfo = document.getElementById('dns-step-info');
+    const tosCheckbox = document.getElementById('tos-agreement-checkbox');
+    const tosProceedBtn = document.getElementById('tos-proceed-btn');
+
+    // Helper to get cookie
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    };
+
+    // Helper to set cookie (max-age in seconds, 31536000 = 1 year)
+    const setCookie = (name, value, maxAge) => {
+        document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    };
+
+    const openModal = () => {
+        if (!modalOverlay) return;
+
+        // Reset states
+        if (tosCheckbox) tosCheckbox.checked = false;
+
+        // Check if ToS was already accepted
+        const tosAccepted = getCookie('dns_tos_accepted');
+
+        if (tosAccepted === 'true') {
+            // Show Info directly
+            if (stepTos) stepTos.hidden = true;
+            if (stepInfo) {
+                stepInfo.hidden = false;
+                stepInfo.classList.remove('fade-out');
+            }
+        } else {
+            // Show ToS
+            if (stepInfo) stepInfo.hidden = true;
+            if (stepTos) {
+                stepTos.hidden = false;
+                stepTos.classList.remove('fade-out');
+            }
+
+            // Disable button initially
+            if (tosProceedBtn) {
+                tosProceedBtn.disabled = true;
+                tosProceedBtn.classList.add('cta-button--disabled');
+            }
+        }
+
+        modalOverlay.hidden = false;
+        document.body.classList.add('body-lock');
+    };
+
+    const closeModal = () => {
+        if (!modalOverlay) return;
+        modalOverlay.hidden = true;
+        document.body.classList.remove('body-lock');
+
+        // Reset transitions
+        if (stepTos) stepTos.classList.remove('fade-out', 'fade-in');
+        if (stepInfo) stepInfo.classList.remove('fade-out', 'fade-in');
+    };
+
+    if (viewIpsBtn) {
+        viewIpsBtn.addEventListener('click', openModal);
+    }
+
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', closeModal);
+    }
+
+    // Close on click outside (overlay)
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+    }
+
+    // ToS Checkbox Logic
+    if (tosCheckbox && tosProceedBtn) {
+        tosCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                tosProceedBtn.disabled = false;
+                tosProceedBtn.classList.remove('cta-button--disabled');
+            } else {
+                tosProceedBtn.disabled = true;
+                tosProceedBtn.classList.add('cta-button--disabled');
+            }
+        });
+    }
+
+    // Proceed Button Logic with Transition
+    if (tosProceedBtn) {
+        tosProceedBtn.addEventListener('click', () => {
+            setCookie('dns_tos_accepted', 'true', 31536000); // 1 year
+
+            if (stepTos && stepInfo) {
+                // Fade out ToS
+                stepTos.classList.add('fade-out');
+
+                setTimeout(() => {
+                    stepTos.hidden = true;
+                    stepInfo.hidden = false;
+                    stepInfo.classList.add('fade-in');
+
+                    // Small delay to allow fade-in class to apply before removing it/or letting CSS handle opacity
+                    requestAnimationFrame(() => {
+                        stepInfo.classList.remove('fade-in'); // This might just pop in if we don't have fade-in defined to start at 0
+                    });
+                }, 250); // Match CSS transition duration
+            }
+        });
+    }
+
+    // --- COPY BUTTON LOGIC ---
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetSelector = btn.getAttribute('data-copy-target');
+            if (targetSelector) {
+                const targetElement = document.querySelector(targetSelector);
+                if (targetElement) {
+                    const textToCopy = targetElement.innerText;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        // Success feedback
+                        const originalContent = btn.innerHTML;
+                        const copiedMsg = btn.querySelector('.copied-message');
+
+                        // Add pulsing class
+                        btn.classList.add('pulsing');
+
+                        if (copiedMsg) {
+                            copiedMsg.classList.add('show');
+                            setTimeout(() => {
+                                copiedMsg.classList.remove('show');
+                                btn.classList.remove('pulsing');
+                            }, 2000);
+                        }
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                }
+            }
+        });
+    });
 });
