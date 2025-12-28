@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reforging the Shield: AdGuard Home | hapara.fail Blog</title>
+    <meta name="description"
+        content="We've switched from Pi-hole to AdGuard Home. Learn why this upgrade brings superior speed, native encryption (DoH/DoT/DoQ), and better security for bypassing censorship.">
+    <link rel="canonical" href="https://www.hapara.fail/blog/adguard-home" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="hapara.fail" />
+    <meta property="og:title" content="Reforging the Shield: AdGuard Home | hapara.fail Blog" />
+    <meta property="og:description"
+        content="We've switched from Pi-hole to AdGuard Home. Learn why this upgrade brings superior speed, native encryption (DoH/DoT/DoQ), and better security for bypassing censorship." />
+    <meta property="og:url" content="https://www.hapara.fail/blog/adguard-home" />
+    <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
+    <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
+    <meta property="article:author" content="a9x" />
+    <meta property="article:published_time" content="2025-12-28" />
+    <meta property="article:modified_time" content="2025-12-28" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Reforging the Shield: AdGuard Home | hapara.fail Blog" />
+    <meta name="twitter:description"
+        content="We've switched from Pi-hole to AdGuard Home. Learn why this upgrade brings superior speed, native encryption (DoH/DoT/DoQ), and better security for bypassing censorship." />
+    <meta name="twitter:image" content="https://www.hapara.fail/images/og-twitter.png" />
+    <meta name="twitter:image:alt" content="hapara.fail wordmark on dark background." />
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="hapara.fail" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/universal.css">
+    <link rel="stylesheet" href="/css/article.css">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Reforging the Shield: Why We Switched to AdGuard Home",
+            "description": "We've switched from Pi-hole to AdGuard Home. Learn why this upgrade brings superior speed, native encryption (DoH/DoT/DoQ), and better security for bypassing censorship.",
+            "author": {
+                "@type": "Person",
+                "name": "a9x"
+            },
+            "datePublished": "2025-12-28",
+            "dateModified": "2025-12-28",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://www.hapara.fail/blog/adguard-home"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "hapara.fail",
+                "url": "https://www.hapara.fail/",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://www.hapara.fail/images/favicon-96x96.png"
+                }
+            },
+            "url": "https://www.hapara.fail/blog/adguard-home",
+            "image": "https://www.hapara.fail/images/og-twitter.png"
+        }
+    </script>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
+        <button class="hamburger-menu" aria-label="Open navigation menu" aria-controls="site-drawer"
+            aria-expanded="false">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </button>
+    </header>
+
+    <div class="nav-overlay" data-nav-overlay hidden></div>
+    <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
+
+    <main>
+        <section class="article-hero">
+            <div class="parallax-bg"></div>
+            <div class="container reveal-item reveal-up">
+                <h1 class="gradient-text">Reforging the Shield: Why We Switched to AdGuard Home</h1>
+                <div class="article-meta">
+                    By <span>a9x</span> &bull; Published on December 28, 2025
+                </div>
+            </div>
+        </section>
+
+        <article class="article-body container">
+            <div class="reveal-item reveal-up">
+                <p>For the past year, the backbone of hapara.fail has been Pi-hole. It is the legendary "OG" of
+                    network-level blocking&mdash;a fantastic piece of software that put DNS sinkholing on the map. It
+                    served us well, processing millions of requests and sinking countless tracking beacons from
+                    GoGuardian and Hapara.</p>
+
+                <p>But in the cat-and-mouse game of surveillance evasion, stagnation is death. As our user base grew and
+                    the "edtech" monitoring giants became more sophisticated, our infrastructure needed to evolve. We
+                    have officially migrated our public resolvers from Pi-hole to <strong>AdGuard Home</strong>.</p>
+
+                <p>This wasn't just a preference; it was a necessity. Here is why AdGuard Home is the superior engine
+                    for our mission.</p>
+            </div>
+
+            <div class="reveal-item reveal-up">
+                <h2>Under the Hood: Go vs. The PHP Stack</h2>
+                <p>To understand why this switch matters, you have to look at how these two systems are built.</p>
+
+                <p><strong>Pi-hole</strong> is effectively a clever wrapper. It stitches together several different
+                    technologies: <code>dnsmasq</code> (for DNS), <code>lighttpd</code> (web server), and
+                    <code>PHP</code> (logic and dashboard). While powerful, this "Frankenstein" approach is
+                    resource-heavy. Every time you load the dashboard or query the API, the server has to spin up PHP
+                    processes, which is computationally expensive and slower under load.
+                </p>
+
+                <p><strong>AdGuard Home</strong> is a different beast entirely. It is written in <strong>Go
+                        (Golang)</strong>, a modern language designed by Google for high-performance networking.</p>
+
+                <ul>
+                    <li><strong>Single Binary:</strong> There are no dependencies, no external web servers, and no PHP
+                        interpreters. It is one self-contained file.</li>
+                    <li><strong>Concurrency:</strong> Go handles thousands of simultaneous connections with a fraction
+                        of the memory Pi-hole would require.</li>
+                    <li><strong>Speed:</strong> Because it runs as compiled machine code rather than interpreted
+                        scripts, the response times are faster, and the dashboard is instantaneous, even when we are
+                        getting hammered by traffic.</li>
+                </ul>
+
+                <p>For us, this means we can serve more students on the same hardware, with less latency and higher
+                    stability.</p>
+            </div>
+
+            <div class="reveal-item reveal-up">
+                <h2>Native Encryption: Security Without Compromise</h2>
+                <p>In 2025, unencrypted DNS is a liability. If you are using standard UDP (Port 53), your school's
+                    network admin can see exactly what you are requesting, or worse, intercept it.</p>
+
+                <p>Pi-hole does not support encryption out of the box. To get DNS-over-HTTPS (DoH) working on Pi-hole,
+                    you have to bolt on extra services like <code>cloudflared</code> or configure a complex reverse
+                    proxy like Nginx. It’s a "hacky" solution that adds latency and introduces more points of failure.
+                </p>
+
+                <p>AdGuard Home supports <strong>DNS-over-HTTPS (DoH)</strong>, <strong>DNS-over-TLS (DoT)</strong>,
+                    and the bleeding-edge <strong>DNS-over-QUIC (DoQ)</strong> natively.</p>
+
+                <p>This native support is a game-changer:</p>
+                <ol>
+                    <li><strong>Stealth:</strong> By using DoH (Port 443), your DNS traffic looks indistinguishable from
+                        regular HTTPS web browsing. It blends into the noise, making it significantly harder for school
+                        firewalls to isolate and block our service.</li>
+                    <li><strong>Integrity:</strong> You can be 100% sure that the response you get comes from us,
+                        authenticated by our SSL certificate. No man-in-the-middle attacks, no injected block pages.
+                    </li>
+                    <li><strong>Efficiency:</strong> No proxy middleware means the encryption happens directly in the
+                        DNS engine, keeping your internet fast.</li>
+                </ol>
+            </div>
+
+            <div class="reveal-item reveal-up">
+                <h2>Surgical Precision with ABP Syntax</h2>
+                <p>Finally, there is the matter of the blocklist itself. Pi-hole relies heavily on simple domain lists
+                    (<code>ads.google.com</code>). While it supports Regex, managing complex rules is cumbersome.</p>
+
+                <p>AdGuard Home natively uses <strong>Adblock Plus (ABP) syntax</strong>&mdash;the industry standard
+                    used by uBlock Origin. This allows us to write powerful, flexible rules like
+                    <code>||goguardian.com^</code> that handle subdomains and edge cases with surgical precision. It
+                    creates a seamless workflow where we can push updates to the <code>hapara.fail</code> blocklist and
+                    have them enforced immediately, without the overhead of regex compilation.
+                </p>
+            </div>
+
+            <div class="reveal-item reveal-up">
+                <h2>How to Upgrade</h2>
+                <p>The backend switch is already done. If you are using our legacy IP addresses, you are already being
+                    routed through the new engine.</p>
+
+                <p>However, to get the full security and privacy benefits of the new system, you need to configure your
+                    device to use the <strong>Secure DNS</strong> protocols (DoH/DoT) rather than just the IP address.
+                </p>
+
+                <p>We have written full guides for Chrome, Android, iOS, and Windows on our services page:</p>
+
+                <p style="text-align: center; margin-top: 2rem;">
+                    <a href="/dns-service.html" class="button button-primary"><strong>Upgrade to Secure
+                            DNS</strong></a>
+                </p>
+
+                <p>We built this platform to prove that privacy is a right, not a privilege. By moving to AdGuard Home,
+                    we aren't just keeping up; we're staying ahead.</p>
+
+                <a href="/blog" class="back-link">Back to Blog</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://discord.gg/KA66dHUF4P" target="_blank" rel="noopener noreferrer"
+                    aria-label="Discord"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z" />
+                    </svg></a>
+                <a href="https://github.com/hapara-fail" target="_blank" rel="noopener noreferrer"
+                    aria-label="GitHub"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg></a>
+                <a href="mailto:support@hapara.fail" aria-label="Email"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg></a>
+            </div>
+            <p class="footer-copy">&copy; 2026 hapara.fail<br>People over profits.</p>
+            <p class="footer-legal"><a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • <a
+                    href="https://license.hapara.fail/">License</a> • <a href="https://status.hapara.fail/">Status</a>
+            </p>
+        </div>
+    </footer>
+
+    <div class="cookie-notice" id="cookieNotice" role="dialog" aria-live="polite" aria-label="Cookie notice">
+        <div class="cookie-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true">
+                <title>Cookie SVG Icon</title>
+                <path fill="currentColor"
+                    d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08" />
+            </svg>
+            <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
+        </div>
+        <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
+    </div>
+
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/scroll-reveal.js"></script>
+    <script src="/js/cookie-notice.js"></script>
+
+</body>
+
+</html>
