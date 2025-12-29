@@ -328,4 +328,100 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- COMPATIBILITY CHECKER LOGIC ---
+    const BLOCKED_SERVICES = [
+        {
+            category: "Monitoring & Classroom Management",
+            services: ["Bark", "DyKnow", "Gaggle", "GoGuardian", "Gopher", "Hapara", "Impero", "LanSchool", "NetSupport", "Senso"]
+        },
+        {
+            category: "Content Filtering & Security",
+            services: ["Blocksi", "Content Keeper", "Fortinet / FortiGuard", "Iboss", "Lightspeed Systems", "Linewize / Qoria / FamilyZone", "Netsweeper", "Securly", "Smoothwall", "Sophos", "Zscaler"]
+        },
+        {
+            category: "Device Management (MDM) & Infrastructure",
+            services: ["Anthology / Blackboard", "Deledao", "Jamf", "LFGL", "Mosyle", "Pulse / EducatorImpact"]
+        },
+        {
+            category: "Parental Control & Location Tracking",
+            services: ["Life360", "Mobile Guardian", "Kiddoware", "Qustodio"]
+        }
+    ];
+
+    const searchInput = document.getElementById('service-search');
+    const serviceList = document.getElementById('service-list');
+
+    const renderServices = (filterText = '') => {
+        if (!serviceList) return;
+        serviceList.innerHTML = '';
+
+        const normalizedFilter = filterText.toLowerCase().trim();
+        let hasResults = false;
+
+        BLOCKED_SERVICES.forEach(group => {
+            // Filter services within the group
+            const matchingServices = group.services.filter(service =>
+                service.toLowerCase().includes(normalizedFilter)
+            );
+
+            if (matchingServices.length > 0) {
+                hasResults = true;
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'service-category-group';
+
+                const headerEl = document.createElement('h3');
+                headerEl.className = 'service-category-header';
+                headerEl.textContent = group.category;
+                categoryEl.appendChild(headerEl);
+
+                const cardsContainer = document.createElement('div');
+                cardsContainer.className = 'service-cards-container';
+
+                matchingServices.forEach(service => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+                    card.innerHTML = `
+                        <div class="service-info" style="display: flex; align-items: center; gap: 15px; width: 100%; justify-content: space-between;">
+                            <span class="service-name">${service}</span>
+                            <span class="service-status">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Blocked
+                            </span>
+                        </div>
+                    `;
+                    cardsContainer.appendChild(card);
+                });
+
+                categoryEl.appendChild(cardsContainer);
+                serviceList.appendChild(categoryEl);
+            }
+        });
+
+        if (!hasResults && normalizedFilter) {
+            const noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.innerHTML = `
+                <p>No services found matching "<strong>${filterText}</strong>". <br>They might not be blocked, or are listed under a different name.</p>
+                <a href="https://github.com/hapara-fail/blocklist/issues/new?template=additions-removals.md" target="_blank" rel="noopener noreferrer" class="cta-button" style="margin-top: 15px; display: inline-flex; font-size: 0.9rem; align-items: center; gap: 8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Request to add this service
+                </a>
+            `;
+            serviceList.appendChild(noResults);
+        }
+    };
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderServices(e.target.value);
+        });
+        // Initial render
+        renderServices();
+    }
 });

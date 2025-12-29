@@ -308,7 +308,7 @@
 }
 
 .main-footer {
-    background-color: var(--bg-offset);
+    background-color: var(--bg-dark);
     border-top: 1px solid var(--border-color);
 }
 
@@ -535,4 +535,185 @@
 
 .dns-copy-row:hover {
     border-color: var(--accent-1);
+}
+
+/* --- Compatibility Checker --- */
+.checker-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Search Bar */
+.search-wrapper {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.search-wrapper input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    padding: 16px 20px 16px 50px;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.search-wrapper input:focus {
+    border-color: var(--accent-1);
+    box-shadow: 0 0 0 4px rgba(82, 74, 242, 0.15);
+    background: rgba(22, 21, 46, 0.8);
+}
+
+.search-wrapper .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.search-wrapper input:focus+.search-icon {
+    color: var(--accent-1);
+}
+
+/* Service List */
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.service-category-group {
+    margin-bottom: 40px;
+}
+
+.service-category-header {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.service-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.service-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.service-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.service-status {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #4ade80;
+    /* Green */
+    background: rgba(22, 163, 74, 0.2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.no-results {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 0;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+}
+
+/* Raw Lists */
+.raw-lists-container {
+    margin-top: 60px;
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.raw-lists-container h3 {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.raw-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.raw-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.raw-btn:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.raw-btn svg {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .service-cards-container {
+        grid-template-columns: 1fr;
+    }
+
+    .search-wrapper input {
+        font-size: 1rem;
+        padding: 14px 18px 14px 44px;
+    }
 }
