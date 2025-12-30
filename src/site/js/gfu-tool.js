@@ -118,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         let info_map_string = initialDataMatch[1].replace(/&quot;/g, '"')
-                                                 .replace(/&amp;/g, '&')
                                                  .replace(/&lt;/g, '<')
-                                                 .replace(/&gt;/g, '>');
+                                                 .replace(/&gt;/g, '>')
+                                                 .replace(/&amp;/g, '&');
 
         let info_map;
         try {
