@@ -330,27 +330,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- COMPATIBILITY CHECKER LOGIC ---
-    const BLOCKED_SERVICES = [
-        {
-            category: "Monitoring & Classroom Management",
-            services: ["Hapara", "GoGuardian", "LanSchool", "Bark", "Gaggle", "Blocksi", "NetSupport", "DyKnow", "Impero", "Senso", "Pulse / EducatorImpact"]
-        },
-        {
-            category: "Content Filtering & Security",
-            services: ["Lightspeed Systems", "Securly", "iboss", "Fortinet / FortiGuard", "Zscaler", "Linewize / Qoria / FamilyZone", "Content Keeper", "Smoothwall", "Sophos", "Netsweeper", "Deledao"]
-        },
-        {
-            category: "Device Management (MDM) & Infrastructure",
-            services: ["Jamf", "Mosyle", "Gopher", "LFGL", "Mobile Guardian"]
-        },
-        {
-            category: "Parental Control & Location Tracking",
-            services: ["Life360", "Qustodio", "Kiddoware", "Findmykids", "Troomi", "mSpy", "Net Nanny", "FamiSafe"]
-        }
-    ];
+    let BLOCKED_SERVICES = [];
 
     const searchInput = document.getElementById('service-search');
     const serviceList = document.getElementById('service-list');
+
+    const fetchServices = async () => {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/README.md');
+            if (!response.ok) throw new Error('Failed to fetch blocklist');
+            const text = await response.text();
+
+            const targetSectionHeader = "## 👁️ Services Targeted";
+            const startIdx = text.indexOf(targetSectionHeader);
+            if (startIdx === -1) return;
+
+            const sectionText = text.slice(startIdx + targetSectionHeader.length);
+            const lines = sectionText.split('\n');
+
+            let currentCategory = null;
+            let currentServices = [];
+            const parsedServices = [];
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+
+                // Stop at next section or horizontal rule
+                if (trimmed.startsWith('---') || trimmed.startsWith('## ')) {
+                    if (currentCategory && currentServices.length > 0 && currentCategory !== "Common Dependencies") {
+                        parsedServices.push({ category: currentCategory, services: currentServices });
+                    }
+                    break;
+                }
+
+                if (trimmed.startsWith('#### ')) {
+                    if (currentCategory && currentServices.length > 0 && currentCategory !== "Common Dependencies") {
+                        parsedServices.push({ category: currentCategory, services: currentServices });
+                    }
+                    currentCategory = trimmed.replace('#### ', '').trim();
+                    currentServices = [];
+                } else if (trimmed.startsWith('* ') && currentCategory) {
+                    currentServices.push(trimmed.replace('* ', '').trim());
+                }
+            }
+
+            BLOCKED_SERVICES = parsedServices;
+            renderServices(searchInput ? searchInput.value : '');
+
+        } catch (error) {
+            console.error('Error loading blocklist:', error);
+            if (serviceList) {
+                serviceList.innerHTML = '<div class="no-results"><p>Unable to load service list from GitHub.</p></div>';
+            }
+        }
+    };
 
     const renderServices = (filterText = '') => {
         if (!serviceList) return;
@@ -423,5 +457,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         // Initial render
         renderServices();
+        fetchServices();
     }
 });
