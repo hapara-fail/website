@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             category: "Parental Control & Location Tracking",
-            services: ["Life360", "Qustodio", "Kiddoware"]
+            services: ["Life360", "Qustodio", "Kiddoware", "Findmykids", "Troomi", "mSpy", "Net Nanny", "FamiSafe"]
         }
     ];
 
