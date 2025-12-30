@@ -15,7 +15,7 @@ We only support the most recent stable release of the project. Please ensure you
 
 If you have discovered a security vulnerability in this project, we appreciate your help in disclosing it to us in a responsible manner.
 
-### Method 1: GitHub Private Reportin
+### Method 1: GitHub Private Reporting
 
 We have enabled **Private Vulnerability Reporting** for this repository. This is the fastest and most secure way to report issues, as it allows you to discuss vulnerability details privately with us without the risk of a public leak.
 
