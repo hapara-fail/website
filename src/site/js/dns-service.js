@@ -333,19 +333,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const BLOCKED_SERVICES = [
         {
             category: "Monitoring & Classroom Management",
-            services: ["Bark", "DyKnow", "Gaggle", "GoGuardian", "Gopher", "Hapara", "Impero", "LanSchool", "NetSupport", "Senso"]
+            services: ["Hapara", "GoGuardian", "LanSchool", "Bark", "Gaggle", "Blocksi", "NetSupport", "DyKnow", "Impero", "Senso", "Pulse / EducatorImpact"]
         },
         {
             category: "Content Filtering & Security",
-            services: ["Blocksi", "Content Keeper", "Fortinet / FortiGuard", "Iboss", "Lightspeed Systems", "Linewize / Qoria / FamilyZone", "Netsweeper", "Securly", "Smoothwall", "Sophos", "Zscaler"]
+            services: ["Lightspeed Systems", "Securly", "iboss", "Fortinet / FortiGuard", "Zscaler", "Linewize / Qoria / FamilyZone", "Content Keeper", "Smoothwall", "Sophos", "Netsweeper", "Deledao"]
         },
         {
             category: "Device Management (MDM) & Infrastructure",
-            services: ["Anthology / Blackboard", "Deledao", "Jamf", "LFGL", "Mosyle", "Pulse / EducatorImpact"]
+            services: ["Jamf", "Mosyle", "Gopher", "Anthology / Blackboard", "LFGL", "Mobile Guardian"]
         },
         {
             category: "Parental Control & Location Tracking",
-            services: ["Life360", "Mobile Guardian", "Kiddoware", "Qustodio"]
+            services: ["Life360", "Qustodio", "Kiddoware"]
         }
     ];
 
