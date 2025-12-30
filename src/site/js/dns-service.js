@@ -437,16 +437,41 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hasResults && normalizedFilter) {
             const noResults = document.createElement('div');
             noResults.className = 'no-results';
-            noResults.innerHTML = `
-                <p>No services found matching "<strong>${filterText}</strong>". <br>They might not be blocked, or are listed under a different name.</p>
-                <a href="https://github.com/hapara-fail/blocklist/issues/new?template=additions-removals.md" target="_blank" rel="noopener noreferrer" class="cta-button" style="margin-top: 15px; display: inline-flex; font-size: 0.9rem; align-items: center; gap: 8px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Request to add this service
-                </a>
+
+            const messagePara = document.createElement('p');
+            messagePara.appendChild(document.createTextNode('No services found matching "'));
+
+            const strongEl = document.createElement('strong');
+            strongEl.textContent = filterText;
+            messagePara.appendChild(strongEl);
+
+            messagePara.appendChild(document.createTextNode('". '));
+            const br = document.createElement('br');
+            messagePara.appendChild(br);
+            messagePara.appendChild(document.createTextNode('They might not be blocked, or are listed under a different name.'));
+
+            noResults.appendChild(messagePara);
+
+            const link = document.createElement('a');
+            link.href = 'https://github.com/hapara-fail/blocklist/issues/new?template=additions-removals.md';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'cta-button';
+            link.style.marginTop = '15px';
+            link.style.display = 'inline-flex';
+            link.style.fontSize = '0.9rem';
+            link.style.alignItems = 'center';
+            link.style.gap = '8px';
+
+            link.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Request to add this service
             `;
+
+            noResults.appendChild(link);
             serviceList.appendChild(noResults);
         }
     };
