@@ -1,4 +1,4 @@
-# Contributing to the hapara.fail Website
+# Contributing Guidelines
 
 First off, thank you for considering contributing to the **hapara.fail website**. This platform serves as a hub for privacy tools and educational resources, and your help is vital to keeping it fast, accurate, and useful for students.
 
