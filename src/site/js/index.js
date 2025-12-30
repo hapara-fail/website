@@ -32,12 +32,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const heroTitle = document.querySelector('.hero-title');
         if (heroTitle) {
             const text = heroTitle.textContent.trim();
-            // Build word wrappers
-            heroTitle.innerHTML = text.split(' ').map(word => `<span class="word-wrapper"><span class="word">${word}</span></span>`).join(' ');
-            
-            const words = heroTitle.querySelectorAll('.word');
-            words.forEach((word, i) => {
-                word.style.transitionDelay = `${i * 100}ms`;
+            // Build word wrappers safely using DOM APIs
+            const wordsArray = text.split(/\s+/);
+            heroTitle.textContent = '';
+            wordsArray.forEach((word, index) => {
+                const wrapper = document.createElement('span');
+                wrapper.className = 'word-wrapper';
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                wordSpan.textContent = word;
+                wordSpan.style.transitionDelay = `${index * 100}ms`;
+                wrapper.appendChild(wordSpan);
+                heroTitle.appendChild(wrapper);
+                if (index < wordsArray.length - 1) {
+                    heroTitle.appendChild(document.createTextNode(' '));
+                }
             });
 
             // Force layout then add class to trigger animation
