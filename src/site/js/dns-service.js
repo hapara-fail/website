@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             category: "Device Management (MDM) & Infrastructure",
-            services: ["Jamf", "Mosyle", "Gopher", "Anthology / Blackboard", "LFGL", "Mobile Guardian"]
+            services: ["Jamf", "Mosyle", "Gopher", "LFGL", "Mobile Guardian"]
         },
         {
             category: "Parental Control & Location Tracking",
