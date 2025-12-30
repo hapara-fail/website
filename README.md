@@ -114,11 +114,13 @@ This command will build the project and deploy it to the Cloudflare Workers envi
 
 ## 🤝 Contributing
 
-Contributions are welcome! If you have ideas for improvements, new tools, bug fixes, or blog post topics, please feel free to:
+Contributions are welcome! To ensure changes are processed quickly and correctly, please review our **[Contributing Guidelines](https://github.com/hapara-fail/website/blob/main/CONTRIBUTING.md)** before submitting.
 
-  * Open an issue on GitHub.
-  * Submit a pull request.
-  * Join our [Discord server](https://discord.gg/KA66dHUF4P) to discuss.
+If you have ideas for improvements, new tools, bug fixes, or blog post topics, please feel free to:
+
+* **Open an Issue** on GitHub using our standardized templates.
+* **Submit a Pull Request** with your proposed changes.
+* Join our [Discord server](https://discord.gg/KA66dHUF4P) to discuss.
 
 You can also find donation options [here](https://hapara.fail/contribute).
 
