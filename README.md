@@ -52,7 +52,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 │   └── worker.ts       \# Cloudflare Worker entry point (routing logic)
 ├── package.json        \# Project dependencies and scripts
 ├── tsconfig.json       \# TypeScript configuration
-├── wrangler.toml       \# Cloudflare Workers configuration
+├── wrangler.jsonc      \# Cloudflare Workers configuration
 └── README.md           \# This file
 
 ```
@@ -108,7 +108,7 @@ Ensure you have Wrangler installed and configured (`wrangler login`).
 npm run deploy
 ```
 
-This command will build the project and deploy it to the Cloudflare Workers environment specified in `wrangler.toml`.
+This command will build the project and deploy it to the Cloudflare Workers environment specified in `wrangler.jsonc`.
 
 -----
 
