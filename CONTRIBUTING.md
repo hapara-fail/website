@@ -51,7 +51,7 @@ The project is built on **Cloudflare Workers**.
 ---
 
 ## 🤝 Code of Conduct
-We value accuracy, privacy, and collaboration. Please ensure your interactions—whether in issues, pull requests, or Discord—are respectful and constructive.
+We value accuracy, privacy, and collaboration. Please ensure your interactions—whether in issues, pull requests, or Discord—are respectful and constructive. By participating, you are expected to uphold our **[Code of Conduct](https://github.com/hapara-fail/website/blob/main/CODE_OF_CONDUCT.md)**.
 
 ## 📜 License
 By contributing to hapara.fail, you agree that your contributions will be licensed under the same **GNU General Public License v3.0 (GPLv3)** that covers the project. Details can be found at [license.hapara.fail](https://license.hapara.fail/).
