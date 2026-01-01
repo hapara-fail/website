@@ -59,13 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Build word wrappers safely using DOM APIs
             const wordsArray = text.split(/\s+/);
             heroTitle.textContent = '';
+            const WORD_ANIMATION_DELAY_MS = 100;
             wordsArray.forEach((word, index) => {
                 const wrapper = document.createElement('span');
                 wrapper.className = 'word-wrapper';
                 const wordSpan = document.createElement('span');
                 wordSpan.className = 'word';
                 wordSpan.textContent = word;
-                wordSpan.style.transitionDelay = `${index * 100}ms`;
+                wordSpan.style.transitionDelay = `${index * WORD_ANIMATION_DELAY_MS}ms`;
                 wrapper.appendChild(wordSpan);
                 heroTitle.appendChild(wrapper);
                 if (index < wordsArray.length - 1) {
