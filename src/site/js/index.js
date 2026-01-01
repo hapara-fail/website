@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Force layout then add class to trigger animation
+            // Force a synchronous layout/reflow so the subsequent class addition
+            // starts the CSS transition/animation from its initial state.
             void heroTitle.offsetWidth;
             requestAnimationFrame(() => {
                 heroTitle.classList.add('revealed');
