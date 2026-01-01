@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabsNav = document.querySelector('.tabs-nav');
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabButtonsArray = Array.from(tabButtons);
-    const tabContents = document.querySelectorAll('.tab-content');
     const tabUnderline = document.querySelector('.tab-underline');
     const tabsWrapper = document.querySelector('.tabs-content-wrapper');
     const osDetectionMessage = document.getElementById('os-detection-message');
@@ -246,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusTag = document.getElementById('dns-status-tag');
         if (!statusTag) return;
 
-        const statusDot = statusTag.querySelector('.status-dot');
         const statusText = statusTag.querySelector('.status-text');
 
         // Reset state
@@ -347,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const textToCopy = targetElement.innerText;
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         // Success feedback
-                        const originalContent = btn.innerHTML;
                         const copiedMsg = btn.querySelector('.copied-message');
 
                         // Add pulsing class
