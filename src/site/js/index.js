@@ -1,8 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+    // Utility: ensure handler runs at most once
+    const createOnceHandler = (fn) => {
+        let called = false;
+        return function (...args) {
+            if (called) {
+                return;
+            }
+            called = true;
+            return fn.apply(this, args);
+        };
+    };
+
     // --- FAQ Dropdown Animation ---
     const FAQ_HEIGHT_TRANSITION_DELAY_MS = 10;
+    const FAQ_FALLBACK_TIMEOUT_MS = 500;
     document.querySelectorAll('.faq-item').forEach(detail => {
         const summary = detail.querySelector('summary');
         const contentWrapper = detail.querySelector('.faq-content-wrapper');
@@ -13,17 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 detail.open = !detail.open;
                 return;
             }
-            // Utility: ensure handler runs at most once
-            const createOnceHandler = (fn) => {
-                let called = false;
-                return function (...args) {
-                    if (called) {
-                        return;
-                    }
-                    called = true;
-                    return fn.apply(this, args);
-                };
-            };
+
             if (detail.open) {
                 const height = contentWrapper.scrollHeight;
                 contentWrapper.style.height = `${height}px`;
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 contentWrapper.addEventListener('transitionend', finishClose, { once: true });
                 // Fallback in case transitionend does not fire (e.g., element removed or transition canceled)
-                setTimeout(finishClose, 500);
+                setTimeout(finishClose, FAQ_FALLBACK_TIMEOUT_MS);
             } else {
                 contentWrapper.style.height = '0px';
                 detail.open = true;
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 contentWrapper.addEventListener('transitionend', finishOpen, { once: true });
                 // Fallback in case transitionend does not fire
-                setTimeout(finishOpen, 500);
+                setTimeout(finishOpen, FAQ_FALLBACK_TIMEOUT_MS);
             }
         });
     });
@@ -78,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Force a synchronous layout/reflow so the subsequent class addition
             // starts the CSS transition/animation from its initial state.
+            // Using `void` here makes it explicit that we only care about triggering
+            // the read side effect (layout), and that the `offsetWidth` value is ignored.
             void heroTitle.offsetWidth;
             requestAnimationFrame(() => {
                 heroTitle.classList.add('revealed');

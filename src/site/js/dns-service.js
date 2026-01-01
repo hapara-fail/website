@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TABS & OS DETECTION SCRIPT ---
     const tabsNav = document.querySelector('.tabs-nav');
     const tabButtons = document.querySelectorAll('.tab-button');
-    const tabButtonsArray = Array.from(tabButtons);
     const tabUnderline = document.querySelector('.tab-underline');
     const tabsWrapper = document.querySelector('.tabs-content-wrapper');
     const osDetectionMessage = document.getElementById('os-detection-message');
@@ -75,8 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
         moveUnderline(newActiveButton);
 
         if (currentActiveContent && !isInitial) {
-            const currentIndex = tabButtonsArray.indexOf(currentActiveButton);
-            const newIndex = tabButtonsArray.indexOf(newActiveButton);
+            let currentIndex = -1;
+            let newIndex = -1;
+
+            tabButtons.forEach((btn, idx) => {
+                if (btn === currentActiveButton) currentIndex = idx;
+                if (btn === newActiveButton) newIndex = idx;
+            });
             const directionClass = newIndex > currentIndex ? 'slide-from-right' : 'slide-from-left';
 
             currentActiveContent.classList.add('is-exiting');
@@ -273,7 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const contentType = response.headers.get('content-type') || '';
-            if (!contentType.toLowerCase().includes('text') && !contentType.toLowerCase().includes('json')) {
+            const mimeType = contentType.split(';', 1)[0].trim().toLowerCase();
+            const allowedContentTypes = ['application/json', 'text/plain'];
+
+            if (!allowedContentTypes.includes(mimeType)) {
                 throw new Error('Unexpected content type: ' + contentType);
             }
 
@@ -424,6 +431,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Basic integrity/format validation to ensure the content matches
+            // the expected structure before using it in the UI.
+            const isValidServices = Array.isArray(parsedServices) && parsedServices.every(entry => {
+                if (!entry || typeof entry.category !== 'string' || !Array.isArray(entry.services)) {
+                    return false;
+                }
+                // Categories and services should be non-empty strings without control characters
+                const safeText = (s) => typeof s === 'string' && s.trim().length > 0 && !/[\x00-\x08\x0E-\x1F]/.test(s);
+                if (!safeText(entry.category)) {
+                    return false;
+                }
+                return entry.services.every(safeText);
+            });
+
+            if (!isValidServices) {
+                throw new Error('Fetched blocklist content did not match expected format');
+            }
+
             BLOCKED_SERVICES = parsedServices;
             renderServices(searchInput ? searchInput.value : '');
 
@@ -466,8 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.className = 'service-card';
 
                     const serviceInfo = document.createElement('div');
-                    serviceInfo.className = 'service-info';
-                    serviceInfo.style.cssText = 'display: flex; align-items: center; gap: 15px; width: 100%; justify-content: space-between;';
+                    serviceInfo.className = 'service-info service-info-flex';
+                    serviceInfo.style.display = 'flex';
+                    serviceInfo.style.alignItems = 'center';
+                    serviceInfo.style.gap = '15px';
+                    serviceInfo.style.width = '100%';
+                    serviceInfo.style.justifyContent = 'space-between';
 
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'service-name';
@@ -537,13 +566,33 @@ document.addEventListener('DOMContentLoaded', () => {
             link.style.alignItems = 'center';
             link.style.gap = '8px';
 
-            link.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Request to add this service
-            `;
+            const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            svgEl.setAttribute('width', '18');
+            svgEl.setAttribute('height', '18');
+            svgEl.setAttribute('viewBox', '0 0 24 24');
+            svgEl.setAttribute('fill', 'none');
+            svgEl.setAttribute('stroke', 'currentColor');
+            svgEl.setAttribute('stroke-width', '2.5');
+            svgEl.setAttribute('stroke-linecap', 'round');
+            svgEl.setAttribute('stroke-linejoin', 'round');
+
+            const lineVertical = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineVertical.setAttribute('x1', '12');
+            lineVertical.setAttribute('y1', '5');
+            lineVertical.setAttribute('x2', '12');
+            lineVertical.setAttribute('y2', '19');
+            svgEl.appendChild(lineVertical);
+
+            const lineHorizontal = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineHorizontal.setAttribute('x1', '5');
+            lineHorizontal.setAttribute('y1', '12');
+            lineHorizontal.setAttribute('x2', '19');
+            lineHorizontal.setAttribute('y2', '12');
+            svgEl.appendChild(lineHorizontal);
+
+            link.appendChild(svgEl);
+            link.appendChild(document.createTextNode(' Request to add this service'));
 
             noResults.appendChild(link);
             serviceList.appendChild(noResults);
