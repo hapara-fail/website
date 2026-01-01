@@ -13,21 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 detail.open = !detail.open;
                 return;
             }
+            // Utility: ensure handler runs at most once
+            const createOnceHandler = (fn) => {
+                let called = false;
+                return function (...args) {
+                    if (called) {
+                        return;
+                    }
+                    called = true;
+                    return fn.apply(this, args);
+                };
+            };
             if (detail.open) {
                 const height = contentWrapper.scrollHeight;
                 contentWrapper.style.height = `${height}px`;
                 setTimeout(() => { contentWrapper.style.height = '0px'; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure state is consistent
-                const createOnceHandler = (fn) => {
-                    let called = false;
-                    return function (...args) {
-                        if (called) {
-                            return;
-                        }
-                        called = true;
-                        return fn.apply(this, args);
-                    };
-                };
                 const finishClose = createOnceHandler(() => {
                     detail.open = false;
                 });
@@ -40,16 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const height = contentWrapper.scrollHeight;
                 setTimeout(() => { contentWrapper.style.height = `${height}px`; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure height is reset
-                const createOnceHandler = (fn) => {
-                    let called = false;
-                    return function (...args) {
-                        if (called) {
-                            return;
-                        }
-                        called = true;
-                        return fn.apply(this, args);
-                    };
-                };
                 const finishOpen = createOnceHandler(() => {
                     if (detail.open) {
                         contentWrapper.style.height = '';
