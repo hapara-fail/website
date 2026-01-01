@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabUnderline = document.querySelector('.tab-underline');
     const tabsWrapper = document.querySelector('.tabs-content-wrapper');
     const osDetectionMessage = document.getElementById('os-detection-message');
+    // Small delay to allow the browser to apply CSS transition classes
+    // before we remove the slide direction helper classes.
+    const TAB_TRANSITION_CLEANUP_DELAY_MS = 10;
 
     const moveUnderline = (targetTab) => {
         if (!targetTab || !tabUnderline) return;
@@ -82,7 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 currentActiveContent.classList.remove('active', 'is-exiting');
                 newActiveContent.classList.add('active');
-                setTimeout(() => newActiveContent.classList.remove('slide-from-right', 'slide-from-left'), 10);
+                // Use a small delay so the browser can apply the slide transition
+                setTimeout(
+                    () => newActiveContent.classList.remove('slide-from-right', 'slide-from-left'),
+                    TAB_TRANSITION_CLEANUP_DELAY_MS
+                );
             }, 50);
 
         } else if (newActiveContent) {
