@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // --- FAQ Dropdown Animation ---
+    const FAQ_HEIGHT_TRANSITION_DELAY_MS = 10;
     document.querySelectorAll('.faq-item').forEach(detail => {
         const summary = detail.querySelector('summary');
         const contentWrapper = detail.querySelector('.faq-content-wrapper');
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detail.open) {
                 const height = contentWrapper.scrollHeight;
                 contentWrapper.style.height = `${height}px`;
-                setTimeout(() => { contentWrapper.style.height = '0px'; }, 10);
+                setTimeout(() => { contentWrapper.style.height = '0px'; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure state is consistent
                 let closeCompleted = false;
                 const finishClose = () => {
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentWrapper.style.height = '0px';
                 detail.open = true;
                 const height = contentWrapper.scrollHeight;
-                setTimeout(() => { contentWrapper.style.height = `${height}px`; }, 10);
+                setTimeout(() => { contentWrapper.style.height = `${height}px`; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure height is reset
                 let openCompleted = false;
                 const finishOpen = () => {
