@@ -14,9 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
+    // Utility: setup scroll reveal animation for matching elements
+    const setupScrollReveal = (selector, threshold = 0.1) => {
+        const revealItems = document.querySelectorAll(selector);
+        if (!revealItems.length || typeof IntersectionObserver === 'undefined') {
+            return;
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold });
+        revealItems.forEach(item => observer.observe(item));
+    };
+
     // --- FAQ Dropdown Animation ---
     const FAQ_HEIGHT_TRANSITION_DELAY_MS = 10;
     const FAQ_FALLBACK_TIMEOUT_MS = 500;
+    const INTERSECTION_THRESHOLD = 0.1;
     document.querySelectorAll('.faq-item').forEach(detail => {
         const summary = detail.querySelector('summary');
         const contentWrapper = detail.querySelector('.faq-content-wrapper');
@@ -82,25 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Force a synchronous layout/reflow so the subsequent class addition
             // starts the CSS transition/animation from its initial state.
-            // Using `void` here makes it explicit that we only care about triggering
-            // the read side effect (layout), and that the `offsetWidth` value is ignored.
-            void heroTitle.offsetWidth;
+            // Read layout explicitly; the value is unused, we only need the side effect.
+            const _forceReflow = heroTitle.getBoundingClientRect();
             requestAnimationFrame(() => {
                 heroTitle.classList.add('revealed');
             });
         }
 
         // --- Scroll Reveal Animation ---
-        const revealItems = document.querySelectorAll('.reveal-item');
-        const INTERSECTION_THRESHOLD = 0.1;
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: INTERSECTION_THRESHOLD });
-        revealItems.forEach(item => observer.observe(item));
+        setupScrollReveal('.reveal-item', INTERSECTION_THRESHOLD);
     }
 });
