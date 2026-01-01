@@ -18,14 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentWrapper.style.height = `${height}px`;
                 setTimeout(() => { contentWrapper.style.height = '0px'; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure state is consistent
-                let closeCompleted = false;
-                const finishClose = () => {
-                    if (closeCompleted) {
-                        return;
-                    }
-                    closeCompleted = true;
-                    detail.open = false;
+                const createOnceHandler = (fn) => {
+                    let called = false;
+                    return function (...args) {
+                        if (called) {
+                            return;
+                        }
+                        called = true;
+                        return fn.apply(this, args);
+                    };
                 };
+                const finishClose = createOnceHandler(() => {
+                    detail.open = false;
+                });
                 contentWrapper.addEventListener('transitionend', finishClose, { once: true });
                 // Fallback in case transitionend does not fire (e.g., element removed or transition canceled)
                 setTimeout(finishClose, 500);
@@ -35,16 +40,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const height = contentWrapper.scrollHeight;
                 setTimeout(() => { contentWrapper.style.height = `${height}px`; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
                 // Use transitionend with a fallback timeout to ensure height is reset
-                let openCompleted = false;
-                const finishOpen = () => {
-                    if (openCompleted) {
-                        return;
-                    }
-                    openCompleted = true;
+                const createOnceHandler = (fn) => {
+                    let called = false;
+                    return function (...args) {
+                        if (called) {
+                            return;
+                        }
+                        called = true;
+                        return fn.apply(this, args);
+                    };
+                };
+                const finishOpen = createOnceHandler(() => {
                     if (detail.open) {
                         contentWrapper.style.height = '';
                     }
-                };
+                });
                 contentWrapper.addEventListener('transitionend', finishOpen, { once: true });
                 // Fallback in case transitionend does not fire
                 setTimeout(finishOpen, 500);
@@ -75,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Force layout then add class to trigger animation
+            // Force a synchronous layout/reflow so the subsequent class addition
+            // starts the CSS transition/animation from its initial state.
             void heroTitle.offsetWidth;
             requestAnimationFrame(() => {
                 heroTitle.classList.add('revealed');
