@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabUnderline = document.querySelector('.tab-underline');
     const tabsWrapper = document.querySelector('.tabs-content-wrapper');
     const osDetectionMessage = document.getElementById('os-detection-message');
+    // Small delay to allow the browser to apply CSS transition classes
+    // before we remove the slide direction helper classes.
+    const TAB_TRANSITION_CLEANUP_DELAY_MS = 10;
 
     const moveUnderline = (targetTab) => {
         if (!targetTab || !tabUnderline) return;
@@ -82,7 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 currentActiveContent.classList.remove('active', 'is-exiting');
                 newActiveContent.classList.add('active');
-                setTimeout(() => newActiveContent.classList.remove('slide-from-right', 'slide-from-left'), 10);
+                // Use a small delay so the browser can apply the slide transition
+                setTimeout(
+                    () => newActiveContent.classList.remove('slide-from-right', 'slide-from-left'),
+                    TAB_TRANSITION_CLEANUP_DELAY_MS
+                );
             }, 50);
 
         } else if (newActiveContent) {
@@ -260,12 +267,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             clearTimeout(timeoutId);
 
-            if (response.status === 200) {
-                statusTag.classList.add('status-up');
-                if (statusText) statusText.textContent = 'Operational';
-            } else {
-                throw new Error('Service down');
+            // Basic HTTP status and content-type validation
+            if (!response.ok) {
+                throw new Error('Unexpected response status: ' + response.status);
             }
+
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.toLowerCase().includes('text') && !contentType.toLowerCase().includes('json')) {
+                throw new Error('Unexpected content type: ' + contentType);
+            }
+
+            statusTag.classList.add('status-up');
+            if (statusText) statusText.textContent = 'Operational';
         } catch (error) {
             console.error('DNS Status Check Failed:', error);
             statusTag.classList.add('status-down');
@@ -451,17 +464,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 matchingServices.forEach(service => {
                     const card = document.createElement('div');
                     card.className = 'service-card';
-                    card.innerHTML = `
-                        <div class="service-info" style="display: flex; align-items: center; gap: 15px; width: 100%; justify-content: space-between;">
-                            <span class="service-name">${service}</span>
-                            <span class="service-status">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                                Blocked
-                            </span>
-                        </div>
-                    `;
+
+                    const serviceInfo = document.createElement('div');
+                    serviceInfo.className = 'service-info';
+                    serviceInfo.style.cssText = 'display: flex; align-items: center; gap: 15px; width: 100%; justify-content: space-between;';
+
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'service-name';
+                    nameSpan.textContent = service;
+
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = 'service-status';
+
+                    const svgNS = 'http://www.w3.org/2000/svg';
+                    const svg = document.createElementNS(svgNS, 'svg');
+                    svg.setAttribute('xmlns', svgNS);
+                    svg.setAttribute('width', '14');
+                    svg.setAttribute('height', '14');
+                    svg.setAttribute('viewBox', '0 0 24 24');
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    svg.setAttribute('stroke-width', '3');
+                    svg.setAttribute('stroke-linecap', 'round');
+                    svg.setAttribute('stroke-linejoin', 'round');
+                    svg.style.marginRight = '4px';
+
+                    const polyline = document.createElementNS(svgNS, 'polyline');
+                    polyline.setAttribute('points', '20 6 9 17 4 12');
+                    svg.appendChild(polyline);
+
+                    statusSpan.appendChild(svg);
+                    statusSpan.appendChild(document.createTextNode('Blocked'));
+
+                    serviceInfo.appendChild(nameSpan);
+                    serviceInfo.appendChild(statusSpan);
+
+                    card.appendChild(serviceInfo);
                     cardsContainer.appendChild(card);
                 });
 
