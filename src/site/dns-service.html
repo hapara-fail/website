@@ -383,9 +383,9 @@
                             d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                     </svg></a>
             </div>
-            <p class="footer-copy">&copy; 2026 hapara.fail<br>People over profits.</p>
+            <p class="footer-copy">&copy; 2026 hapara.fail<br>People over profits</p>
             <p class="footer-legal"><a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • <a
-                    href="https://license.hapara.fail/">License</a> • <a href="https://status.hapara.fail/">Status</a>
+                    href="/license">License</a> • <a href="https://status.hapara.fail/">Status</a>
             </p>
         </div>
     </footer>
@@ -432,13 +432,19 @@
             <div id="dns-step-info" class="dns-step" hidden>
                 <h3 class="dns-modal-title">DNS Configuration</h3>
 
-                <div class="dns-location-tag">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                        <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    South Carolina, USA
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
+                    <div class="dns-location-tag" style="margin-bottom: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        South Carolina, USA
+                    </div>
+                    <div id="dns-status-tag" class="dns-status-tag" style="margin-bottom: 0;">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Checking...</span>
+                    </div>
                 </div>
 
                 <div class="dns-info-group">

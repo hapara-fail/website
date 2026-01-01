@@ -235,6 +235,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalOverlay.hidden = false;
         document.body.classList.add('body-lock');
+
+        // Check DNS status when modal opens (or when we proceed to info)
+        if (tosAccepted === 'true') {
+            checkDnsStatus();
+        }
+    };
+
+    const checkDnsStatus = async () => {
+        const statusTag = document.getElementById('dns-status-tag');
+        if (!statusTag) return;
+
+        const statusDot = statusTag.querySelector('.status-dot');
+        const statusText = statusTag.querySelector('.status-text');
+
+        // Reset state
+        statusTag.className = 'dns-status-tag';
+        if (statusText) statusText.textContent = 'Checking...';
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
+            const response = await fetch('https://dns-monitor.a9x.workers.dev/', {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (response.status === 200) {
+                statusTag.classList.add('status-up');
+                if (statusText) statusText.textContent = 'Operational';
+            } else {
+                throw new Error('Service down');
+            }
+        } catch (error) {
+            console.error('DNS Status Check Failed:', error);
+            statusTag.classList.add('status-down');
+            if (statusText) statusText.textContent = 'Service Issue';
+        }
     };
 
     const closeModal = () => {
@@ -288,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     stepTos.hidden = true;
                     stepInfo.hidden = false;
                     stepInfo.classList.add('fade-in');
+                    checkDnsStatus();
 
                     // Small delay to allow fade-in class to apply before removing it/or letting CSS handle opacity
                     requestAnimationFrame(() => {

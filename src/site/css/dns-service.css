@@ -503,6 +503,76 @@
     margin-bottom: 25px;
 }
 
+.dns-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+.dns-status-tag.status-up {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.dns-status-tag.status-down {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    position: relative;
+}
+
+.dns-status-tag.status-up .status-dot::after,
+.dns-status-tag.status-down .status-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    transform: translate3d(-50%, -50%, 0) scale(1) rotateZ(0.01deg);
+    animation: ripple 1.5s ease-out infinite;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    z-index: -1;
+}
+
+.dns-status-tag.status-up .status-dot,
+.dns-status-tag.status-down .status-dot {
+    opacity: 1;
+    z-index: 1;
+}
+
+@keyframes ripple {
+    0% {
+        transform: translate3d(-50%, -50%, 0) scale(1) rotateZ(0.01deg);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate3d(-50%, -50%, 0) scale(3) rotateZ(0.01deg);
+        opacity: 0;
+    }
+}
+
 .dns-info-group {
     margin-bottom: 20px;
 }

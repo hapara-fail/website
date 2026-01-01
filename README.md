@@ -128,4 +128,4 @@ You can also find donation options [here](https://hapara.fail/contribute).
 
 ## 📄 License
 
-This project is licensed under the terms specified at [license.hapara.fail](https://license.hapara.fail/).
+This project is licensed under the terms specified at [www.hapara.fail/license](https://www.hapara.fail/license).

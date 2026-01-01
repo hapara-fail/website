@@ -1,0 +1,483 @@
+/* Fira Code Fonts */
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic/wght/normal.woff2);
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin/wght/normal.woff2);
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin-ext/wght/normal.woff2);
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek-ext/wght/normal.woff2);
+    unicode-range: U+1F00-1FFF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek/wght/normal.woff2);
+    unicode-range: U+0370-03FF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic-ext/wght/normal.woff2);
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin-ext/wght/normal.woff2);
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic-ext/wght/normal.woff2);
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic/wght/normal.woff2);
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek/wght/normal.woff2);
+    unicode-range: U+0370-03FF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek-ext/wght/normal.woff2);
+    unicode-range: U+1F00-1FFF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin/wght/normal.woff2);
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic-ext/wght/normal.woff2);
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek/wght/normal.woff2);
+    unicode-range: U+0370-03FF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/greek-ext/wght/normal.woff2);
+    unicode-range: U+1F00-1FFF;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin/wght/normal.woff2);
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/cyrillic/wght/normal.woff2);
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Fira Code;
+    font-style: normal;
+    font-weight: 500;
+    src: url(/cf-fonts/v/fira-code/5.0.16/latin-ext/wght/normal.woff2);
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    font-display: swap;
+}
+
+/* Note: Poppins is loaded via Google Fonts in license.html */
+
+/* Core Variables & Resets */
+:root {
+    --accent-glow: rgba(168, 85, 247, 0.15);
+    --success-color: #22c55e;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+}
+
+/* Page Header Specifics */
+.page-header {
+    padding: 0 0 2rem 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.header-divider {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    opacity: 0.5;
+    font-weight: 400;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.logo-text:hover {
+    color: var(--accent-2);
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+/* License Summary Card */
+.license-summary-card {
+    background-color: var(--bg-offset);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 3rem;
+    margin-top: 120px;
+    margin-bottom: 5rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.license-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+.license-summary-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(82, 74, 242, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.license-summary-card>* {
+    position: relative;
+    z-index: 1;
+}
+
+.license-summary-card p {
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+}
+
+.license-summary-card h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.license-summary-card h2 {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2.5rem;
+    margin-top: 3rem;
+}
+
+.grid-section h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grid-section ul {
+    list-style: none;
+}
+
+.grid-section li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.grid-section li:hover {
+    color: var(--text-primary);
+}
+
+.grid-section li svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.permissions h3 {
+    color: var(--success-color);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.limitations h3 {
+    color: var(--danger-color);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.conditions h3 {
+    color: var(--info-color);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.permissions svg {
+    color: var(--success-color);
+}
+
+.limitations svg {
+    color: var(--danger-color);
+}
+
+.conditions svg {
+    color: var(--info-color);
+}
+
+/* Philosophy Section */
+.philosophy-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 5rem;
+}
+
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .philosophy-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.philosophy-item h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: var(--text-primary);
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.philosophy-item p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+}
+
+/* Raw License Text */
+.section-heading {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 3rem;
+    letter-spacing: -1px;
+}
+
+.raw-license-container .section-heading {
+    margin-bottom: 1rem;
+}
+
+.raw-license-container {
+    margin-bottom: 6rem;
+    position: relative;
+}
+
+.license-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-control {
+    background: var(--bg-offset);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-control:hover {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--accent-1);
+}
+
+.btn-control svg {
+    width: 16px;
+    height: 16px;
+}
+
+.license-text-wrapper {
+    background-color: #080713;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2.5rem;
+    overflow-x: auto;
+    position: relative;
+    max-height: 600px;
+    overflow-y: auto;
+    text-align: center;
+}
+
+.license-text-wrapper pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--text-secondary);
+}
+
+/* Animations */
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .license-summary-card {
+        padding: 1.5rem;
+    }
+
+    .section-heading {
+        margin-bottom: 2rem;
+    }
+}
