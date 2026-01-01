@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- FAQ Dropdown Animation ---
-    const FAQ_HEIGHT_TRANSITION_DELAY_MS = 10;
-    const FAQ_FALLBACK_TIMEOUT_MS = 500;
+    // Refactored to handle spam clicks and provide immediate feedback
     const INTERSECTION_THRESHOLD = 0.1;
     document.querySelectorAll('.faq-item').forEach(detail => {
         const summary = detail.querySelector('summary');
@@ -46,31 +45,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (detail.open) {
-                const height = contentWrapper.scrollHeight;
-                contentWrapper.style.height = `${height}px`;
-                setTimeout(() => { contentWrapper.style.height = '0px'; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
-                // Use transitionend with a fallback timeout to ensure state is consistent
-                const finishClose = createOnceHandler(() => {
-                    detail.open = false;
-                });
-                contentWrapper.addEventListener('transitionend', finishClose, { once: true });
-                // Fallback in case transitionend does not fire (e.g., element removed or transition canceled)
-                setTimeout(finishClose, FAQ_FALLBACK_TIMEOUT_MS);
-            } else {
-                contentWrapper.style.height = '0px';
+            // If it's closed OR it's currently animating to close (has 'closing' class), we open it.
+            if (!detail.open || detail.classList.contains('closing')) {
+                // OPENING
+                const wasClosing = detail.classList.contains('closing');
+                detail.classList.remove('closing');
                 detail.open = true;
-                const height = contentWrapper.scrollHeight;
-                setTimeout(() => { contentWrapper.style.height = `${height}px`; }, FAQ_HEIGHT_TRANSITION_DELAY_MS);
-                // Use transitionend with a fallback timeout to ensure height is reset
-                const finishOpen = createOnceHandler(() => {
-                    if (detail.open) {
+
+                // CRITICAL FIX: To animate FROM 0, we must set it to 0 immediately after opening
+                // but before the browser paints the "auto" height.
+                if (!wasClosing) {
+                    contentWrapper.style.height = '0px';
+                } else {
+                    const startHeight = contentWrapper.offsetHeight;
+                    contentWrapper.style.height = `${startHeight}px`;
+                }
+
+                // Force reflow
+                contentWrapper.getBoundingClientRect();
+
+                // Transition to full height
+                const targetHeight = contentWrapper.scrollHeight;
+                contentWrapper.style.height = `${targetHeight}px`;
+
+                // Clean up logic: only unset height if we are still open and not closing again
+                const finishOpen = () => {
+                    if (detail.open && !detail.classList.contains('closing')) {
                         contentWrapper.style.height = '';
                     }
-                });
+                };
+
                 contentWrapper.addEventListener('transitionend', finishOpen, { once: true });
-                // Fallback in case transitionend does not fire
-                setTimeout(finishOpen, FAQ_FALLBACK_TIMEOUT_MS);
+
+            } else {
+                // CLOSING
+                detail.classList.add('closing');
+
+                // Set explicit height to start transition from current height
+                const startHeight = contentWrapper.offsetHeight;
+                contentWrapper.style.height = `${startHeight}px`;
+
+                // Force reflow
+                contentWrapper.getBoundingClientRect();
+
+                // Transition to 0
+                requestAnimationFrame(() => {
+                    contentWrapper.style.height = '0px';
+                });
+
+                // Clean up logic: only close detail if we are still marked as closing
+                const finishClose = () => {
+                    if (detail.classList.contains('closing')) {
+                        detail.open = false;
+                        detail.classList.remove('closing');
+                        contentWrapper.style.height = '';
+                    }
+                };
+                contentWrapper.addEventListener('transitionend', finishClose, { once: true });
             }
         });
     });
@@ -83,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Build word wrappers safely using DOM APIs
             const wordsArray = text.split(/\s+/);
             heroTitle.textContent = '';
+            // 100ms between words gives a readable cascading reveal without feeling sluggish.
             const WORD_ANIMATION_DELAY_MS = 100;
             wordsArray.forEach((word, index) => {
                 const wrapper = document.createElement('span');
@@ -101,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Force a synchronous layout/reflow so the subsequent class addition
             // starts the CSS transition/animation from its initial state.
             // Read layout explicitly; the value is unused, we only need the side effect.
-            const _forceReflow = heroTitle.getBoundingClientRect();
+            heroTitle.getBoundingClientRect();
             requestAnimationFrame(() => {
                 heroTitle.classList.add('revealed');
             });

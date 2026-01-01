@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest new privacy tools, blog topics, or site improvements.
+about: Suggest new privacy tools, blog topics, or site improvements
 title: "[FEAT] "
 labels: discussion, enhancement
 assignees: nota9x

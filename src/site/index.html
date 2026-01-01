@@ -71,7 +71,7 @@
             <div class="parallax-bg"></div>
             <div class="hero-content">
                 <h1 class="hero-title gradient-text">Edtech is watching.</h1>
-                <p>Companies like GoGuardian, Gaggle, and Hapara have built a billion-dollar industry on student
+                <p>Companies like Hapara, GoGuardian, and Gaggle have built a billion-dollar industry on student
                     surveillance. We're here to expose it and help you fight back.</p>
             </div>
             <div class="scroll-indicator">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="stepper-item reveal-item reveal-up" style="transition-delay: 0.2s;">
                         <div class="stepper-number">2</div>
-                        <h3>Flawed AI "Threat" Detection</h3>
+                        <h3>AI "Threat" Detection</h3>
                         <p>Companies like <strong>Gaggle</strong> use AI to scan every word you write, flagging
                             "threats." As the EFF reports, these error-prone systems can punish students for normal
                             behavior and stifle creative expression.</p>
@@ -206,34 +206,56 @@
                     <h2 class="gradient-text">Frequently Asked Questions</h2>
                 </div>
                 <details class="faq-item">
-                    <summary>Is using this against school rules?</summary>
+                    <summary>Will I get in trouble for using this?</summary>
                     <div class="faq-content-wrapper">
                         <div class="faq-content">
-                            <p>It might be. We are not lawyers, and you should be aware of your school's Acceptable Use
-                                Policy. Our mission is to provide you with information and tools to protect your
-                                privacy. How you use them is your decision, but we believe privacy is a right worth
-                                defending.</p>
+                            <p>It acts as a network setting rather than a hack installed on your device. While we
+                                provide the tools to protect your privacy, you should always be aware of your school's
+                                Acceptable Use Policy. We believe privacy is a human right, but how you exercise that
+                                right is your decision.</p>
                         </div>
                     </div>
                 </details>
                 <details class="faq-item">
-                    <summary>How does your DNS actually stop services like GoGuardian?</summary>
+                    <summary>How does this actually stop school spyware?</summary>
                     <div class="faq-content-wrapper">
                         <div class="faq-content">
-                            <p>Surveillance software needs to "phone home" to its servers to send data and receive
-                                commands. Our DNS service maintains a constantly updated blocklist of these servers.
-                                When the software on your device tries to contact a GoGuardian server, our DNS refuses
-                                to connect it. No connection means no monitoring.</p>
+                            <p>Spyware like Hapara and GoGuardian relies on "phoning home" to their servers to report
+                                your screen activity. Our DNS service identifies these connection requests and blocks
+                                them. If the spyware can't connect to its command server, it can't send your data or
+                                receive instructions to look at your screen.</p>
                         </div>
                     </div>
                 </details>
                 <details class="faq-item">
-                    <summary>Is this a total solution for privacy?</summary>
+                    <summary>Will this unblock websites and games?</summary>
                     <div class="faq-content-wrapper">
                         <div class="faq-content">
-                            <p>No, and it's important to understand that. Our DNS is a powerful layer of defense against
-                                network-level surveillance. However, it may not stop monitoring from locally installed
-                                agents that work offline. It is a critical step, but not a magic invisibility cloak.</p>
+                            <p>Yes. By routing your DNS requests through our servers, you bypass many of the
+                                category-based web filters schools use to block content. This often unlocks access to
+                                games, streaming services, and other websites that have been arbitrarily restricted.</p>
+                        </div>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Does this work on school-managed Chromebooks?</summary>
+                    <div class="faq-content-wrapper">
+                        <div class="faq-content">
+                            <p>Yes. While schools often lock down standard network settings, we provide alternative
+                                methods to configure DNS on managed Chromebooks. Visit our <a href="/services/dns">DNS
+                                    Service page</a> to see specific instructions for your device ("Method 2" is often
+                                the key for restrictive devices).</p>
+                        </div>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Is this really free? Do you sell my data?</summary>
+                    <div class="faq-content-wrapper">
+                        <div class="faq-content">
+                            <p>The service is 100% free and open source. We are a student-led initiative, not a data
+                                broker. We do not serve you ads, track your identity, or sell your data. For
+                                full details on how we protect your information, please read our <a
+                                    href="/privacy">Privacy Policy</a>.</p>
                         </div>
                     </div>
                 </details>

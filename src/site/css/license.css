@@ -254,7 +254,7 @@
 .license-summary-card h1 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--accent-1);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.5rem;

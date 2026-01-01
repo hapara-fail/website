@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report broken tools, layout glitches, or self-hosting errors.
+about: Report broken tools, layout glitches, or self-hosting errors
 title: "[BUG] "
 labels: bug, triage
 assignees: nota9x

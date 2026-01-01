@@ -501,6 +501,20 @@
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 25px;
+
+    /* Shrinking behavior */
+    min-width: 0;
+    max-width: 100%;
+}
+
+.dns-location-tag svg {
+    flex-shrink: 0;
+}
+
+.dns-location-tag .location-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dns-status-tag {
@@ -516,6 +530,11 @@
     margin-bottom: 25px;
     transition: all 0.3s ease;
     vertical-align: middle;
+    cursor: pointer;
+}
+
+.dns-status-tag:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .dns-status-tag.status-up {
