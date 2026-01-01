@@ -260,12 +260,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             clearTimeout(timeoutId);
 
-            if (response.status === 200) {
-                statusTag.classList.add('status-up');
-                if (statusText) statusText.textContent = 'Operational';
-            } else {
-                throw new Error('Service down');
+            // Basic HTTP status and content-type validation
+            if (!response.ok) {
+                throw new Error('Unexpected response status: ' + response.status);
             }
+
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.toLowerCase().includes('text') && !contentType.toLowerCase().includes('json')) {
+                throw new Error('Unexpected content type: ' + contentType);
+            }
+
+            statusTag.classList.add('status-up');
+            if (statusText) statusText.textContent = 'Operational';
         } catch (error) {
             console.error('DNS Status Check Failed:', error);
             statusTag.classList.add('status-down');
