@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Scroll Reveal Animation ---
         const revealItems = document.querySelectorAll('.reveal-item');
+        const INTERSECTION_THRESHOLD = 0.1;
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: INTERSECTION_THRESHOLD });
         revealItems.forEach(item => observer.observe(item));
     }
 });
