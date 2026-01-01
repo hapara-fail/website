@@ -16,13 +16,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 const height = contentWrapper.scrollHeight;
                 contentWrapper.style.height = `${height}px`;
                 setTimeout(() => { contentWrapper.style.height = '0px'; }, 10);
-                contentWrapper.addEventListener('transitionend', () => { detail.open = false; }, { once: true });
+                // Use transitionend with a fallback timeout to ensure state is consistent
+                let closeCompleted = false;
+                const finishClose = () => {
+                    if (closeCompleted) {
+                        return;
+                    }
+                    closeCompleted = true;
+                    detail.open = false;
+                };
+                contentWrapper.addEventListener('transitionend', finishClose, { once: true });
+                // Fallback in case transitionend does not fire (e.g., element removed or transition canceled)
+                setTimeout(finishClose, 500);
             } else {
                 contentWrapper.style.height = '0px';
                 detail.open = true;
                 const height = contentWrapper.scrollHeight;
                 setTimeout(() => { contentWrapper.style.height = `${height}px`; }, 10);
-                contentWrapper.addEventListener('transitionend', () => { if (detail.open) { contentWrapper.style.height = ''; } }, { once: true });
+                // Use transitionend with a fallback timeout to ensure height is reset
+                let openCompleted = false;
+                const finishOpen = () => {
+                    if (openCompleted) {
+                        return;
+                    }
+                    openCompleted = true;
+                    if (detail.open) {
+                        contentWrapper.style.height = '';
+                    }
+                };
+                contentWrapper.addEventListener('transitionend', finishOpen, { once: true });
+                // Fallback in case transitionend does not fire
+                setTimeout(finishOpen, 500);
             }
         });
     });
@@ -58,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Scroll Reveal Animation ---
         const revealItems = document.querySelectorAll('.reveal-item');
+        const INTERSECTION_THRESHOLD = 0.1;
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -65,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: INTERSECTION_THRESHOLD });
         revealItems.forEach(item => observer.observe(item));
     }
 });
