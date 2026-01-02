@@ -1,13 +1,16 @@
 {
   "name": "hapara-fail",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev",
-    "preview": "wrangler dev --remote",
-    "deploy": "wrangler deploy"
+    "generate-version": "node scripts/generate-version.js",
+    "dev": "npm run generate-version && wrangler dev",
+    "preview": "npm run generate-version && wrangler dev --remote",
+    "deploy": "npm run generate-version && wrangler deploy"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241022.0",
+    "prettier": "3.7.4",
     "wrangler": "^4.54.0"
   }
 }

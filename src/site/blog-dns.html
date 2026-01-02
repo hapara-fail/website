@@ -1,20 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Neutralizing Surveillance with DNS | hapara.fail Blog</title>
-    <meta name="description"
-        content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance.">
+    <meta
+      name="description"
+      content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance."
+    />
     <link rel="canonical" href="https://www.hapara.fail/blog/dns" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="hapara.fail" />
     <meta property="og:title" content="Neutralizing Surveillance with DNS | hapara.fail Blog" />
-    <meta property="og:description"
-        content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance." />
+    <meta
+      property="og:description"
+      content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance."
+    />
     <meta property="og:url" content="https://www.hapara.fail/blog/dns" />
     <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
     <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
@@ -23,8 +26,10 @@
     <meta property="article:modified_time" content="2025-09-10" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Neutralizing Surveillance with DNS | hapara.fail Blog" />
-    <meta name="twitter:description"
-        content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance." />
+    <meta
+      name="twitter:description"
+      content="How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance."
+    />
     <meta name="twitter:image" content="https://www.hapara.fail/images/og-twitter.png" />
     <meta name="twitter:image:alt" content="hapara.fail wordmark on dark background." />
     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
@@ -33,113 +38,136 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="hapara.fail" />
     <link rel="manifest" href="/images/site.webmanifest" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/universal.css">
-    <link rel="stylesheet" href="/css/article.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/universal.css" />
+    <link rel="stylesheet" href="/css/article.css" />
     <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": "Neutralizing Surveillance with DNS",
-            "description": "How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance.",
-            "author": {
-                "@type": "Person",
-                "name": "a9x"
-            },
-            "datePublished": "2025-09-10",
-            "dateModified": "2025-09-10",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.hapara.fail/blog/dns"
-            },
-            "publisher": {
-                "@type": "Organization",
-                "name": "hapara.fail",
-                "url": "https://www.hapara.fail/",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "https://www.hapara.fail/images/favicon-96x96.png"
-                }
-            },
-            "url": "https://www.hapara.fail/blog/dns",
-            "image": "https://www.hapara.fail/images/og-twitter.png"
-        }
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Neutralizing Surveillance with DNS",
+        "description": "How DNS sinkholing disables edtech spyware. Learn our Pi-hole-based approach, curated blocklists, and why cutting command servers breaks surveillance.",
+        "author": {
+          "@type": "Person",
+          "name": "a9x"
+        },
+        "datePublished": "2025-09-10",
+        "dateModified": "2025-09-10",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://www.hapara.fail/blog/dns"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "hapara.fail",
+          "url": "https://www.hapara.fail/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.hapara.fail/images/favicon-96x96.png"
+          }
+        },
+        "url": "https://www.hapara.fail/blog/dns",
+        "image": "https://www.hapara.fail/images/og-twitter.png"
+      }
     </script>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <header class="main-header">
-        <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
-        <button class="hamburger-menu" aria-label="Open navigation menu" aria-controls="site-drawer"
-            aria-expanded="false">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </button>
+      <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
+      <button
+        class="hamburger-menu"
+        aria-label="Open navigation menu"
+        aria-controls="site-drawer"
+        aria-expanded="false"
+      >
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
     </header>
 
     <div class="nav-overlay" data-nav-overlay hidden></div>
     <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
 
     <main>
-        <section class="article-hero">
-            <div class="parallax-bg"></div>
-            <div class="container reveal-item reveal-up">
-                <h1 class="gradient-text">Neutralizing Surveillance with DNS</h1>
-                <div class="article-meta">
-                    By <span>a9x</span> &bull; Published on September 10, 2025
-                </div>
-            </div>
-        </section>
+      <section class="article-hero">
+        <div class="parallax-bg"></div>
+        <div class="container reveal-item reveal-up">
+          <h1 class="gradient-text">Neutralizing Surveillance with DNS</h1>
+          <div class="article-meta">By <span>a9x</span> &bull; Published on September 10, 2025</div>
+        </div>
+      </section>
 
-        <article class="article-body container">
-            <div class="reveal-item reveal-up">
-                <p>Student surveillance software like GoGuardian, Hapara, and Gaggle appears invincible. It's installed
-                    deep within the operating system, often as a mandatory browser extension, and seems to watch every
-                    move. However, all of this software shares a fundamental, exploitable weakness: to function, it must
-                    communicate with a central server. If we can sever that connection, the software is rendered inert.
-                    This is the principle behind our custom DNS service.</p>
-            </div>
+      <article class="article-body container">
+        <div class="reveal-item reveal-up">
+          <p>
+            Student surveillance software like GoGuardian, Hapara, and Gaggle appears invincible.
+            It's installed deep within the operating system, often as a mandatory browser extension,
+            and seems to watch every move. However, all of this software shares a fundamental,
+            exploitable weakness: to function, it must communicate with a central server. If we can
+            sever that connection, the software is rendered inert. This is the principle behind our
+            custom DNS service.
+          </p>
+        </div>
 
-            <div class="reveal-item reveal-up">
-                <h2>The Internet's Phonebook</h2>
-                <p>Every time you visit a website, your computer performs a lookup using the Domain Name System (DNS).
-                    Think of DNS as the internet's phonebook. You know the name (<code>google.com</code>), but your
-                    browser needs the number—the IP address (like <code>142.250.190.78</code>)—to make the connection.
-                    Your device sends the domain name to a DNS server, which looks up the corresponding IP and sends it
-                    back.</p>
-                <p>By default, your device uses the DNS server provided by your network, which in a school setting, is
-                    controlled by the school. This gives them the power to maintain their own "phonebook" where they can
-                    simply remove the listings for sites they want to block. When you try to visit a blocked site, their
-                    DNS server effectively says, "Sorry, no number listed for that name," and your browser can't
-                    connect.</p>
-            </div>
+        <div class="reveal-item reveal-up">
+          <h2>The Internet's Phonebook</h2>
+          <p>
+            Every time you visit a website, your computer performs a lookup using the Domain Name
+            System (DNS). Think of DNS as the internet's phonebook. You know the name
+            (<code>google.com</code>), but your browser needs the number—the IP address (like
+            <code>142.250.190.78</code>)—to make the connection. Your device sends the domain name
+            to a DNS server, which looks up the corresponding IP and sends it back.
+          </p>
+          <p>
+            By default, your device uses the DNS server provided by your network, which in a school
+            setting, is controlled by the school. This gives them the power to maintain their own
+            "phonebook" where they can simply remove the listings for sites they want to block. When
+            you try to visit a blocked site, their DNS server effectively says, "Sorry, no number
+            listed for that name," and your browser can't connect.
+          </p>
+        </div>
 
-            <div class="reveal-item reveal-up">
-                <h2>The Digital Black Hole: Introducing Pi-hole</h2>
-                <p>This is where Pi-hole comes in. Pi-hole is a powerful, open-source application designed to be a DNS
-                    <em>sinkhole</em>. It sets itself up as your network's DNS server. When it receives a request, it
-                    checks the domain against a massive blocklist.
-                </p>
-                <blockquote>If the domain is on the list, Pi-hole doesn't look up the real IP. Instead, it lies. It
-                    either sends back a fake, non-routable IP address (like <code>0.0.0.0</code>) or simply refuses to
-                    answer. The result is the same: the connection fails, and the unwanted content is blocked before it
-                    ever reaches your device.</blockquote>
-                <p>Originally built for blocking ads and trackers network-wide, we realized this mechanism was the
-                    perfect weapon against edtech surveillance.</p>
-            </div>
+        <div class="reveal-item reveal-up">
+          <h2>The Digital Black Hole: Introducing Pi-hole</h2>
+          <p>
+            This is where Pi-hole comes in. Pi-hole is a powerful, open-source application designed
+            to be a DNS <em>sinkhole</em>. It sets itself up as your network's DNS server. When it
+            receives a request, it checks the domain against a massive blocklist.
+          </p>
+          <blockquote>
+            If the domain is on the list, Pi-hole doesn't look up the real IP. Instead, it lies. It
+            either sends back a fake, non-routable IP address (like <code>0.0.0.0</code>) or simply
+            refuses to answer. The result is the same: the connection fails, and the unwanted
+            content is blocked before it ever reaches your device.
+          </blockquote>
+          <p>
+            Originally built for blocking ads and trackers network-wide, we realized this mechanism
+            was the perfect weapon against edtech surveillance.
+          </p>
+        </div>
 
-            <div class="reveal-item reveal-up">
-                <h2>Forging the Shield: Our Implementation</h2>
-                <p>The hapara.fail DNS service is, at its core, a powerful, publicly accessible Pi-hole instance. But
-                    instead of using a generic ad-blocking list, we maintain our own highly specialized blocklist, which
-                    you can view on our <a href="https://github.com/hapara-fail/blocklist" target="_blank"
-                        rel="noopener noreferrer">GitHub</a>. This list doesn't contain ad servers; it contains the
-                    lifeblood of surveillance companies:</p>
-                <pre><code># GoGuardian
+        <div class="reveal-item reveal-up">
+          <h2>Forging the Shield: Our Implementation</h2>
+          <p>
+            The hapara.fail DNS service is, at its core, a powerful, publicly accessible Pi-hole
+            instance. But instead of using a generic ad-blocking list, we maintain our own highly
+            specialized blocklist, which you can view on our
+            <a
+              href="https://github.com/hapara-fail/blocklist"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a
+            >. This list doesn't contain ad servers; it contains the lifeblood of surveillance
+            companies:
+          </p>
+          <pre><code># GoGuardian
 *.goguardian.com
 *.hosted-extensions.s3.us-west-2.amazonaws.com
 
@@ -153,70 +181,104 @@
 
 # And hundreds more...
 </code></pre>
-                <p>When a school Chromebook is configured to use our DNS, the entire ecosystem of surveillance breaks
-                    down. An extension might try to send a screenshot to a server at GoGuardian, but that request first
-                    goes to our DNS. Our server sees the domain on our blocklist and sinks it. The extension, unable to
-                    phone home, effectively stops functioning. We aren't hacking the software; we're simply cutting its
-                    lines of communication.</p>
-            </div>
+          <p>
+            When a school Chromebook is configured to use our DNS, the entire ecosystem of
+            surveillance breaks down. An extension might try to send a screenshot to a server at
+            GoGuardian, but that request first goes to our DNS. Our server sees the domain on our
+            blocklist and sinks it. The extension, unable to phone home, effectively stops
+            functioning. We aren't hacking the software; we're simply cutting its lines of
+            communication.
+          </p>
+        </div>
 
-            <div class="reveal-item reveal-up">
-                <h2>There's More</h2>
-                <p>When you switch your device's DNS from your school's server to ours, you stop using their restrictive
-                    phonebook and start using our open one. The school's DNS-based filtering—the system that blocks
-                    gaming sites, social media, and other resources—is instantly bypassed. Our DNS resolves these
-                    domains without issue, granting you access to a less censored internet. This happens as a direct
-                    byproduct of reclaiming control over your device's fundamental network settings.</p>
-                <p>Ultimately, our DNS service is more than a bypass tool. It's a demonstration of a core principle: by
-                    understanding and controlling the foundational protocols of the internet, we can dismantle the
-                    systems of control built on top of them.</p>
+        <div class="reveal-item reveal-up">
+          <h2>There's More</h2>
+          <p>
+            When you switch your device's DNS from your school's server to ours, you stop using
+            their restrictive phonebook and start using our open one. The school's DNS-based
+            filtering—the system that blocks gaming sites, social media, and other resources—is
+            instantly bypassed. Our DNS resolves these domains without issue, granting you access to
+            a less censored internet. This happens as a direct byproduct of reclaiming control over
+            your device's fundamental network settings.
+          </p>
+          <p>
+            Ultimately, our DNS service is more than a bypass tool. It's a demonstration of a core
+            principle: by understanding and controlling the foundational protocols of the internet,
+            we can dismantle the systems of control built on top of them.
+          </p>
 
-                <a href="/blog" class="back-link">Back to Blog</a>
-            </div>
-        </article>
+          <a href="/blog" class="back-link">Back to Blog</a>
+        </div>
+      </article>
     </main>
 
     <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://discord.gg/KA66dHUF4P" target="_blank" rel="noopener noreferrer"
-                    aria-label="Discord"><svg viewBox="0 0 24 24">
-                        <path
-                            d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z" />
-                    </svg></a>
-                <a href="https://github.com/hapara-fail" target="_blank" rel="noopener noreferrer"
-                    aria-label="GitHub"><svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg></a>
-                <a href="mailto:support@hapara.fail" aria-label="Email"><svg viewBox="0 0 24 24">
-                        <path
-                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                    </svg></a>
-            </div>
-            <p class="footer-copy">&copy; 2026 hapara.fail<br>People over profits</p>
-            <p class="footer-legal"><a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • <a
-                    href="/license">License</a> • <a href="https://status.hapara.fail/">Status</a>
-            </p>
+      <div class="footer-content">
+        <div class="footer-links">
+          <a
+            href="https://discord.gg/KA66dHUF4P"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"
+              /></svg
+          ></a>
+          <a
+            href="https://github.com/hapara-fail"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              /></svg
+          ></a>
+          <a href="mailto:support@hapara.fail" aria-label="Contact via Email"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+              /></svg
+          ></a>
         </div>
+        <p class="footer-copy">&copy; 2026 hapara.fail<br />People over profits</p>
+        <p class="footer-legal">
+          <a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> •
+          <a href="/license">License</a> • <a href="https://status.hapara.fail/">Status</a>
+        </p>
+      </div>
     </footer>
 
-    <div class="cookie-notice" id="cookieNotice" role="dialog" aria-live="polite" aria-label="Cookie notice">
-        <div class="cookie-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true">
-                <title>Cookie SVG Icon</title>
-                <path fill="currentColor"
-                    d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08" />
-            </svg>
-            <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
-        </div>
-        <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
+    <div
+      class="cookie-notice"
+      id="cookieNotice"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Cookie notice"
+    >
+      <div class="cookie-content">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="256"
+          height="256"
+          viewBox="0 0 256 256"
+          aria-hidden="true"
+        >
+          <title>Cookie SVG Icon</title>
+          <path
+            fill="currentColor"
+            d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08"
+          />
+        </svg>
+        <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
+      </div>
+      <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
     </div>
 
     <script src="/js/nav.js" defer></script>
+    <script src="/js/version.js" defer></script>
     <script src="/js/scroll-reveal.js"></script>
     <script src="/js/cookie-notice.js"></script>
-
-</body>
-
+  </body>
 </html>

@@ -5,9 +5,8 @@
   "compatibility_date": "2025-11-02",
   "assets": {
     "directory": "src/site",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
   },
   // Define Worker environment variables here
-  "vars": {}
+  "vars": {},
 }
-

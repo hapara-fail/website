@@ -1,12 +1,14 @@
 /* Shared scroll-reveal animations for sub-pages */
 .reveal-item {
-    opacity: 0;
-    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+  opacity: 0;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 .reveal-up {
-    transform: translateY(50px);
+  transform: translateY(50px);
 }
 .reveal-item.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }

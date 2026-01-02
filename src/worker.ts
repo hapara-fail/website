@@ -32,7 +32,8 @@ function normalizePath(pathname: string): string {
 
 function setSecurityHeaders(headers: Headers): void {
   if (!headers.has('X-Content-Type-Options')) headers.set('X-Content-Type-Options', 'nosniff');
-  if (!headers.has('Referrer-Policy')) headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  if (!headers.has('Referrer-Policy'))
+    headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   if (!headers.has('X-Frame-Options')) headers.set('X-Frame-Options', 'SAMEORIGIN');
 }
 
@@ -56,9 +57,9 @@ export default {
       const resp = new Response('Method Not Allowed', {
         status: 405,
         headers: {
-          'Allow': 'GET, HEAD',
-          'Content-Type': 'text/plain; charset=utf-8'
-        }
+          Allow: 'GET, HEAD',
+          'Content-Type': 'text/plain; charset=utf-8',
+        },
       });
       setSecurityHeaders(resp.headers);
       return resp;
@@ -70,8 +71,8 @@ export default {
       const resp = new Response(null, {
         status: 301,
         headers: {
-          'Location': redirectTarget
-        }
+          Location: redirectTarget,
+        },
       });
       setSecurityHeaders(resp.headers);
       return resp;
@@ -94,7 +95,7 @@ export default {
       assetUrl.pathname = `/${htmlFile}`;
       const response = await env.ASSETS.fetch(assetUrl.toString(), {
         method: request.method,
-        headers: request.headers
+        headers: request.headers,
       });
       if (response.status === 304) return applySecurityHeaders(response);
       if (response.ok) return applySecurityHeaders(response);
@@ -111,14 +112,14 @@ export default {
 
     const notFoundResponse = await env.ASSETS.fetch(notFoundUrl.toString(), {
       method: request.method,
-      headers: request.headers
+      headers: request.headers,
     });
 
     if (notFoundResponse.status === 304) return applySecurityHeaders(notFoundResponse);
     if (notFoundResponse.ok) {
       const resp = new Response(notFoundResponse.body, {
         status: 404,
-        headers: notFoundResponse.headers
+        headers: notFoundResponse.headers,
       });
       return applySecurityHeaders(resp);
     }
@@ -127,9 +128,9 @@ export default {
     const resp = new Response('Not Found', {
       status: 404,
       headers: {
-        'Content-Type': 'text/plain; charset=utf-8'
-      }
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
     });
     return applySecurityHeaders(resp);
-  }
+  },
 } satisfies ExportedHandler<Env>;

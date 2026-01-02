@@ -25,9 +25,10 @@ We have enabled **Private Vulnerability Reporting** for this repository. This is
 4.  Click **Submit report**.
 
 **Benefits:**
-* This process is fully private.
-* GitHub notifies us directly and immediately.
-* You are automatically added as a collaborator and credited user on the proposed advisory, allowing us to collaborate on a fix securely.
+
+- This process is fully private.
+- GitHub notifies us directly and immediately.
+- You are automatically added as a collaborator and credited user on the proposed advisory, allowing us to collaborate on a fix securely.
 
 ### Method 2: Email Reporting
 
@@ -36,15 +37,15 @@ If you are unable to use the GitHub reporting tool, please send vulnerability re
 To ensure your report passes our spam filters and is routed correctly, please follow these steps:
 
 1.  **Subject Line:** Must contain `hapara.fail` and `vulnerability`.
-    * *Example:* `hapara.fail vulnerability: Possible XSS in search bar`
+    - _Example:_ `hapara.fail vulnerability: Possible XSS in search bar`
 2.  **Body Content:**
-    * Type of issue (e.g., buffer overflow, SQL injection, cross-site scripting).
-    * Full paths of source file(s) related to the manifestation of the issue.
-    * Location of the affected source code (tag/branch/commit or direct URL).
-    * Any special configuration required to reproduce the issue.
-    * Step-by-step instructions to reproduce the issue.
-    * Proof-of-concept or exploit code (if available).
-    * Impact of the issue, including how an attacker might exploit it.
+    - Type of issue (e.g., buffer overflow, SQL injection, cross-site scripting).
+    - Full paths of source file(s) related to the manifestation of the issue.
+    - Location of the affected source code (tag/branch/commit or direct URL).
+    - Any special configuration required to reproduce the issue.
+    - Step-by-step instructions to reproduce the issue.
+    - Proof-of-concept or exploit code (if available).
+    - Impact of the issue, including how an attacker might exploit it.
 
 ## What to Expect
 
@@ -61,9 +62,9 @@ If you reported via email and have not received a reply within **7 days**, pleas
 
 To encourage security research and avoid legal complications, we ask that you:
 
-* **Do not** attempt to access or modify data that does not belong to you.
-* **Do not** execute a Denial of Service (DoS) attack.
-* **Do not** use social engineering or phishing against our employees or users.
-* **Do** give us reasonable time to correct the issue before making any information public.
+- **Do not** attempt to access or modify data that does not belong to you.
+- **Do not** execute a Denial of Service (DoS) attack.
+- **Do not** use social engineering or phishing against our employees or users.
+- **Do** give us reasonable time to correct the issue before making any information public.
 
 As long as you comply with these guidelines, we will never take legal action against you regarding your research.
