@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "generate-version": "node scripts/generate-version.js",
+    "build": "npm run generate-version",
     "dev": "npm run generate-version && wrangler dev",
     "preview": "npm run generate-version && wrangler dev --remote",
     "deploy": "npm run generate-version && wrangler deploy"

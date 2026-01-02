@@ -23,6 +23,7 @@ Thumbs.db
 *~
 
 # Build outputs
+src/site/js/version.js
 dist/
 .cache/
 

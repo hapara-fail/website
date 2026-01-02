@@ -6,11 +6,26 @@ try {
   let commitHash = 'unknown';
   let commitMessage = 'unknown';
 
+  // Try to get commit hash from various sources
   try {
+    // 1. Try local git command
     commitHash = execSync('git rev-parse --short HEAD').toString().trim();
     commitMessage = execSync('git log -1 --pretty=%B').toString().trim();
   } catch (e) {
-    console.warn('Failed to get git info:', e.message);
+    // 2. Try common CI environment variables
+    if (process.env.CF_PAGES_COMMIT_SHA) {
+      commitHash = process.env.CF_PAGES_COMMIT_SHA.substring(0, 7);
+      commitMessage = process.env.CF_PAGES_COMMIT_MESSAGE || 'Deployed via Cloudflare Pages';
+    } else if (process.env.GITHUB_SHA) {
+      commitHash = process.env.GITHUB_SHA.substring(0, 7);
+      commitMessage = 'Deployed via GitHub Actions';
+    } else if (process.env.CLOUDFLARE_BUILD_COMMIT) {
+        // Cloudflare Workers builds might provide this
+        commitHash = process.env.CLOUDFLARE_BUILD_COMMIT.substring(0, 7);
+        commitMessage = 'Deployed via Cloudflare Workers';
+    } else {
+      console.warn('Failed to get git info and no fallback environment variables found:', e.message);
+    }
   }
 
   const outputPath = path.join(__dirname, '../src/site/js/version.js');
