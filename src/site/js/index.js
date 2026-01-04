@@ -1,18 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Utility: ensure handler runs at most once
-  const createOnceHandler = (fn) => {
-    let called = false;
-    return function (...args) {
-      if (called) {
-        return;
-      }
-      called = true;
-      return fn.apply(this, args);
-    };
-  };
-
   // --- FAQ Dropdown Animation ---
   // Refactored to handle spam clicks and provide immediate feedback
   // Refactored to handle spam clicks and provide immediate feedback

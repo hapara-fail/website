@@ -209,6 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function isProbablyBase64(str) {
+    if (typeof str !== 'string') return false;
+    const trimmed = str.trim();
+    if (trimmed.length === 0 || trimmed.length % 4 !== 0) return false;
+    // Only allow valid Base64 characters and up to two '=' paddings at the end
+    return /^[A-Za-z0-9+/]+={0,2}$/.test(trimmed);
+  }
+
   function extractSipe() {
     const jsonData = sipeJsonInput.value.trim();
     if (!jsonData)
@@ -217,7 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const json = JSON.parse(jsonData);
       if (json?.SPECIFICS?.wifi_configuration?.passphrase) {
-        const passphrase = atob(json.SPECIFICS.wifi_configuration.passphrase);
+        const encodedPassphrase = json.SPECIFICS.wifi_configuration.passphrase;
+
+        if (!isProbablyBase64(encodedPassphrase)) {
+          throw new Error('WiFi passphrase is not valid Base64.');
+        }
+
+        const passphrase = atob(encodedPassphrase.trim());
         let ssid = 'SSID Not Found';
         if (json.NON_UNIQUE_NAME) {
           ssid = hexDecode(json.NON_UNIQUE_NAME.split('<')[0]);
@@ -264,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
           'Db25maWd1cmF0aW9ucw',
         ];
         let networksFound = 0;
+        let lineErrors = 0;
 
         for (const line of lines) {
           try {
@@ -294,7 +309,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               }
             }
-          } catch {}
+          } catch (lineError) {
+            lineErrors++;
+            // Optionally log for debugging without interrupting processing:
+            // console.warn('Failed to process log line:', lineError);
+          }
         }
         if (networksFound === 0)
           throw new Error(

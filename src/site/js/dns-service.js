@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // --- TABS & OS DETECTION SCRIPT ---
   const tabsNav = document.querySelector('.tabs-nav');
   const tabButtons = document.querySelectorAll('.tab-button');

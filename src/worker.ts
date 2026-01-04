@@ -93,7 +93,7 @@ export default {
     if (htmlFile) {
       const assetUrl = new URL(url);
       assetUrl.pathname = `/${htmlFile}`;
-      const response = await env.ASSETS.fetch(assetUrl.toString(), {
+      const response = await env.ASSETS.fetch(assetUrl, {
         method: request.method,
         headers: request.headers,
       });
@@ -110,7 +110,7 @@ export default {
     const notFoundUrl = new URL(url);
     notFoundUrl.pathname = '/404.html';
 
-    const notFoundResponse = await env.ASSETS.fetch(notFoundUrl.toString(), {
+    const notFoundResponse = await env.ASSETS.fetch(notFoundUrl, {
       method: request.method,
       headers: request.headers,
     });

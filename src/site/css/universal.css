@@ -826,6 +826,52 @@ body {
   transform: translateY(0) rotate(-45deg);
 }
 
+/* Version Footer (injected by version.js) */
+.version-footer {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  flex-wrap: wrap;
+  font-family: monospace;
+}
+
+.version-footer-svg {
+  display: flex;
+  align-items: center;
+}
+
+.version-footer-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.version-footer-link:hover {
+  color: #fff;
+  border-bottom-color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.version-footer-sep {
+  opacity: 0.5;
+}
+
+.version-footer-msg {
+  font-style: italic;
+  opacity: 0.8;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Scroll lock */
 .body-lock {
   overflow: hidden;
