@@ -21,7 +21,7 @@
     <meta property="og:url" content="https://www.hapara.fail/privacy" />
     <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
     <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
-    <meta property="article:modified_time" content="2025-11-01" />
+    <meta property="article:modified_time" content="2026-01-04" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Privacy Policy | hapara.fail" />
     <meta
@@ -51,7 +51,7 @@
         "name": "Privacy Policy | hapara.fail",
         "url": "https://www.hapara.fail/privacy",
         "description": "We don’t track, sell, or profile you. Read our minimal logging for DNS abuse prevention, retention policy, data rights, and security practices.",
-        "dateModified": "2025-11-01",
+        "dateModified": "2026-01-04",
         "publisher": {
           "@type": "Organization",
           "name": "hapara.fail",
@@ -86,7 +86,7 @@
         <div class="parallax-bg"></div>
         <div class="container">
           <h1 class="gradient-text">Privacy Policy</h1>
-          <div class="article-meta">Last Updated: November 1, 2025</div>
+          <div class="article-meta">Last Updated: January 4, 2026</div>
         </div>
       </section>
 
@@ -133,7 +133,9 @@
             anonymous metrics provided by Cloudflare, such as the total number of visitors per day
             or the countries from which traffic originates.
             <strong>This data cannot be used to identify or track individual users.</strong> It
-            helps us understand our bandwidth usage and protect against attacks.
+            helps us understand our bandwidth usage and protect against attacks. For more information
+            on how Cloudflare processes traffic, please review the
+            <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare Privacy Policy</a>.
           </p>
 
           <h3>3.2 DNS Service Users</h3>
@@ -143,8 +145,8 @@
             information required for us to identify and mitigate abuse. An example of what this log
             entry looks like is shown below:
           </p>
-          <pre><code>Time: 2025-09-14 11:30:15 | Status: Blocked | Type: AAAA | Domain: analytics.goguardian.com | Client IP: 205.251.242.103 | Latency: 1.3ms
-Time: 2025-09-14 11:30:16 | Status: Allowed | Type: A    | Domain: wikipedia.org            | Client IP: 205.251.242.103 | Latency: 25.8ms</code></pre>
+          <pre><code>Time: 2026-01-04 14:02:00 | Status: Processed (3 ms)                | Type: A, Plain DNS      | Domain: google.com | Client: 108.201.34.55 (Dallas, US)
+Time: 2026-01-01 18:19:25 | Status: Blocked (hapara.fail Blocklist) | Type: A, DNS-over-HTTPS | Domain: hapara.com | Client: 73.17.201.142 (New Haven, US)</code></pre>
           <p>
             The <strong>sole and explicit purpose</strong> of these logs is for anti-abuse measures.
             We analyze this data to identify and mitigate malicious activity, such as DDoS attacks,
@@ -160,12 +162,12 @@ Time: 2025-09-14 11:30:16 | Status: Allowed | Type: A    | Domain: wikipedia.org
           <ul>
             <li>
               DNS query logs are automatically rotated and
-              <strong>typically deleted within 91 days</strong>.
+              <strong>typically deleted within 30 days</strong>.
             </li>
             <li>
               In the rare event that we are actively investigating a security incident or a
               significant violation of our Terms of Service, specific logs related to that incident
-              may be retained for <strong>up to one year</strong> to ensure the stability and
+              may be retained for <strong>up to 6 months</strong> to ensure the stability and
               security of our platform.
             </li>
           </ul>
@@ -209,9 +211,7 @@ Time: 2025-09-14 11:30:16 | Status: Allowed | Type: A    | Domain: wikipedia.org
           <p>
             To submit a data access or deletion request, please email us at
             <strong><a href="mailto:support@hapara.fail">support@hapara.fail</a></strong
-            >. To protect privacy, we may need to verify your control of the IP address in question
-            before processing the request. We will only ask for the minimum information necessary to
-            perform this verification.
+            >. Since we do not store names or emails, we must verify that you control the specific IP address you wish to purge. We may ask you to click a unique system-generated link to confirm that your current IP matches the data in question. This process temporarily logs your IP address for verification purposes only; once your request is processed, this log is immediately deleted.
           </p>
         </div>
 
@@ -226,7 +226,17 @@ Time: 2025-09-14 11:30:16 | Status: Allowed | Type: A    | Domain: wikipedia.org
         </div>
 
         <div>
-          <h2>8. Changes to This Policy</h2>
+          <h2>8. Children's Privacy</h2>
+          <p>
+            Our Services are not directed to individuals under the age of 13. We do not
+            knowingly collect personal information from children under 13. If we become
+            aware that a child under 13 has provided us with personal information, we will
+            take steps to delete such information immediately.
+          </p>
+        </div>
+
+        <div>
+          <h2>9. Changes to This Policy</h2>
           <p>
             We may update this Privacy Policy from time to time. Any changes will be posted on this
             page, and the "Last Updated" date will be revised. We encourage you to review this
@@ -235,7 +245,7 @@ Time: 2025-09-14 11:30:16 | Status: Allowed | Type: A    | Domain: wikipedia.org
         </div>
 
         <div>
-          <h2>9. Contact Us</h2>
+          <h2>10. Contact Us</h2>
           <p>
             If you have any questions, concerns, or feedback regarding this Privacy Policy, please
             do not hesitate to contact us at
