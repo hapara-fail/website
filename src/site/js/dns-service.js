@@ -435,8 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           currentCategory = trimmed.replace('#### ', '').trim();
           currentServices = [];
-        } else if (trimmed.startsWith('* ') && currentCategory) {
-          currentServices.push(trimmed.replace('* ', '').trim());
+        } else if ((trimmed.startsWith('* ') || trimmed.startsWith('- ')) && currentCategory) {
+          currentServices.push(trimmed.replace(/^[\*\-]\s+/, '').trim());
         }
       }
 
