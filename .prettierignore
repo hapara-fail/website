@@ -11,3 +11,6 @@ build
 
 # Package lock
 package-lock.json
+
+# Downloads
+src/site/downloads

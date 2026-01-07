@@ -264,12 +264,13 @@
                     <strong>Settings gear ⚙️</strong>.
                   </li>
                   <li>
-                    Go to <strong>Network</strong> &rarr; <strong>Wi-Fi</strong>, and click the
-                    <strong>></strong> arrow next to your current network.
+                    Go to <strong>Network</strong> &gt; <strong>Wi-Fi</strong>, and click the
+                    <strong>&gt;</strong> arrow next to your current network. Press the
+                    <strong>&gt;</strong> arrow again.
                   </li>
                   <li>Expand the <strong>Network</strong> section.</li>
                   <li>Under "Name servers," select <strong>Custom name servers</strong>.</li>
-                  <li>Enter <code>34.23.12.208</code> in all available name server fields.</li>
+                  <li>Enter <code>34.23.12.208</code> in all available fields.</li>
                 </ol>
                 <hr
                   style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color)"
@@ -289,7 +290,7 @@
                     Change the setting from "Automatic name servers" to
                     <strong>Custom name servers</strong>.
                   </li>
-                  <li>Enter <code>34.23.12.208</code> in all available text boxes.</li>
+                  <li>Enter <code>34.23.12.208</code> in all available fields.</li>
                 </ol>
               </div>
             </div>
@@ -299,7 +300,7 @@
                 <p>Windows 10 Build 19628 and higher support DNS-over-HTTPS natively.</p>
                 <ol>
                   <li>
-                    Open <strong>Settings</strong> &rarr; <strong>Network & Internet</strong> &rarr;
+                    Open <strong>Settings</strong> &gt; <strong>Network & Internet</strong> &gt;
                     <strong>Status</strong>.
                   </li>
                   <li>Click <strong>Properties</strong> for your active connection.</li>
@@ -339,14 +340,29 @@
             </div>
             <div id="macos" class="tab-content">
               <div class="instructions-panel">
-                <p><strong>Recommended: Secure DNS</strong></p>
+                <p><strong>Recommended: Secure DNS (Configuration Profile)</strong></p>
                 <p>
-                  macOS Big Sur and higher support DNS-over-TLS and DNS-over-HTTPS natively via
-                  configuration profiles. Generate a profile pointing to
-                  <code>https://dns.hapara.fail/dns-query</code> (DoH) or
-                  <code>dns.hapara.fail</code>
-                  (DoT).
+                  macOS Big Sur and higher support DNS-over-HTTPS natively via configuration
+                  profiles.
                 </p>
+                <ol>
+                  <li>
+                    Download the
+                    <a href="/downloads/doh.mobileconfig" download>configuration profile</a>.
+                  </li>
+                  <li>
+                    Your Mac should automatically open System Settings (or System Preferences) to
+                    the Profiles pane. <br /><em
+                      >If not, go to Apple menu &gt; System Settings &gt; Privacy &amp; Security
+                      &gt; Profiles.</em
+                    >
+                  </li>
+                  <li>
+                    Double-click the profile in the list (it may be under a "Downloaded" or
+                    "Unsigned" section). Click <strong>Install...</strong> and follow the prompts to
+                    enter your Mac’s administrator password.
+                  </li>
+                </ol>
                 <hr
                   style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color)"
                 />
@@ -363,13 +379,32 @@
             </div>
             <div id="ios" class="tab-content">
               <div class="instructions-panel">
-                <p><strong>Recommended: Secure DNS</strong></p>
+                <p><strong>Recommended: Secure DNS (Configuration Profile)</strong></p>
                 <p>
                   iOS 14 and higher support DNS-over-TLS and DNS-over-HTTPS natively via
-                  configuration profiles. Generate a profile pointing to
-                  <code>https://dns.hapara.fail/dns-query</code> (DoH) or
-                  <code>dns.hapara.fail</code> (DoT).
+                  configuration profiles.
                 </p>
+                <ol>
+                  <li>
+                    Download the
+                    <a href="/downloads/doh.mobileconfig" download>configuration profile</a>.
+                    <br /><em
+                      >Note: If using a third-party app (like Chrome), you may need to tap the file
+                      and select "Allow".</em
+                    >
+                  </li>
+                  <li>
+                    A popup will appear saying "Profile Downloaded." Tap <strong>Close</strong>.
+                  </li>
+                  <li>
+                    Open <strong>Settings</strong> and tap <strong>Profile Downloaded</strong> (near
+                    the top) or go to <strong>General &gt; VPN &amp; Device Management</strong>.
+                  </li>
+                  <li>
+                    Select the downloaded profile, tap <strong>Install</strong>, enter your device
+                    passcode, and confirm until finished.
+                  </li>
+                </ol>
                 <hr
                   style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color)"
                 />
@@ -391,9 +426,8 @@
                 <p>Android 9 supports DNS-over-TLS natively.</p>
                 <ol>
                   <li>
-                    Go to <strong>Settings</strong> &rarr;
-                    <strong>Network & internet</strong> &rarr; <strong>Advanced</strong> &rarr;
-                    <strong>Private DNS</strong>.
+                    Go to <strong>Settings</strong> &gt; <strong>Network & internet</strong> &gt;
+                    <strong>Advanced</strong> &gt; <strong>Private DNS</strong>.
                   </li>
                   <li>Enter <code>dns.hapara.fail</code>.</li>
                 </ol>

@@ -309,6 +309,18 @@
   font-weight: 600;
 }
 
+.instructions-panel a {
+  color: var(--accent-2);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.instructions-panel a:hover {
+  color: var(--accent-1);
+  text-decoration: underline;
+}
+
 .os-detection-note {
   text-align: center;
   margin-bottom: 40px;
