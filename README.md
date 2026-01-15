@@ -62,6 +62,8 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 
 ## 🗺️ Routes
 
+### Primary
+
 - `/` - Homepage
 - `/about` - About page
 - `/contribute` - Contribute page
