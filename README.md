@@ -34,6 +34,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 - **Runtime:** [Cloudflare Workers](https://workers.cloudflare.com/) - Serverless execution environment on the edge.
 - **Static Assets:** [Workers Assets](https://developers.cloudflare.com/workers/static-assets/) - Optimized hosting for site assets.
 - **Routing & Logic:** [TypeScript](https://www.typescriptlang.org/) - Type-safe code for the Worker.
+- **Code Formatter:** [Prettier](https://prettier.io/) - Opinionated code formatter.
 - **Development/Deployment:** [Wrangler 4](https://developers.cloudflare.com/workers/wrangler/) - The Cloudflare CLI tool.
 - **Core:** HTML5, CSS3, Vanilla JavaScript (ES6+) - For the frontend structure, style, and interactivity.
 
@@ -71,6 +72,16 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 - `/tool/wifi` - WiFi Password Extractor Tool
 - `/blog` - Blog index
 - `/blog/[slug]` - Individual blog posts (e.g., `/blog/dns`, `/blog/google-form-unlocker`, etc.)
+- `/license` - License information
+
+### Redirects & Shortcuts
+
+- `/bypass` → `/services/dns`
+- `/dns` → `/services/dns`
+- `/forms` → `/tool/gfu`
+- `/wifi` → `/tool/wifi`
+- `/discord` → [Discord Invite](https://www.hapara.fail/discord)
+- `/github` → [GitHub Profile](https://github.com/hapara-fail)
 
 ---
 
@@ -120,7 +131,7 @@ If you have ideas for improvements, new tools, bug fixes, or blog post topics, p
 
 - **Open an Issue** on GitHub using our standardized templates.
 - **Submit a Pull Request** with your proposed changes.
-- Join our [Discord server](https://discord.gg/KA66dHUF4P) to discuss.
+- Join our [Discord server](https://www.hapara.fail/discord) to discuss.
 
 You can also find donation options [here](https://hapara.fail/contribute).
 
