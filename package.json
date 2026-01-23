@@ -10,8 +10,8 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241022.0",
-    "prettier": "3.8.0",
-    "wrangler": "^4.59.2"
+    "@cloudflare/workers-types": "^4.20260123.0",
+    "prettier": "3.8.1",
+    "wrangler": "^4.60.0"
   }
 }
