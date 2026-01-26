@@ -1,0 +1,59 @@
+name: Feature Request
+description: Suggest new privacy tools, blog topics, or site improvements
+title: '[FEAT] '
+labels:
+  - discussion
+  - enhancement
+assignees:
+  - nota9x
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Feature Request
+        
+        We love hearing your ideas! Please share your suggestions for new features or improvements.
+  
+  - type: input
+    id: idea-name
+    attributes:
+      label: 1. Idea Name
+      description: Short summary of your idea.
+      placeholder: 'e.g., "Add a dark mode toggle," "New blog post about Securly SSL decryption," "Tool to unblock X"'
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: 2. Description
+      description: Explain your idea. If it's a tool, what should it do? If it's a blog post, what should it cover?
+      placeholder: Tell us more about your idea!
+    validations:
+      required: true
+  
+  - type: textarea
+    id: why-needed
+    attributes:
+      label: 3. Why do we need this?
+      description: How does this help students or improve privacy?
+      placeholder: 'e.g., "Helps bypassing the new X filter update," "Makes the site easier to read at night"'
+    validations:
+      required: true
+  
+  - type: textarea
+    id: implementation-ideas
+    attributes:
+      label: 4. Implementation Ideas (Optional)
+      description: Do you have any technical ideas on how to build this?
+      placeholder: 'e.g., "Use localStorage for the theme," "I found this exploits POC we could adapt"'
+    validations:
+      required: false
+  
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have checked that this feature doesn't already exist.
+          required: true
