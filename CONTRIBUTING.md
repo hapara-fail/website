@@ -12,14 +12,14 @@ We have simplified our issue reporting process. Please use the direct links belo
 
 If a tool isn't working, a page is broken, or you spot a visual glitch:
 
-- **[Click here to open a Bug Report](https://github.com/hapara-fail/website/issues/new?template=bug-report.md)**
+- **[Click here to open a Bug Report](https://github.com/hapara-fail/website/issues/new?template=bug-report.yml)**
 - **Crucial:** Please tell us which browser/device you are using (e.g., School Chromebook, Mobile Safari) and provide steps to reproduce the error.
 
 ### 2. Suggesting Features & Content
 
 If you have an idea for a new privacy tool, a blog post topic, or a design improvement:
 
-- **[Click here to open a Feature Request](https://github.com/hapara-fail/website/issues/new?template=feature-request.md)**
+- **[Click here to open a Feature Request](https://github.com/hapara-fail/website/issues/new?template=feature-request.yml)**
 - We love community ideas! If you have technical insights on how to implement your idea, please include them.
 
 ---

@@ -571,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const link = document.createElement('a');
       link.href =
-        'https://github.com/hapara-fail/blocklist/issues/new?template=service---domain-addition.md';
+        'https://github.com/hapara-fail/blocklist/issues/new?template=service---domain-addition.yml';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.className = 'cta-button';
