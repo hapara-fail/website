@@ -22,7 +22,7 @@
 					</dict>
 				</array>
 				<key>PayloadDescription</key>
-				<string>Configures device to use AdGuard Home</string>
+				<string>Configures device to use the dns.hapara.fail DNS-over-HTTPS service</string>
 				<key>PayloadDisplayName</key>
 				<string>dns.hapara.fail DoH</string>
 				<key>PayloadIdentifier</key>
@@ -36,7 +36,7 @@
 			</dict>
 		</array>
 		<key>PayloadDescription</key>
-		<string>Adds AdGuard Home to macOS Big Sur and iOS 14 or newer systems</string>
+		<string>Adds the dns.hapara.fail DNS-over-HTTPS service to macOS Big Sur and iOS 14 or newer systems</string>
 		<key>PayloadDisplayName</key>
 		<string>dns.hapara.fail DoH</string>
 		<key>PayloadIdentifier</key>
