@@ -54,10 +54,7 @@ function applySecurityHeaders(original: Response): Response {
 }
 
 function handleAssetResponse(response: Response): Response | null {
-  if (response.status === 304) {
-    return applySecurityHeaders(response);
-  }
-  if (response.ok) {
+  if (response.status === 304 || response.ok) {
     return applySecurityHeaders(response);
   }
   return null;
