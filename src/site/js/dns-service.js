@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const osDetectionMessage = document.getElementById('os-detection-message');
   // Small delay to allow the browser to apply CSS transition classes
   // before we remove the slide direction helper classes.
+  // before we remove the slide direction helper classes.
   const TAB_TRANSITION_CLEANUP_DELAY_MS = 10;
+
+  const DNS_MONITOR_ALLOWED_CONTENT_TYPES = ['application/json', 'text/plain'];
 
   const moveUnderline = (targetTab) => {
     if (!targetTab || !tabUnderline) return;
@@ -204,8 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Helper to set cookie (max-age in seconds, 31536000 = 1 year)
+  // Helper to set cookie (max-age in seconds, 31536000 = 1 year)
   const setCookie = (name, value, maxAge) => {
-    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    let cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    if (typeof window !== 'undefined' && window.location && window.location.protocol === 'https:') {
+      cookie += '; Secure';
+    }
+    document.cookie = cookie;
   };
 
   const openModal = () => {
@@ -262,10 +270,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const response = await fetch('https://dns-monitor.a9x.workers.dev/', {
+      const monitorUrl = 'https://dns-monitor.a9x.workers.dev/';
+      const response = await fetch(monitorUrl, {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
+
+      // Validate that the response origin matches the expected monitor origin
+      const expectedOrigin = new URL(monitorUrl).origin;
+      const actualOrigin = new URL(response.url).origin;
+      if (actualOrigin !== expectedOrigin) {
+        throw new Error('Unexpected response origin: ' + actualOrigin);
+      }
 
       // Basic HTTP status and content-type validation
       if (!response.ok) {
@@ -274,9 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const contentType = response.headers.get('content-type') || '';
       const mimeType = contentType.split(';', 1)[0].trim().toLowerCase();
-      const allowedContentTypes = ['application/json', 'text/plain'];
 
-      if (!allowedContentTypes.includes(mimeType)) {
+      if (!DNS_MONITOR_ALLOWED_CONTENT_TYPES.includes(mimeType)) {
         throw new Error('Unexpected content type: ' + contentType);
       }
 
@@ -390,6 +405,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('service-search');
   const serviceList = document.getElementById('service-list');
 
+  /**
+   * Basic integrity / trust check for the downloaded blocklist content.
+   * This is not a cryptographic guarantee, but it ensures that we only
+   * proceed when the markdown has the expected stable structure and
+   * markers we control.
+   *
+   * If you intentionally update the upstream blocklist format, update
+   * these checks alongside the pinned URL below.
+   */
+  const isTrustedBlocklist = (text) => {
+    if (typeof text !== 'string' || text.length === 0) {
+      return false;
+    }
+
+    // Require the expected section header and at least one known category
+    // marker to be present, so that arbitrary content cannot be silently
+    // treated as a valid blocklist.
+    const requiredHeader = '## 👁️ Services Targeted';
+    const knownCategoryMarker = '#### Monitoring & Classroom Management'; // keep in sync with README.md
+
+    if (!text.includes(requiredHeader)) {
+      return false;
+    }
+
+    if (!text.includes(knownCategoryMarker)) {
+      return false;
+    }
+
+    return true;
+  };
+
   const fetchServices = async () => {
     try {
       const response = await fetch(
@@ -397,6 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       if (!response.ok) throw new Error('Failed to fetch blocklist');
       const text = await response.text();
+
+      if (!isTrustedBlocklist(text)) {
+        throw new Error('Blocklist content failed integrity checks');
+      }
 
       const targetSectionHeader = '## 👁️ Services Targeted';
       const startIdx = text.indexOf(targetSectionHeader);

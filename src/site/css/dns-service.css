@@ -769,11 +769,17 @@
 .no-results {
   text-align: center;
   color: var(--text-secondary);
-  padding: 40px 0;
+  padding: 40px 20px;
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px;
-  border: 1px dashed var(--border-color);
+  max-width: 600px;
+  margin: 0 auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.no-results strong {
+  word-break: break-all;
+  color: var(--text-primary);
 }
 
 /* Raw Lists */

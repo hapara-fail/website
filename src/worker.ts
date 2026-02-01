@@ -49,7 +49,7 @@ function applySecurityHeaders(original: Response): Response {
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
-    const path = normalizePath(url.pathname);
+    const normalizedPath = normalizePath(url.pathname);
     const method = request.method.toUpperCase();
 
     // Only allow safe methods for static site
@@ -66,7 +66,7 @@ export default {
     }
 
     // Check if this is a redirect
-    const redirectTarget = REDIRECT_MAP.get(path);
+    const redirectTarget = REDIRECT_MAP.get(normalizedPath);
     if (redirectTarget) {
       const resp = new Response(null, {
         status: 301,
@@ -79,20 +79,21 @@ export default {
     }
 
     // Check if this is a mapped route
-    let htmlFile = ROUTE_MAP.get(path);
+    let htmlFilename = ROUTE_MAP.get(normalizedPath);
 
     // /blog/[slug] -> blog-[slug].html
-    if (!htmlFile && path.startsWith('/blog/')) {
-      const slug = path.slice('/blog/'.length);
-      if (slug && /^[a-z0-9-]+$/.test(slug)) {
-        htmlFile = `blog-${slug}.html`;
+    if (!htmlFilename && normalizedPath.startsWith('/blog/')) {
+      const slug = normalizedPath.slice('/blog/'.length);
+      const MAX_BLOG_SLUG_LENGTH = 200;
+      if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && /^[a-z0-9-]+$/.test(slug)) {
+        htmlFilename = `blog-${slug}.html`;
       }
     }
 
     // If we have a mapped HTML file, fetch it from assets
-    if (htmlFile) {
+    if (htmlFilename) {
       const assetUrl = new URL(url);
-      assetUrl.pathname = `/${htmlFile}`;
+      assetUrl.pathname = `/${htmlFilename}`;
       const response = await env.ASSETS.fetch(assetUrl, {
         method: request.method,
         headers: request.headers,
