@@ -4,6 +4,8 @@ export interface Env {
   ASSETS: Fetcher;
 }
 
+const BLOG_SLUG_REGEX = /^[a-z0-9-]+$/;
+
 const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
   ['/dns', '/services/dns'],
@@ -12,6 +14,8 @@ const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/discord', 'https://discord.gg/KA66dHUF4P'],
   ['/github', 'https://github.com/hapara-fail'],
 ]);
+
+const MAX_BLOG_SLUG_LENGTH = 200;
 
 const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/', 'index.html'],
@@ -84,8 +88,7 @@ export default {
     // /blog/[slug] -> blog-[slug].html
     if (!htmlFilename && normalizedPath.startsWith('/blog/')) {
       const slug = normalizedPath.slice('/blog/'.length);
-      const MAX_BLOG_SLUG_LENGTH = 200;
-      if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && /^[a-z0-9-]+$/.test(slug)) {
+      if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && BLOG_SLUG_REGEX.test(slug)) {
         htmlFilename = `blog-${slug}.html`;
       }
     }
@@ -100,12 +103,13 @@ export default {
       });
       if (response.status === 304) return applySecurityHeaders(response);
       if (response.ok) return applySecurityHeaders(response);
+      // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
+    } else {
+      // For static assets (CSS, JS, images, etc.), pass through
+      const response = await env.ASSETS.fetch(request);
+      if (response.status === 304) return applySecurityHeaders(response);
+      if (response.ok) return applySecurityHeaders(response);
     }
-
-    // For static assets (CSS, JS, images, etc.), pass through
-    const response = await env.ASSETS.fetch(request);
-    if (response.status === 304) return applySecurityHeaders(response);
-    if (response.ok) return applySecurityHeaders(response);
 
     // 404 fallback - fetch 404.html
     const notFoundUrl = new URL(url);
