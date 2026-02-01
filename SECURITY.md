@@ -4,7 +4,7 @@ Thank you for your interest in the security of **hapara.fail**. We take the secu
 
 ## Supported Versions
 
-We only support the most recent stable release of the project. Please ensure you are testing against the latest version.
+We only support the most recent stable release of the project (the `main` branch deployed to production). Please ensure you are testing against the live version or the latest source code.
 
 | Version | Supported          |
 | ------- | ------------------ |
