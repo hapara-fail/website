@@ -4,7 +4,7 @@ export interface Env {
   ASSETS: Fetcher;
 }
 
-const BLOG_SLUG_REGEX = /^[a-z0-9-]+$/;
+const BLOG_SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
@@ -15,7 +15,10 @@ const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/github', 'https://github.com/hapara-fail'],
 ]);
 
+// Limit blog slugs to 200 characters to keep URLs reasonably short and well within
+// typical browser and server URL length limits. Adjust here if external limits change.
 const MAX_BLOG_SLUG_LENGTH = 200;
+const BLOG_PATH_PREFIX = '/blog/';
 
 const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/', 'index.html'],
@@ -82,12 +85,22 @@ export default {
       return resp;
     }
 
+    const handleAssetResponse = (response: Response): Response | null => {
+      if (response.status === 304) {
+        return applySecurityHeaders(response);
+      }
+      if (response.ok) {
+        return applySecurityHeaders(response);
+      }
+      return null;
+    };
+
     // Check if this is a mapped route
     let htmlFilename = ROUTE_MAP.get(normalizedPath);
 
     // /blog/[slug] -> blog-[slug].html
-    if (!htmlFilename && normalizedPath.startsWith('/blog/')) {
-      const slug = normalizedPath.slice('/blog/'.length);
+    if (!htmlFilename && normalizedPath.startsWith(BLOG_PATH_PREFIX)) {
+      const slug = normalizedPath.slice(BLOG_PATH_PREFIX.length);
       if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && BLOG_SLUG_REGEX.test(slug)) {
         htmlFilename = `blog-${slug}.html`;
       }
@@ -101,14 +114,14 @@ export default {
         method: request.method,
         headers: request.headers,
       });
-      if (response.status === 304) return applySecurityHeaders(response);
-      if (response.ok) return applySecurityHeaders(response);
+      const handledMapped = handleAssetResponse(response);
+      if (handledMapped) return handledMapped;
       // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
     } else {
       // For static assets (CSS, JS, images, etc.), pass through
       const response = await env.ASSETS.fetch(request);
-      if (response.status === 304) return applySecurityHeaders(response);
-      if (response.ok) return applySecurityHeaders(response);
+      const handledStatic = handleAssetResponse(response);
+      if (handledStatic) return handledStatic;
     }
 
     // 404 fallback - fetch 404.html
@@ -120,7 +133,8 @@ export default {
       headers: request.headers,
     });
 
-    if (notFoundResponse.status === 304) return applySecurityHeaders(notFoundResponse);
+    const handledNotFound = handleAssetResponse(notFoundResponse);
+    if (handledNotFound) return handledNotFound;
     if (notFoundResponse.ok) {
       const resp = new Response(notFoundResponse.body, {
         status: 404,
