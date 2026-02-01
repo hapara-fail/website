@@ -132,8 +132,7 @@ export default {
 
     // Handle 304 responses using the helper
     if (notFoundResponse.status === 304) {
-      const handled = handleAssetResponse(notFoundResponse);
-      if (handled) return handled;
+      return handleAssetResponse(notFoundResponse)!;
     }
     
     // For successful responses, wrap in 404 status
