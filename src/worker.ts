@@ -53,6 +53,16 @@ function applySecurityHeaders(original: Response): Response {
   return new Response(original.body, { status: original.status, headers });
 }
 
+function handleAssetResponse(response: Response): Response | null {
+  if (response.status === 304) {
+    return applySecurityHeaders(response);
+  }
+  if (response.ok) {
+    return applySecurityHeaders(response);
+  }
+  return null;
+}
+
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -84,16 +94,6 @@ export default {
       setSecurityHeaders(resp.headers);
       return resp;
     }
-
-    const handleAssetResponse = (response: Response): Response | null => {
-      if (response.status === 304) {
-        return applySecurityHeaders(response);
-      }
-      if (response.ok) {
-        return applySecurityHeaders(response);
-      }
-      return null;
-    };
 
     // Check if this is a mapped route
     let htmlFilename = ROUTE_MAP.get(normalizedPath);
@@ -133,8 +133,7 @@ export default {
       headers: request.headers,
     });
 
-    const handledNotFound = handleAssetResponse(notFoundResponse);
-    if (handledNotFound) return handledNotFound;
+    if (notFoundResponse.status === 304) return applySecurityHeaders(notFoundResponse);
     if (notFoundResponse.ok) {
       const resp = new Response(notFoundResponse.body, {
         status: 404,
