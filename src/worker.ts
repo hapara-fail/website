@@ -42,6 +42,15 @@ function setSecurityHeaders(headers: Headers): void {
   if (!headers.has('Referrer-Policy'))
     headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   if (!headers.has('X-Frame-Options')) headers.set('X-Frame-Options', 'SAMEORIGIN');
+  if (!headers.has('Content-Security-Policy')) {
+    headers.set(
+      'Content-Security-Policy',
+      "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+    );
+  }
+  if (!headers.has('Strict-Transport-Security')) {
+    headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
 }
 
 function applySecurityHeaders(original: Response): Response {
@@ -132,7 +141,11 @@ export default {
 
     // Handle 304 responses using the helper
     if (notFoundResponse.status === 304) {
-      return handleAssetResponse(notFoundResponse)!;
+      const handledNotFound = handleAssetResponse(notFoundResponse);
+      if (handledNotFound) {
+        return handledNotFound;
+      }
+      // If the helper returns null, fall through to the 404 handling below.
     }
     
     // For successful responses, wrap in 404 status
