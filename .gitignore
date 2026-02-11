@@ -25,4 +25,5 @@ Thumbs.db
 src/site/js/version.js
 dist/
 .cache/
+worker-configuration.d.ts
 
