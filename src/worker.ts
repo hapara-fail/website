@@ -45,7 +45,7 @@ function setSecurityHeaders(headers: Headers): void {
   if (!headers.has('Content-Security-Policy')) {
     headers.set(
       'Content-Security-Policy',
-      "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+      "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
     );
   }
   if (!headers.has('Strict-Transport-Security')) {
