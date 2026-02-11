@@ -52,7 +52,7 @@ function setSecurityHeaders(headers: Headers): void {
       "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
-      "frame-ancestors 'self';"
+      "frame-ancestors 'self'"
     ];
     headers.set('Content-Security-Policy', cspDirectives.join(' '));
   }
