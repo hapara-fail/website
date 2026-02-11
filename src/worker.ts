@@ -43,10 +43,18 @@ function setSecurityHeaders(headers: Headers): void {
     headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   if (!headers.has('X-Frame-Options')) headers.set('X-Frame-Options', 'SAMEORIGIN');
   if (!headers.has('Content-Security-Policy')) {
-    headers.set(
-      'Content-Security-Policy',
-      "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
-    );
+    const cspDirectives = [
+      "default-src 'self';",
+      "img-src 'self' data:;",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+      "font-src 'self' https://fonts.gstatic.com;",
+      "script-src 'self';",
+      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
+      "object-src 'none';",
+      "base-uri 'self';",
+      "frame-ancestors 'self'",
+    ];
+    headers.set('Content-Security-Policy', cspDirectives.join(' '));
   }
   if (!headers.has('Strict-Transport-Security')) {
     headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
@@ -120,14 +128,14 @@ export default {
         method: request.method,
         headers: request.headers,
       });
-      const handledMapped = handleAssetResponse(response);
-      if (handledMapped) return handledMapped;
+      const mappedAssetResponse = handleAssetResponse(response);
+      if (mappedAssetResponse) return mappedAssetResponse;
       // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
     } else {
       // For static assets (CSS, JS, images, etc.), pass through
       const response = await env.ASSETS.fetch(request);
-      const handledStatic = handleAssetResponse(response);
-      if (handledStatic) return handledStatic;
+      const staticAssetResponse = handleAssetResponse(response);
+      if (staticAssetResponse) return staticAssetResponse;
     }
 
     // 404 fallback - fetch 404.html
@@ -139,15 +147,12 @@ export default {
       headers: request.headers,
     });
 
-    // Handle 304 responses using the helper
-    if (notFoundResponse.status === 304) {
-      const handledNotFound = handleAssetResponse(notFoundResponse);
-      if (handledNotFound) {
-        return handledNotFound;
-      }
-      // If the helper returns null, fall through to the 404 handling below.
+    const processedNotFoundResponse = handleAssetResponse(notFoundResponse);
+    // Only short-circuit 304 Not Modified responses; allow 200 OK to be rewrapped as 404 below.
+    if (processedNotFoundResponse && processedNotFoundResponse.status === 304) {
+      return processedNotFoundResponse;
     }
-    
+
     // For successful responses, wrap in 404 status
     if (notFoundResponse.ok) {
       const resp = new Response(notFoundResponse.body, {
