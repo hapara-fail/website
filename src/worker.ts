@@ -52,7 +52,7 @@ function setSecurityHeaders(headers: Headers): void {
       "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
-      "frame-ancestors 'self'"
+      "frame-ancestors 'self'",
     ];
     headers.set('Content-Security-Policy', cspDirectives.join(' '));
   }
@@ -148,10 +148,11 @@ export default {
     });
 
     const processedNotFoundResponse = handleAssetResponse(notFoundResponse);
-    if (processedNotFoundResponse) {
+    // Only short-circuit 304 Not Modified responses; allow 200 OK to be rewrapped as 404 below.
+    if (processedNotFoundResponse && processedNotFoundResponse.status === 304) {
       return processedNotFoundResponse;
     }
-    
+
     // For successful responses, wrap in 404 status
     if (notFoundResponse.ok) {
       const resp = new Response(notFoundResponse.body, {
