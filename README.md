@@ -92,7 +92,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- npm or yarn
+- [pnpm](https://pnpm.io/) (v9 or higher)
 
 ### Local Setup
 
@@ -103,11 +103,11 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
     ```
 2.  **Install dependencies:**
     ```bash
-    npm install
+    pnpm install
     ```
 3.  **Start the local development server:**
     ```bash
-    npm run dev
+    pnpm run dev
     ```
     This command uses Wrangler to build the Worker and serve the site locally, typically at `http://127.0.0.1:8787`.
 
@@ -118,7 +118,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 Ensure you have Wrangler installed and configured (`wrangler login`).
 
 ```bash
-npm run deploy
+pnpm run deploy
 ```
 
 This command will build the project and deploy it to the Cloudflare Workers environment specified in `wrangler.jsonc`.

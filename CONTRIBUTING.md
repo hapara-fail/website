@@ -40,10 +40,10 @@ The project is built on **Cloudflare Workers**.
 1.  **Fork** the repository to your own GitHub account.
 2.  **Create a Branch** for your specific change (e.g., `fix-dark-mode` or `add-securly-blog-post`).
 3.  **Make your changes.**
-    - If modifying the Worker logic, ensure it compiles (`npm run build`).
+    - If modifying the Worker logic, ensure it compiles (`pnpm run build`).
     - If adding assets, ensure they are placed correctly in `src/site/`.
 4.  **Test Locally:**
-    - Run `npm run dev` to start the local Wrangler development server.
+    - Run `pnpm run dev` to start the local Wrangler development server.
     - Verify your changes at `http://127.0.0.1:8787`.
 5.  **Commit** your changes with a clear message:
     - _Good:_ "Fix mobile navigation layout on small screens"

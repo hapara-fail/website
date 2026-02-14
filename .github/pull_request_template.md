@@ -21,8 +21,8 @@ _Briefly explain what you changed and why. (e.g., "Fixed mobile navbar not openi
 **4. Verification & Testing:**
 _How did you verify these changes?_
 
-- [ ] I have built the worker locally (`npm run build`) without errors.
-- [ ] I have tested the changes on a local development server (`npm run dev`).
+- [ ] I have built the worker locally (`pnpm run build`) without errors.
+- [ ] I have tested the changes on a local development server (`pnpm run dev`).
 - [ ] (If UI related) I have checked how this looks on mobile/Chromebooks.
 
 **5. Screenshots (Optional):**
