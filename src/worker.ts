@@ -50,7 +50,7 @@ function setSecurityHeaders(headers: Headers): void {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
       "font-src 'self' https://fonts.gstatic.com;",
       "script-src 'self';",
-      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
+      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com/hapara-fail/;",
       "object-src 'none';",
       "base-uri 'self';",
       "frame-ancestors 'self'",
@@ -62,13 +62,23 @@ function setSecurityHeaders(headers: Headers): void {
   }
 }
 
-function applySecurityHeaders(original: Response): Response {
-  const headers = new Headers(original.headers);
-  setSecurityHeaders(headers);
-  if (original.status === 304) {
-    return new Response(null, { status: 304, headers });
+function applySecurityHeaders(body: BodyInit | null, init: ResponseInit): Response;
+function applySecurityHeaders(original: Response): Response;
+function applySecurityHeaders(
+  bodyOrResponse: Response | BodyInit | null,
+  init?: ResponseInit,
+): Response {
+  if (bodyOrResponse instanceof Response) {
+    const headers = new Headers(bodyOrResponse.headers);
+    setSecurityHeaders(headers);
+    if (bodyOrResponse.status === 304) {
+      return new Response(null, { status: 304, headers });
+    }
+    return new Response(bodyOrResponse.body, { status: bodyOrResponse.status, headers });
   }
-  return new Response(original.body, { status: original.status, headers });
+  const resp = new Response(bodyOrResponse, init);
+  setSecurityHeaders(resp.headers);
+  return resp;
 }
 
 function handleAssetResponse(response: Response): Response | null {
@@ -86,28 +96,24 @@ export default {
 
     // Only allow safe methods for static site
     if (method !== 'GET' && method !== 'HEAD') {
-      const resp = new Response('Method Not Allowed', {
+      return applySecurityHeaders('Method Not Allowed', {
         status: 405,
         headers: {
           Allow: 'GET, HEAD',
           'Content-Type': 'text/plain; charset=utf-8',
         },
       });
-      setSecurityHeaders(resp.headers);
-      return resp;
     }
 
     // Check if this is a redirect
     const redirectTarget = REDIRECT_MAP.get(normalizedPath);
     if (redirectTarget) {
-      const resp = new Response(null, {
+      return applySecurityHeaders(null, {
         status: 301,
         headers: {
           Location: redirectTarget,
         },
       });
-      setSecurityHeaders(resp.headers);
-      return resp;
     }
 
     // Check if this is a mapped route

@@ -22,7 +22,7 @@ Thumbs.db
 *~
 
 # Build outputs
-src/site/js/version.js
+src/site/js/version-data.js
 dist/
 .cache/
 worker-configuration.d.ts
