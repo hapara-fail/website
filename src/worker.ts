@@ -30,6 +30,7 @@ const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/tool/gfu', 'gfu-tool.html'],
   ['/tool/wifi', 'wifi-tool.html'],
   ['/blog', 'blog.html'],
+  ['/license', 'license.html'],
 ]);
 
 function normalizePath(pathname: string): string {
