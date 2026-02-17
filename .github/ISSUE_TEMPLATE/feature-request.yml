@@ -11,9 +11,9 @@ body:
     attributes:
       value: |
         # Feature Request
-        
+
         We love hearing your ideas! Please share your suggestions for new features or improvements.
-  
+
   - type: input
     id: idea-name
     attributes:
@@ -22,7 +22,7 @@ body:
       placeholder: 'e.g., "Add a dark mode toggle," "New blog post about Securly SSL decryption," "Tool to unblock X"'
     validations:
       required: true
-  
+
   - type: textarea
     id: description
     attributes:
@@ -31,7 +31,7 @@ body:
       placeholder: Tell us more about your idea!
     validations:
       required: true
-  
+
   - type: textarea
     id: why-needed
     attributes:
@@ -40,7 +40,7 @@ body:
       placeholder: 'e.g., "Helps bypassing the new X filter update," "Makes the site easier to read at night"'
     validations:
       required: true
-  
+
   - type: textarea
     id: implementation-ideas
     attributes:
@@ -49,7 +49,7 @@ body:
       placeholder: 'e.g., "Use localStorage for the theme," "I found this exploits POC we could adapt"'
     validations:
       required: false
-  
+
   - type: checkboxes
     id: confirmation
     attributes:

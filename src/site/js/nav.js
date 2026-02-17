@@ -233,8 +233,9 @@ function buildFooterMarkup() {
     window.haparaVersion = v;
 
     // Sanitize message for safe innerHTML use
-    const safeMsg = (v.message || '').replace(/[<>"&]/g, (c) =>
-      ({ '<': '&lt;', '>': '&gt;', '"': '&quot;', '&': '&amp;' })[c]
+    const safeMsg = (v.message || '').replace(
+      /[<>"&]/g,
+      (c) => ({ '<': '&lt;', '>': '&gt;', '"': '&quot;', '&': '&amp;' })[c]
     );
 
     footerText.innerHTML = `<div class="version-footer">

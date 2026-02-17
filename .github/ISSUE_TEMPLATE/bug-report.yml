@@ -11,9 +11,9 @@ body:
     attributes:
       value: |
         # Bug Report
-        
+
         Thank you for taking the time to report a bug! Please provide as much detail as possible.
-  
+
   - type: textarea
     id: what-is-broken
     attributes:
@@ -22,7 +22,7 @@ body:
       placeholder: Tell us what you see!
     validations:
       required: true
-  
+
   - type: input
     id: affected-page
     attributes:
@@ -31,7 +31,7 @@ body:
       placeholder: 'e.g., /tool/gfu, /blog/dns, Homepage'
     validations:
       required: true
-  
+
   - type: input
     id: browser-device
     attributes:
@@ -40,7 +40,7 @@ body:
       placeholder: 'e.g., Chrome on School Chromebook, Safari on iPhone, Firefox on Windows'
     validations:
       required: true
-  
+
   - type: textarea
     id: steps-to-reproduce
     attributes:
@@ -52,7 +52,7 @@ body:
         3. See error...
     validations:
       required: true
-  
+
   - type: textarea
     id: screenshots-logs
     attributes:
@@ -61,7 +61,7 @@ body:
       placeholder: Paste screenshots or error logs here
     validations:
       required: false
-  
+
   - type: checkboxes
     id: confirmation
     attributes:

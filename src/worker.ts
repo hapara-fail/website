@@ -66,7 +66,7 @@ function applySecurityHeaders(body: BodyInit | null, init: ResponseInit): Respon
 function applySecurityHeaders(original: Response): Response;
 function applySecurityHeaders(
   bodyOrResponse: Response | BodyInit | null,
-  init?: ResponseInit,
+  init?: ResponseInit
 ): Response {
   if (bodyOrResponse instanceof Response) {
     const headers = new Headers(bodyOrResponse.headers);
