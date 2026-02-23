@@ -14,7 +14,7 @@ Our primary support channel is our [Support Portal](https://support.hapara.fail/
 ### Email
 
 You can also reach us directly via email at:
-[support@hapara.fail](mailto:support@hapara.fail)
+[support@support.hapara.fail](mailto:support@support.hapara.fail)
 
 ### Community Support
 

@@ -56,7 +56,7 @@ For significant changes to the project (e.g., new major features, architectural 
 
 - **GitHub Issues**: The primary place for bug reports, feature requests, and technical discussion.
 - **Discord**: Our community server for real-time discussion, support, and collaboration ([www.hapara.fail/discord](https://www.hapara.fail/discord)).
-- **Email**: For private or sensitive matters ([support@hapara.fail](mailto:support@hapara.fail)).
+- **Email**: For private or sensitive matters ([support@support.hapara.fail](mailto:support@support.hapara.fail)).
 
 ---
 
