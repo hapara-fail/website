@@ -1,15 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Activate preloaded Google Fonts stylesheet (non-render-blocking).
-  // The <link rel="preload"> in HTML fetches the CSS early; this turns it
-  // into an active stylesheet after the page has rendered.
-  if (!document.querySelector('link[rel="stylesheet"][href*="fonts.googleapis.com"]')) {
-    const fontLink = document.createElement('link');
-    fontLink.rel = 'stylesheet';
-    fontLink.href =
-      'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap';
-    document.head.appendChild(fontLink);
-  }
-
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cookieNotice = document.getElementById('cookieNotice');
   const acceptCookie = document.getElementById('acceptCookie');
