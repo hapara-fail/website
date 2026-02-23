@@ -380,7 +380,7 @@ function buildFooterMarkup() {
   // Auto-hide header on scroll down, show on scroll up or at top
   const header = document.querySelector('.main-header');
   if (header) {
-    let lastScrollY = window.scrollY;
+    let lastScrollY = 0;
     let ticking = false;
     const scrollThreshold = 50; // Minimum distance before triggering hide/show
     const scrollSpeed = 10; // Speed threshold to detect "fast" scrolling
@@ -434,7 +434,10 @@ function buildFooterMarkup() {
     // Listen to scroll events
     window.addEventListener('scroll', requestTick, { passive: true });
 
-    // Initial check
-    updateHeader();
+    // Initial check deferred to avoid forced reflow
+    window.requestAnimationFrame(function () {
+      lastScrollY = window.scrollY;
+      updateHeader();
+    });
   }
 })();
