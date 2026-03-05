@@ -10,7 +10,7 @@ const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
   ['/dns', '/services/dns'],
   ['/forms', '/tool/gfu'],
-  ['/wifi', '/tool/wifi'],
+
   ['/discord', 'https://discord.gg/KA66dHUF4P'],
   ['/github', 'https://github.com/hapara-fail'],
 ]);
@@ -28,7 +28,7 @@ const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/privacy', 'privacy.html'],
   ['/services/dns', 'dns-service.html'],
   ['/tool/gfu', 'gfu-tool.html'],
-  ['/tool/wifi', 'wifi-tool.html'],
+
   ['/blog', 'blog.html'],
   ['/license', 'license.html'],
 ]);
