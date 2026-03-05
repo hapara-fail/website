@@ -53,12 +53,16 @@ function setSecurityHeaders(headers: Headers): void {
       "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com/hapara-fail/;",
       "object-src 'none';",
       "base-uri 'self';",
+      "form-action 'self' https://docs.google.com;",
       "frame-ancestors 'self'",
     ];
     headers.set('Content-Security-Policy', cspDirectives.join(' '));
   }
   if (!headers.has('Strict-Transport-Security')) {
     headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
+  if (!headers.has('Permissions-Policy')) {
+    headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
   }
 }
 

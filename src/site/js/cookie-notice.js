@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     acceptCookie.addEventListener('click', () => {
       // Set cookie first
-      document.cookie = 'cookieConsent=true; path=/; max-age=31536000; SameSite=Lax';
+      let cookieStr = 'cookieConsent=true; path=/; max-age=31536000; SameSite=Lax';
+      if (window.location.protocol === 'https:') {
+        cookieStr += '; Secure';
+      }
+      document.cookie = cookieStr;
 
       if (prefersReducedMotion) {
         // Respect reduced motion: hide instantly (no animation)

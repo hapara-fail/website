@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.querySelector('.wizard-progress');
     if (progressBar) {
       progressBar.setAttribute('aria-valuenow', currentStep);
-      progressBar.setAttribute('aria-label', `Wizard progress: step ${currentStep} of ${wizardSteps.length}`);
+      progressBar.setAttribute(
+        'aria-label',
+        `Wizard progress: step ${currentStep} of ${wizardSteps.length}`
+      );
     }
 
     backBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
@@ -93,14 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
       success: `<svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`,
     };
 
-    notification.innerHTML = `
-            ${icons[type] || icons['warning']}
-            <div class="notification-content">
-                <div class="notification-title">${title}</div>
-                <div class="notification-message">${message}</div>
-            </div>
-            <button class="notification-close">&times;</button>
-        `;
+    // Build notification with safe DOM methods to prevent XSS
+    const iconWrapper = document.createElement('span');
+    iconWrapper.innerHTML = icons[type] || icons['warning']; // static trusted SVG
+    notification.appendChild(iconWrapper);
+
+    const content = document.createElement('div');
+    content.className = 'notification-content';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'notification-title';
+    titleEl.textContent = title;
+    content.appendChild(titleEl);
+
+    const msgEl = document.createElement('div');
+    msgEl.className = 'notification-message';
+    msgEl.textContent = message;
+    content.appendChild(msgEl);
+
+    notification.appendChild(content);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'notification-close';
+    closeBtn.textContent = '\u00d7';
+    notification.appendChild(closeBtn);
     notificationContainer.appendChild(notification);
 
     setTimeout(() => notification.classList.add('show'), 10);

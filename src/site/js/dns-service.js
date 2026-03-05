@@ -294,7 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => {
       const modal = modalOverlay.querySelector('.dns-modal');
       if (modal) {
-        const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const firstFocusable = modal.querySelector(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
         if (firstFocusable) firstFocusable.focus();
       }
     });
@@ -367,7 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = modalOverlay ? modalOverlay.querySelector('.dns-modal') : null;
     if (!modal || modalOverlay.hidden) return;
     if (!modal.contains(e.target)) {
-      const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const firstFocusable = modal.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
       if (firstFocusable) firstFocusable.focus();
     }
   };
@@ -605,10 +609,14 @@ document.addEventListener('DOMContentLoaded', () => {
     history.replaceState(null, '', url);
   };
 
+  const MAX_URL_PARAM_LENGTH = 200;
+  const sanitizeUrlParam = (s) =>
+    typeof s === 'string' ? s.slice(0, MAX_URL_PARAM_LENGTH).replace(/[\x00-\x1F]/g, '') : '';
+
   const readUrlParams = () => {
     const url = new URL(window.location);
-    const q = url.searchParams.get('q');
-    const cat = url.searchParams.get('category');
+    const q = sanitizeUrlParam(url.searchParams.get('q') || '');
+    const cat = sanitizeUrlParam(url.searchParams.get('category') || '');
     if (q && searchInput) {
       searchInput.value = q;
     }
@@ -638,8 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // One chip per category
     BLOCKED_SERVICES.forEach((group) => {
       const chip = document.createElement('button');
-      chip.className =
-        'category-chip' + (activeCategoryFilter === group.category ? ' active' : '');
+      chip.className = 'category-chip' + (activeCategoryFilter === group.category ? ' active' : '');
       chip.textContent = group.category;
       chip.type = 'button';
       chip.addEventListener('click', () => {
@@ -664,6 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- Fetch Services ---
+  const MAX_BLOCKLIST_SIZE_BYTES = 512 * 1024; // 512 KB
+
   const fetchServices = async () => {
     showLoadingSkeleton();
 
@@ -672,7 +681,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/README.md'
       );
       if (!response.ok) throw new Error('Failed to fetch blocklist');
+
+      const contentLength = parseInt(response.headers.get('content-length') || '0', 10);
+      if (contentLength > MAX_BLOCKLIST_SIZE_BYTES) {
+        throw new Error('Blocklist response exceeds maximum allowed size');
+      }
       const text = await response.text();
+      if (text.length > MAX_BLOCKLIST_SIZE_BYTES) {
+        throw new Error('Blocklist content exceeds maximum allowed size');
+      }
 
       if (!isTrustedBlocklist(text)) {
         throw new Error('Blocklist content failed integrity checks');
@@ -821,7 +838,11 @@ document.addEventListener('DOMContentLoaded', () => {
         service.toLowerCase().includes(normalizedFilter)
       );
       if (matching.length > 0) {
-        exactResults.push({ category: group.category, services: matching, total: group.services.length });
+        exactResults.push({
+          category: group.category,
+          services: matching,
+          total: group.services.length,
+        });
       }
     });
 
@@ -837,7 +858,11 @@ document.addEventListener('DOMContentLoaded', () => {
           .map((r) => r.service);
 
         if (matching.length > 0) {
-          fuzzyResults.push({ category: group.category, services: matching, total: group.services.length });
+          fuzzyResults.push({
+            category: group.category,
+            services: matching,
+            total: group.services.length,
+          });
         }
       });
 
@@ -976,8 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
       noResults.appendChild(messagePara);
 
       const link = document.createElement('a');
-      link.href =
-        'https://github.com/hapara-fail/blocklist/issues/new?template=addition.yml';
+      link.href = 'https://github.com/hapara-fail/blocklist/issues/new?template=addition.yml';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.className = 'cta-button';
@@ -1020,13 +1044,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  let searchDebounceTimer = null;
+  const SEARCH_DEBOUNCE_MS = 150;
+
   if (searchInput) {
     // Read URL params on load
     readUrlParams();
 
     searchInput.addEventListener('input', (e) => {
-      syncUrlParams();
-      renderServices(e.target.value);
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        syncUrlParams();
+        renderServices(e.target.value);
+      }, SEARCH_DEBOUNCE_MS);
     });
 
     // Show skeleton immediately, then fetch
@@ -1034,4 +1064,3 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchServices();
   }
 });
-

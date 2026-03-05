@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "format": "prettier --write .",
     "generate-version": "node scripts/generate-version.js",
     "build": "pnpm run generate-version",
     "dev": "pnpm run build && wrangler dev",
