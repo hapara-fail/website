@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentIndex = tabs.indexOf(document.activeElement);
       if (currentIndex === -1) return;
 
-      let newIndex = currentIndex;
+      let newIndex;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         newIndex = (currentIndex + 1) % tabs.length;
