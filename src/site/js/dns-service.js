@@ -402,9 +402,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- COMPATIBILITY CHECKER LOGIC ---
   let BLOCKED_SERVICES = [];
   let PATCHED_SERVICES = new Set();
+  let activeCategoryFilter = null;
 
   const searchInput = document.getElementById('service-search');
   const serviceList = document.getElementById('service-list');
+  const categoryChipsContainer = document.getElementById('category-chips');
 
   /**
    * Basic integrity / trust check for the downloaded blocklist content.
@@ -437,7 +439,157 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   };
 
+  // --- Loading Skeleton ---
+  const showLoadingSkeleton = () => {
+    if (!serviceList) return;
+    serviceList.innerHTML = '';
+
+    for (let g = 0; g < 3; g++) {
+      const group = document.createElement('div');
+      group.className = 'service-category-group skeleton-group';
+
+      const header = document.createElement('div');
+      header.className = 'skeleton-header skeleton-pulse';
+      group.appendChild(header);
+
+      const container = document.createElement('div');
+      container.className = 'service-cards-container';
+
+      for (let i = 0; i < 4; i++) {
+        const card = document.createElement('div');
+        card.className = 'service-card skeleton-card';
+
+        const left = document.createElement('div');
+        left.className = 'skeleton-name skeleton-pulse';
+
+        const right = document.createElement('div');
+        right.className = 'skeleton-status skeleton-pulse';
+
+        card.appendChild(left);
+        card.appendChild(right);
+        container.appendChild(card);
+      }
+
+      group.appendChild(container);
+      serviceList.appendChild(group);
+    }
+  };
+
+  // --- Fuzzy Matching ---
+  const fuzzyMatch = (query, text) => {
+    const q = query.toLowerCase();
+    const t = text.toLowerCase();
+
+    // Exact substring match
+    if (t.includes(q)) return { match: true, score: 1 };
+
+    // Space-insensitive: remove spaces and compare
+    const qNoSpace = q.replace(/\s+/g, '');
+    const tNoSpace = t.replace(/\s+/g, '');
+    if (tNoSpace.includes(qNoSpace)) return { match: true, score: 0.9 };
+
+    // Multi-word: all query words appear somewhere in text
+    const words = q.split(/\s+/).filter((w) => w.length > 0);
+    if (words.length > 1 && words.every((w) => t.includes(w))) return { match: true, score: 0.85 };
+
+    // Character-skip subsequence: all query chars appear in order
+    if (qNoSpace.length >= 3) {
+      let ti = 0;
+      let matched = 0;
+      for (let qi = 0; qi < qNoSpace.length && ti < tNoSpace.length; ti++) {
+        if (tNoSpace[ti] === qNoSpace[qi]) {
+          matched++;
+          qi++;
+        }
+      }
+      if (matched === qNoSpace.length) {
+        const score = 0.5 + 0.3 * (matched / tNoSpace.length);
+        return { match: true, score: Math.min(score, 0.79) };
+      }
+    }
+
+    return { match: false, score: 0 };
+  };
+
+  // --- URL Param Helpers ---
+  const syncUrlParams = () => {
+    const url = new URL(window.location);
+    const q = searchInput ? searchInput.value.trim() : '';
+    if (q) {
+      url.searchParams.set('q', q);
+    } else {
+      url.searchParams.delete('q');
+    }
+    if (activeCategoryFilter) {
+      url.searchParams.set('category', activeCategoryFilter);
+    } else {
+      url.searchParams.delete('category');
+    }
+    history.replaceState(null, '', url);
+  };
+
+  const readUrlParams = () => {
+    const url = new URL(window.location);
+    const q = url.searchParams.get('q');
+    const cat = url.searchParams.get('category');
+    if (q && searchInput) {
+      searchInput.value = q;
+    }
+    if (cat) {
+      activeCategoryFilter = cat;
+    }
+  };
+
+  // --- Category Chips ---
+  const renderCategoryChips = () => {
+    if (!categoryChipsContainer) return;
+    categoryChipsContainer.innerHTML = '';
+
+    // "All" chip
+    const allChip = document.createElement('button');
+    allChip.className = 'category-chip' + (activeCategoryFilter === null ? ' active' : '');
+    allChip.textContent = 'All';
+    allChip.type = 'button';
+    allChip.addEventListener('click', () => {
+      activeCategoryFilter = null;
+      syncUrlParams();
+      updateChipActiveStates();
+      renderServices(searchInput ? searchInput.value : '');
+    });
+    categoryChipsContainer.appendChild(allChip);
+
+    // One chip per category
+    BLOCKED_SERVICES.forEach((group) => {
+      const chip = document.createElement('button');
+      chip.className =
+        'category-chip' + (activeCategoryFilter === group.category ? ' active' : '');
+      chip.textContent = group.category;
+      chip.type = 'button';
+      chip.addEventListener('click', () => {
+        activeCategoryFilter = group.category;
+        syncUrlParams();
+        updateChipActiveStates();
+        renderServices(searchInput ? searchInput.value : '');
+      });
+      categoryChipsContainer.appendChild(chip);
+    });
+  };
+
+  const updateChipActiveStates = () => {
+    if (!categoryChipsContainer) return;
+    categoryChipsContainer.querySelectorAll('.category-chip').forEach((chip) => {
+      const isAll = chip.textContent === 'All';
+      const isActive = isAll
+        ? activeCategoryFilter === null
+        : chip.textContent === activeCategoryFilter;
+      chip.classList.toggle('active', isActive);
+    });
+  };
+
+  // --- Fetch Services ---
   const fetchServices = async () => {
+    showLoadingSkeleton();
+
     try {
       const response = await fetch(
         'https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/README.md'
@@ -523,116 +675,206 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       BLOCKED_SERVICES = parsedServices;
+      renderCategoryChips();
       renderServices(searchInput ? searchInput.value : '');
     } catch (error) {
       console.error('Error loading blocklist:', error);
       if (serviceList) {
-        serviceList.innerHTML =
-          '<div class="no-results"><p>Unable to load service list from GitHub.</p></div>';
+        serviceList.innerHTML = '';
+
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+
+        const messagePara = document.createElement('p');
+        messagePara.textContent = 'Unable to load service list from GitHub.';
+        noResults.appendChild(messagePara);
+
+        const retryBtn = document.createElement('button');
+        retryBtn.type = 'button';
+        retryBtn.className = 'retry-btn';
+
+        const retrySvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        retrySvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        retrySvg.setAttribute('width', '16');
+        retrySvg.setAttribute('height', '16');
+        retrySvg.setAttribute('viewBox', '0 0 24 24');
+        retrySvg.setAttribute('fill', 'none');
+        retrySvg.setAttribute('stroke', 'currentColor');
+        retrySvg.setAttribute('stroke-width', '2');
+        retrySvg.setAttribute('stroke-linecap', 'round');
+        retrySvg.setAttribute('stroke-linejoin', 'round');
+
+        const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        path1.setAttribute('points', '23 4 23 10 17 10');
+        retrySvg.appendChild(path1);
+
+        const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path2.setAttribute('d', 'M20.49 15a9 9 0 1 1-2.12-9.36L23 10');
+        retrySvg.appendChild(path2);
+
+        retryBtn.appendChild(retrySvg);
+        retryBtn.appendChild(document.createTextNode('Retry'));
+        retryBtn.addEventListener('click', () => fetchServices());
+
+        noResults.appendChild(retryBtn);
+        serviceList.appendChild(noResults);
       }
     }
   };
 
+  // --- Render Services ---
   const renderServices = (filterText = '') => {
     if (!serviceList) return;
     serviceList.innerHTML = '';
 
     const normalizedFilter = filterText.toLowerCase().trim();
     let hasResults = false;
+    let cardIndex = 0;
+    let isFuzzy = false;
 
-    BLOCKED_SERVICES.forEach((group) => {
-      // Filter services within the group
-      const matchingServices = group.services.filter((service) =>
+    // Determine which groups to render based on category filter
+    const filteredGroups = activeCategoryFilter
+      ? BLOCKED_SERVICES.filter((g) => g.category === activeCategoryFilter)
+      : BLOCKED_SERVICES;
+
+    // First pass: exact substring matching
+    const exactResults = [];
+    filteredGroups.forEach((group) => {
+      const matching = group.services.filter((service) =>
         service.toLowerCase().includes(normalizedFilter)
       );
-
-      if (matchingServices.length > 0) {
-        hasResults = true;
-        const categoryEl = document.createElement('div');
-        categoryEl.className = 'service-category-group';
-
-        const headerEl = document.createElement('h3');
-        headerEl.className = 'service-category-header';
-        headerEl.textContent = group.category;
-        categoryEl.appendChild(headerEl);
-
-        const cardsContainer = document.createElement('div');
-        cardsContainer.className = 'service-cards-container';
-
-        matchingServices.forEach((service) => {
-          const card = document.createElement('div');
-          card.className = 'service-card';
-
-          const serviceInfo = document.createElement('div');
-          serviceInfo.className = 'service-info service-info-flex';
-          serviceInfo.style.display = 'flex';
-          serviceInfo.style.alignItems = 'center';
-          serviceInfo.style.gap = '15px';
-          serviceInfo.style.width = '100%';
-          serviceInfo.style.justifyContent = 'space-between';
-
-          const nameSpan = document.createElement('span');
-          nameSpan.className = 'service-name';
-          nameSpan.textContent = service;
-
-          const isPatched = PATCHED_SERVICES.has(service);
-
-          const statusSpan = document.createElement('span');
-          statusSpan.className = isPatched
-            ? 'service-status service-status--patched'
-            : 'service-status';
-          statusSpan.title = isPatched
-            ? 'This service has a hardcoded failsafe that severs your internet connection when blocked, instead of being bypassed.'
-            : 'Our DNS prevents this service from connecting to its servers, stopping it from functioning.';
-
-          const svgNS = 'http://www.w3.org/2000/svg';
-          const svg = document.createElementNS(svgNS, 'svg');
-          svg.setAttribute('xmlns', svgNS);
-          svg.setAttribute('width', '14');
-          svg.setAttribute('height', '14');
-          svg.setAttribute('viewBox', '0 0 24 24');
-          svg.setAttribute('fill', 'none');
-          svg.setAttribute('stroke', 'currentColor');
-          svg.setAttribute('stroke-width', '3');
-          svg.setAttribute('stroke-linecap', 'round');
-          svg.setAttribute('stroke-linejoin', 'round');
-          svg.style.marginRight = '4px';
-
-          if (isPatched) {
-            // X icon for patched services
-            const line1 = document.createElementNS(svgNS, 'line');
-            line1.setAttribute('x1', '18');
-            line1.setAttribute('y1', '6');
-            line1.setAttribute('x2', '6');
-            line1.setAttribute('y2', '18');
-            svg.appendChild(line1);
-
-            const line2 = document.createElementNS(svgNS, 'line');
-            line2.setAttribute('x1', '6');
-            line2.setAttribute('y1', '6');
-            line2.setAttribute('x2', '18');
-            line2.setAttribute('y2', '18');
-            svg.appendChild(line2);
-          } else {
-            // Checkmark icon for blocked services
-            const polyline = document.createElementNS(svgNS, 'polyline');
-            polyline.setAttribute('points', '20 6 9 17 4 12');
-            svg.appendChild(polyline);
-          }
-
-          statusSpan.appendChild(svg);
-          statusSpan.appendChild(document.createTextNode(isPatched ? 'Patched' : 'Blocked'));
-
-          serviceInfo.appendChild(nameSpan);
-          serviceInfo.appendChild(statusSpan);
-
-          card.appendChild(serviceInfo);
-          cardsContainer.appendChild(card);
-        });
-
-        categoryEl.appendChild(cardsContainer);
-        serviceList.appendChild(categoryEl);
+      if (matching.length > 0) {
+        exactResults.push({ category: group.category, services: matching, total: group.services.length });
       }
+    });
+
+    // Second pass: fuzzy matching if no exact results and query >= 3 chars
+    let resultsToRender = exactResults;
+    if (exactResults.length === 0 && normalizedFilter.length >= 3) {
+      const fuzzyResults = [];
+      filteredGroups.forEach((group) => {
+        const matching = group.services
+          .map((service) => ({ service, ...fuzzyMatch(normalizedFilter, service) }))
+          .filter((r) => r.match)
+          .sort((a, b) => b.score - a.score)
+          .map((r) => r.service);
+
+        if (matching.length > 0) {
+          fuzzyResults.push({ category: group.category, services: matching, total: group.services.length });
+        }
+      });
+
+      if (fuzzyResults.length > 0) {
+        resultsToRender = fuzzyResults;
+        isFuzzy = true;
+      }
+    }
+
+    hasResults = resultsToRender.length > 0;
+
+    // Fuzzy note banner
+    if (isFuzzy) {
+      const note = document.createElement('div');
+      note.className = 'fuzzy-note';
+      note.textContent = 'Showing similar results for your search.';
+      serviceList.appendChild(note);
+    }
+
+    // Render result groups
+    resultsToRender.forEach((group) => {
+      const categoryEl = document.createElement('div');
+      categoryEl.className = 'service-category-group';
+
+      const headerEl = document.createElement('h3');
+      headerEl.className = 'service-category-header';
+      headerEl.textContent = group.category;
+
+      // Dynamic service count
+      const countSpan = document.createElement('span');
+      countSpan.className = 'category-count';
+      countSpan.textContent = ` (${group.total})`;
+      headerEl.appendChild(countSpan);
+
+      categoryEl.appendChild(headerEl);
+
+      const cardsContainer = document.createElement('div');
+      cardsContainer.className = 'service-cards-container';
+
+      group.services.forEach((service) => {
+        const card = document.createElement('div');
+        card.className = 'service-card card-enter';
+        card.style.animationDelay = `${cardIndex * 30}ms`;
+        cardIndex++;
+
+        const serviceInfo = document.createElement('div');
+        serviceInfo.className = 'service-info service-info-flex';
+        serviceInfo.style.display = 'flex';
+        serviceInfo.style.alignItems = 'center';
+        serviceInfo.style.gap = '15px';
+        serviceInfo.style.width = '100%';
+        serviceInfo.style.justifyContent = 'space-between';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'service-name';
+        nameSpan.textContent = service;
+
+        const isPatched = PATCHED_SERVICES.has(service);
+
+        const statusSpan = document.createElement('span');
+        statusSpan.className = isPatched
+          ? 'service-status service-status--patched'
+          : 'service-status';
+        statusSpan.title = isPatched
+          ? 'This service has a hardcoded failsafe that severs your internet connection when blocked, instead of being bypassed.'
+          : 'Our DNS prevents this service from connecting to its servers, stopping it from functioning.';
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('xmlns', svgNS);
+        svg.setAttribute('width', '14');
+        svg.setAttribute('height', '14');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '3');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        svg.style.marginRight = '4px';
+
+        if (isPatched) {
+          // X icon for patched services
+          const line1 = document.createElementNS(svgNS, 'line');
+          line1.setAttribute('x1', '18');
+          line1.setAttribute('y1', '6');
+          line1.setAttribute('x2', '6');
+          line1.setAttribute('y2', '18');
+          svg.appendChild(line1);
+
+          const line2 = document.createElementNS(svgNS, 'line');
+          line2.setAttribute('x1', '6');
+          line2.setAttribute('y1', '6');
+          line2.setAttribute('x2', '18');
+          line2.setAttribute('y2', '18');
+          svg.appendChild(line2);
+        } else {
+          // Checkmark icon for blocked services
+          const polyline = document.createElementNS(svgNS, 'polyline');
+          polyline.setAttribute('points', '20 6 9 17 4 12');
+          svg.appendChild(polyline);
+        }
+
+        statusSpan.appendChild(svg);
+        statusSpan.appendChild(document.createTextNode(isPatched ? 'Patched' : 'Blocked'));
+
+        serviceInfo.appendChild(nameSpan);
+        serviceInfo.appendChild(statusSpan);
+
+        card.appendChild(serviceInfo);
+        cardsContainer.appendChild(card);
+      });
+
+      categoryEl.appendChild(cardsContainer);
+      serviceList.appendChild(categoryEl);
     });
 
     if (!hasResults && normalizedFilter) {
@@ -701,11 +943,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (searchInput) {
+    // Read URL params on load
+    readUrlParams();
+
     searchInput.addEventListener('input', (e) => {
+      syncUrlParams();
       renderServices(e.target.value);
     });
-    // Initial render
-    renderServices();
+
+    // Show skeleton immediately, then fetch
+    showLoadingSkeleton();
     fetchServices();
   }
 });
+
