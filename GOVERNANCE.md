@@ -63,4 +63,4 @@ For significant changes to the project (e.g., new major features, architectural 
 ## ☎️ Contact Information
 
 - **Project Lead & Governance**: [a9x@hapara.fail](mailto:a9x@hapara.fail)
-- **General Support**: [SUPPORT.md](https://github.com/hapara-fail/website/blob/main/SUPPORT.md)
+- **General Support**: [SUPPORT.md](SUPPORT.md)

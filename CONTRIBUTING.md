@@ -60,7 +60,7 @@ The project is built on **Cloudflare Workers**.
 
 ## 🤝 Code of Conduct
 
-We value accuracy, privacy, and collaboration. Please ensure your interactions—whether in issues, pull requests, or Discord—are respectful and constructive. By participating, you are expected to uphold our **[Code of Conduct](https://github.com/hapara-fail/website/blob/main/CODE_OF_CONDUCT.md)**.
+We value accuracy, privacy, and collaboration. Please ensure your interactions—whether in issues, pull requests, or Discord—are respectful and constructive. By participating, you are expected to uphold our **[Code of Conduct](CODE_OF_CONDUCT.md)**.
 
 ## 📜 License
 

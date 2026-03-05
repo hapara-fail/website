@@ -766,6 +766,11 @@
   align-items: center;
 }
 
+.service-status--patched {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
 .no-results {
   text-align: center;
   color: var(--text-secondary);

@@ -401,6 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- COMPATIBILITY CHECKER LOGIC ---
   let BLOCKED_SERVICES = [];
+  let PATCHED_SERVICES = new Set();
 
   const searchInput = document.getElementById('service-search');
   const serviceList = document.getElementById('service-list');
@@ -458,6 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let currentCategory = null;
       let currentServices = [];
       const parsedServices = [];
+      const patchedNames = new Set();
+      const patchedHeader = 'Known Patched Systems';
 
       for (const line of lines) {
         const trimmed = line.trim();
@@ -468,7 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (
             currentCategory &&
             currentServices.length > 0 &&
-            currentCategory !== 'Common Dependencies'
+            currentCategory !== 'Common Dependencies' &&
+            currentCategory !== patchedHeader
           ) {
             parsedServices.push({ category: currentCategory, services: currentServices });
           }
@@ -479,16 +483,23 @@ document.addEventListener('DOMContentLoaded', () => {
           if (
             currentCategory &&
             currentServices.length > 0 &&
-            currentCategory !== 'Common Dependencies'
+            currentCategory !== 'Common Dependencies' &&
+            currentCategory !== patchedHeader
           ) {
             parsedServices.push({ category: currentCategory, services: currentServices });
           }
           currentCategory = trimmed.replace('#### ', '').trim();
           currentServices = [];
         } else if ((trimmed.startsWith('* ') || trimmed.startsWith('- ')) && currentCategory) {
-          currentServices.push(trimmed.replace(/^[\*\-]\s+/, '').trim());
+          const serviceName = trimmed.replace(/^[\*\-]\s+/, '').trim();
+          currentServices.push(serviceName);
+          if (currentCategory === patchedHeader) {
+            patchedNames.add(serviceName);
+          }
         }
       }
+
+      PATCHED_SERVICES = patchedNames;
 
       // Basic integrity/format validation to ensure the content matches
       // the expected structure before using it in the UI.
@@ -564,8 +575,15 @@ document.addEventListener('DOMContentLoaded', () => {
           nameSpan.className = 'service-name';
           nameSpan.textContent = service;
 
+          const isPatched = PATCHED_SERVICES.has(service);
+
           const statusSpan = document.createElement('span');
-          statusSpan.className = 'service-status';
+          statusSpan.className = isPatched
+            ? 'service-status service-status--patched'
+            : 'service-status';
+          statusSpan.title = isPatched
+            ? 'This service has a hardcoded failsafe that severs your internet connection when blocked, instead of being bypassed.'
+            : 'Our DNS prevents this service from connecting to its servers, stopping it from functioning.';
 
           const svgNS = 'http://www.w3.org/2000/svg';
           const svg = document.createElementNS(svgNS, 'svg');
@@ -580,12 +598,30 @@ document.addEventListener('DOMContentLoaded', () => {
           svg.setAttribute('stroke-linejoin', 'round');
           svg.style.marginRight = '4px';
 
-          const polyline = document.createElementNS(svgNS, 'polyline');
-          polyline.setAttribute('points', '20 6 9 17 4 12');
-          svg.appendChild(polyline);
+          if (isPatched) {
+            // X icon for patched services
+            const line1 = document.createElementNS(svgNS, 'line');
+            line1.setAttribute('x1', '18');
+            line1.setAttribute('y1', '6');
+            line1.setAttribute('x2', '6');
+            line1.setAttribute('y2', '18');
+            svg.appendChild(line1);
+
+            const line2 = document.createElementNS(svgNS, 'line');
+            line2.setAttribute('x1', '6');
+            line2.setAttribute('y1', '6');
+            line2.setAttribute('x2', '18');
+            line2.setAttribute('y2', '18');
+            svg.appendChild(line2);
+          } else {
+            // Checkmark icon for blocked services
+            const polyline = document.createElementNS(svgNS, 'polyline');
+            polyline.setAttribute('points', '20 6 9 17 4 12');
+            svg.appendChild(polyline);
+          }
 
           statusSpan.appendChild(svg);
-          statusSpan.appendChild(document.createTextNode('Blocked'));
+          statusSpan.appendChild(document.createTextNode(isPatched ? 'Patched' : 'Blocked'));
 
           serviceInfo.appendChild(nameSpan);
           serviceInfo.appendChild(statusSpan);
@@ -621,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const link = document.createElement('a');
       link.href =
-        'https://github.com/hapara-fail/blocklist/issues/new?template=service---domain-addition.yml';
+        'https://github.com/hapara-fail/blocklist/issues/new?template=addition.yml';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.className = 'cta-button';

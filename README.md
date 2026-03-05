@@ -127,7 +127,7 @@ This command will build the project and deploy it to the Cloudflare Workers envi
 
 ## 🤝 Contributing
 
-Contributions are welcome! To ensure changes are processed quickly and correctly, please review our **[Contributing Guidelines](https://github.com/hapara-fail/website/blob/main/CONTRIBUTING.md)** before submitting.
+Contributions are welcome! To ensure changes are processed quickly and correctly, please review our **[Contributing Guidelines](CONTRIBUTING.md)** before submitting.
 
 If you have ideas for improvements, new tools, bug fixes, or blog post topics, please feel free to:
 
