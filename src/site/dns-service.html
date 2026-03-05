@@ -67,6 +67,7 @@
   </head>
 
   <body>
+    <a href="#main-content" class="visually-hidden">Skip to main content</a>
     <header class="main-header">
       <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
       <button
@@ -82,7 +83,7 @@
     <div class="nav-overlay" data-nav-overlay hidden></div>
     <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
 
-    <main>
+    <main id="main-content">
       <section class="page-hero">
         <div class="parallax-bg"></div>
         <div class="container reveal-item reveal-up">
@@ -213,14 +214,14 @@
                 />
               </svg>
             </button>
-            <div class="tabs-nav">
-              <button class="tab-button" data-target="chromeos">ChromeOS</button>
-              <button class="tab-button" data-target="windows">Windows</button>
-              <button class="tab-button" data-target="macos">macOS</button>
-              <button class="tab-button" data-target="ios">iOS / iPadOS</button>
-              <button class="tab-button" data-target="android">Android</button>
-              <button class="tab-button" data-target="linux">Linux</button>
-              <div class="tab-underline"></div>
+            <div class="tabs-nav" role="tablist" aria-label="Operating system instructions">
+              <button class="tab-button" data-target="chromeos" role="tab" aria-selected="false" aria-controls="chromeos" id="tab-chromeos">ChromeOS</button>
+              <button class="tab-button" data-target="windows" role="tab" aria-selected="false" aria-controls="windows" id="tab-windows">Windows</button>
+              <button class="tab-button" data-target="macos" role="tab" aria-selected="false" aria-controls="macos" id="tab-macos">macOS</button>
+              <button class="tab-button" data-target="ios" role="tab" aria-selected="false" aria-controls="ios" id="tab-ios">iOS / iPadOS</button>
+              <button class="tab-button" data-target="android" role="tab" aria-selected="false" aria-controls="android" id="tab-android">Android</button>
+              <button class="tab-button" data-target="linux" role="tab" aria-selected="false" aria-controls="linux" id="tab-linux">Linux</button>
+              <div class="tab-underline" aria-hidden="true"></div>
             </div>
             <button
               class="tabs-arrow tabs-arrow--right"
@@ -247,7 +248,7 @@
           </div>
 
           <div class="tabs-content-wrapper">
-            <div id="chromeos" class="tab-content">
+            <div id="chromeos" class="tab-content" role="tabpanel" aria-labelledby="tab-chromeos" tabindex="0">
               <div class="instructions-panel">
                 <p>
                   <strong>Method 1: Standard Settings</strong> (For personal or unmanaged
@@ -289,7 +290,7 @@
                 </ol>
               </div>
             </div>
-            <div id="windows" class="tab-content">
+            <div id="windows" class="tab-content" role="tabpanel" aria-labelledby="tab-windows" tabindex="0">
               <div class="instructions-panel">
                 <p><strong>Recommended: Secure DNS (DNS-over-HTTPS)</strong></p>
                 <p>Windows 10 Build 19628 and higher support DNS-over-HTTPS natively.</p>
@@ -333,7 +334,7 @@
                 </ol>
               </div>
             </div>
-            <div id="macos" class="tab-content">
+            <div id="macos" class="tab-content" role="tabpanel" aria-labelledby="tab-macos" tabindex="0">
               <div class="instructions-panel">
                 <p><strong>Recommended: Secure DNS (Configuration Profile)</strong></p>
                 <p>
@@ -372,7 +373,7 @@
                 </ol>
               </div>
             </div>
-            <div id="ios" class="tab-content">
+            <div id="ios" class="tab-content" role="tabpanel" aria-labelledby="tab-ios" tabindex="0">
               <div class="instructions-panel">
                 <p><strong>Recommended: Secure DNS (Configuration Profile)</strong></p>
                 <p>
@@ -415,7 +416,7 @@
                 </ol>
               </div>
             </div>
-            <div id="android" class="tab-content">
+            <div id="android" class="tab-content" role="tabpanel" aria-labelledby="tab-android" tabindex="0">
               <div class="instructions-panel">
                 <p><strong>Recommended: Private DNS (Android 9+)</strong></p>
                 <p>Android 9 supports DNS-over-TLS natively.</p>
@@ -453,7 +454,7 @@
                 </ol>
               </div>
             </div>
-            <div id="linux" class="tab-content">
+            <div id="linux" class="tab-content" role="tabpanel" aria-labelledby="tab-linux" tabindex="0">
               <div class="instructions-panel">
                 <p>
                   Steps vary by distribution. These are general instructions for modern desktops
@@ -500,6 +501,7 @@
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 stroke-width="2"
+                aria-hidden="true"
               >
                 <path
                   stroke-linecap="round"
@@ -507,6 +509,7 @@
                   d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
                 />
               </svg>
+              <label for="service-search" class="visually-hidden">Search for a service</label>
               <input
                 type="text"
                 id="service-search"

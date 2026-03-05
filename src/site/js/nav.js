@@ -84,7 +84,7 @@ const NAV_CONFIG = {
 };
 
 // Helper to create SVG element
-function createSvgIcon(iconPath, role = 'img', ariaLabelledBy = null) {
+function createSvgIcon(iconPath, role = null, ariaLabelledBy = null) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('fill', 'none');
   svg.setAttribute('viewBox', '0 0 24 24');
@@ -101,6 +101,11 @@ function createSvgIcon(iconPath, role = 'img', ariaLabelledBy = null) {
   if (role) svg.setAttribute('role', role);
   if (ariaLabelledBy) svg.setAttribute('aria-labelledby', ariaLabelledBy);
 
+  // Mark as decorative if no explicit accessible role is set
+  if (!role && !ariaLabelledBy) {
+    svg.setAttribute('aria-hidden', 'true');
+  }
+
   return svg;
 }
 
@@ -112,6 +117,7 @@ function createToggleIcon() {
   svg.setAttribute('viewBox', '0 0 24 24');
   svg.setAttribute('stroke-width', '2.5');
   svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('aria-hidden', 'true');
 
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   path.setAttribute('stroke-linecap', 'round');
@@ -210,6 +216,7 @@ function buildFooterMarkup() {
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', social.viewBox);
+    svg.setAttribute('aria-hidden', 'true');
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', social.path);
@@ -411,9 +418,11 @@ function buildFooterMarkup() {
       if (currentScrollY <= scrollThreshold) {
         header.classList.remove('header-hidden');
       }
-      // Hide when scrolling down fast
+      // Hide when scrolling down fast (but not if focused element is in header)
       else if (currentScrollY > lastScrollY && scrollDifference > scrollSpeed) {
-        header.classList.add('header-hidden');
+        if (!header.contains(document.activeElement)) {
+          header.classList.add('header-hidden');
+        }
       }
       // Show when scrolling up fast
       else if (currentScrollY < lastScrollY && scrollDifference > scrollSpeed) {

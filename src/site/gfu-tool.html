@@ -67,6 +67,7 @@
   </head>
 
   <body>
+    <a href="#main-content" class="visually-hidden">Skip to main content</a>
     <div class="parallax-bg"></div>
     <header class="main-header">
       <a href="/" class="logo">hapara.fail</a>
@@ -83,11 +84,11 @@
     <div class="nav-overlay" data-nav-overlay hidden></div>
     <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
 
-    <div id="notification-container" class="notification-container"></div>
+    <div id="notification-container" class="notification-container" aria-live="assertive" aria-atomic="true"></div>
 
-    <main class="tool-main-content">
+    <main id="main-content" class="tool-main-content">
       <div class="wizard">
-        <div class="wizard-progress">
+        <div class="wizard-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" aria-label="Wizard progress: step 1 of 4">
           <div class="progress-step" data-step="1"></div>
           <div class="progress-step" data-step="2"></div>
           <div class="progress-step" data-step="3"></div>
@@ -102,6 +103,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -190,6 +192,7 @@
               Select all text on the source page (Ctrl+A or Cmd+A), copy it, and paste it into the
               box below.
             </p>
+            <label for="form_source_input" class="visually-hidden">Paste the page source code here</label>
             <textarea
               id="form_source_input"
               placeholder="Paste the entire page source here..."

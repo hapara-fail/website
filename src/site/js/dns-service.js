@@ -56,8 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentActiveContent = document.querySelector('.tab-content.active');
 
-    tabButtons.forEach((btn) => btn.classList.remove('active'));
-    if (newActiveButton) newActiveButton.classList.add('active');
+    tabButtons.forEach((btn) => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+      btn.setAttribute('tabindex', '-1');
+    });
+    if (newActiveButton) {
+      newActiveButton.classList.add('active');
+      newActiveButton.setAttribute('aria-selected', 'true');
+      newActiveButton.setAttribute('tabindex', '0');
+    }
     moveUnderline(newActiveButton);
 
     if (currentActiveContent && !isInitial) {
@@ -95,6 +103,35 @@ document.addEventListener('DOMContentLoaded', () => {
   tabButtons.forEach((tab) => {
     tab.addEventListener('click', () => setActiveTab(tab.dataset.target));
   });
+
+  // Keyboard navigation for tabs (Arrow Left/Right, Home/End)
+  if (tabsNav) {
+    tabsNav.addEventListener('keydown', (e) => {
+      const tabs = Array.from(tabButtons);
+      const currentIndex = tabs.indexOf(document.activeElement);
+      if (currentIndex === -1) return;
+
+      let newIndex = currentIndex;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        newIndex = (currentIndex + 1) % tabs.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        newIndex = tabs.length - 1;
+      } else {
+        return;
+      }
+
+      tabs[newIndex].focus();
+      setActiveTab(tabs[newIndex].dataset.target);
+    });
+  }
 
   function detectOS() {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -216,8 +253,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.cookie = cookie;
   };
 
+  let modalLastFocused = null;
+
   const openModal = () => {
     if (!modalOverlay) return;
+    modalLastFocused = document.activeElement;
 
     // Reset states
     if (tosCheckbox) tosCheckbox.checked = false;
@@ -249,6 +289,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modalOverlay.hidden = false;
     document.body.classList.add('body-lock');
+
+    // Focus the first focusable element in the modal
+    requestAnimationFrame(() => {
+      const modal = modalOverlay.querySelector('.dns-modal');
+      if (modal) {
+        const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (firstFocusable) firstFocusable.focus();
+      }
+    });
+
+    // Add keyboard handlers
+    document.addEventListener('keydown', onModalKeyDown);
+    document.addEventListener('focusin', trapModalFocus);
 
     // Check DNS status when modal opens (or when we proceed to info)
     if (tosAccepted === 'true') {
@@ -304,14 +357,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const onModalKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  };
+
+  const trapModalFocus = (e) => {
+    const modal = modalOverlay ? modalOverlay.querySelector('.dns-modal') : null;
+    if (!modal || modalOverlay.hidden) return;
+    if (!modal.contains(e.target)) {
+      const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (firstFocusable) firstFocusable.focus();
+    }
+  };
+
   const closeModal = () => {
     if (!modalOverlay) return;
     modalOverlay.hidden = true;
     document.body.classList.remove('body-lock');
 
+    // Remove keyboard handlers
+    document.removeEventListener('keydown', onModalKeyDown);
+    document.removeEventListener('focusin', trapModalFocus);
+
     // Reset transitions
     if (stepTos) stepTos.classList.remove('fade-out', 'fade-in');
     if (stepInfo) stepInfo.classList.remove('fade-out', 'fade-in');
+
+    // Return focus to trigger
+    if (modalLastFocused && typeof modalLastFocused.focus === 'function') {
+      modalLastFocused.focus();
+    }
   };
 
   if (viewIpsBtn) {
@@ -839,6 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
         svg.setAttribute('stroke-width', '3');
         svg.setAttribute('stroke-linecap', 'round');
         svg.setAttribute('stroke-linejoin', 'round');
+        svg.setAttribute('aria-hidden', 'true');
         svg.style.marginRight = '4px';
 
         if (isPatched) {

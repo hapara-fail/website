@@ -24,6 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
       step.classList.toggle('active', stepNum === currentStep);
     });
 
+    // Update progress bar ARIA
+    const progressBar = document.querySelector('.wizard-progress');
+    if (progressBar) {
+      progressBar.setAttribute('aria-valuenow', currentStep);
+      progressBar.setAttribute('aria-label', `Wizard progress: step ${currentStep} of ${wizardSteps.length}`);
+    }
+
     backBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
     skipBtn.style.display = currentStep < 4 ? 'block' : 'none';
     if (currentStep === 1) nextBtn.textContent = 'Start';
@@ -79,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showNotification(type, title, message) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
+    notification.setAttribute('role', 'alert');
 
     const icons = {
       warning: `<svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>`,
