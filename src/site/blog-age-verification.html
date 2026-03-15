@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The ID Trap: Age Verification | hapara.fail Blog</title>
+    <meta
+      name="description"
+      content="An investigation into how age verification laws are building a surveillance machine, exposing sensitive data, and threatening internet anonymity."
+    />
+    <link rel="canonical" href="https://www.hapara.fail/blog/age-verification" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="hapara.fail" />
+    <meta property="og:title" content="The ID Trap: Age Verification | hapara.fail Blog" />
+    <meta
+      property="og:description"
+      content="An investigation into how age verification laws are building a surveillance machine, exposing sensitive data, and threatening internet anonymity."
+    />
+    <meta property="og:url" content="https://www.hapara.fail/blog/age-verification" />
+    <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
+    <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
+    <meta property="article:author" content="a9x" />
+    <meta property="article:published_time" content="2026-03-15" />
+    <meta property="article:modified_time" content="2026-03-15" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The ID Trap: Age Verification | hapara.fail Blog" />
+    <meta
+      name="twitter:description"
+      content="An investigation into how age verification laws are building a surveillance machine, exposing sensitive data, and threatening internet anonymity."
+    />
+    <meta name="twitter:image" content="https://www.hapara.fail/images/og-twitter.png" />
+    <meta name="twitter:image:alt" content="hapara.fail wordmark on dark background." />
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="hapara.fail" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+    <link rel="stylesheet" href="/fonts/poppins/poppins.css" />
+    <link rel="stylesheet" href="/css/universal.css" />
+    <link rel="stylesheet" href="/css/article.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The ID Trap: How \"Protecting Kids\" Became a Surveillance Machine",
+        "description": "An investigation into how age verification laws are building a surveillance machine, exposing sensitive data, and threatening internet anonymity.",
+        "author": {
+          "@type": "Person",
+          "name": "a9x"
+        },
+        "datePublished": "2026-03-15",
+        "dateModified": "2026-03-15",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://www.hapara.fail/blog/age-verification"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "hapara.fail",
+          "url": "https://www.hapara.fail/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.hapara.fail/images/favicon-96x96.png"
+          }
+        },
+        "url": "https://www.hapara.fail/blog/age-verification",
+        "image": "https://www.hapara.fail/images/og-twitter.png"
+      }
+    </script>
+  </head>
+
+  <body>
+    <a href="#main-content" class="visually-hidden">Skip to main content</a>
+    <header class="main-header">
+      <a href="/" class="logo" aria-label="hapara.fail Homepage">hapara.fail</a>
+      <button
+        class="hamburger-menu"
+        aria-label="Open navigation menu"
+        aria-controls="site-drawer"
+        aria-expanded="false"
+      >
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
+    </header>
+
+    <div class="nav-overlay" data-nav-overlay hidden></div>
+    <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
+
+    <main id="main-content">
+      <section class="article-hero">
+        <div class="parallax-bg"></div>
+        <div class="container reveal-item reveal-up">
+          <h1 class="gradient-text">
+            The ID Trap: How "Protecting Kids" Became a Surveillance Machine
+          </h1>
+          <div class="article-meta">By <span>a9x</span> &bull; Published on March 15, 2026</div>
+        </div>
+      </section>
+
+      <article class="article-body container">
+        <div class="reveal-item reveal-up">
+          <p>
+            Something is being built right now &mdash; quietly, legislatively, almost beneath notice
+            &mdash; and by the time most people realize it exists, it will already be
+            infrastructure.
+          </p>
+          <p>
+            In the past few years, age verification has transformed from a niche policy debate into
+            the defining privacy threat of our generation. At least 25 U.S. states have enacted age
+            verification laws targeting social media and pornography websites, requiring
+            government-issued ID, biometric data, or third-party verification systems &mdash; with
+            seven major implementation dates landing in 2026 alone. The UK is actively enforcing new
+            ID requirements. Australia has banned social media for under-16s. Federal legislation in
+            the U.S. has stalled but hasn't died. And every week, the list grows.
+          </p>
+          <p>
+            The story being sold is simple: we need to protect children online. That story is being
+            used to build something else entirely.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The Paradox at the Heart of It</h2>
+          <p>
+            By attempting to enforce age verification, companies end up undermining the very privacy
+            of the users they claim to protect. Researchers call it the "age verification trap": the
+            tools being deployed don't just check a birthdate &mdash; they demand government-issued
+            IDs, facial scans, and biometric analysis powered by AI.
+          </p>
+          <p>
+            There's a reason this is inescapable. To verify that a <em>child</em> isn't accessing a
+            platform, the system must verify <em>everyone</em>. That means every adult who has used
+            social media anonymously for years is suddenly being asked to hand over their driver's
+            license or submit to a facial scan just to scroll their feed. The internet as anonymous
+            public space &mdash; gone.
+          </p>
+          <p>
+            When age verification laws took effect in Louisiana and Utah, traffic to affected sites
+            plummeted as users refused to surrender their identification. This is what digital
+            self-defense looks like when people still have the option to walk away. But as
+            requirements spread to more platforms and more states, that option disappears.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The Companies Cashing In</h2>
+          <p>
+            Here's who actually benefits from all of this. Age verification isn't just policy
+            &mdash; it's an industry. Identity verification companies have raised hundreds of
+            millions in venture funding, betting that age-gating will become permanent internet
+            infrastructure. Their pitch to investors is straightforward: every major platform will
+            need these services, creating a recurring revenue stream from hundreds of millions of
+            users.
+          </p>
+          <p>
+            The breaches and controversies below are not cherry-picked worst cases. They are the
+            current state of an industry being handed your most sensitive data by legal mandate.
+          </p>
+
+          <span class="section-label">Identity Verification Vendor Breach Tracker</span>
+          <div class="breach-table-wrapper">
+            <table class="breach-table" aria-label="Identity verification vendor breach tracker">
+              <thead>
+                <tr>
+                  <th>Vendor</th>
+                  <th>Incident Date</th>
+                  <th>Data Exposed</th>
+                  <th>Severity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>AU10TIX</strong></td>
+                  <td>Credentials stolen Dec 2022; exposed until Jun 2024 (18&nbsp;months)</td>
+                  <td>
+                    Passports, driver's licenses, facial images, names, DOBs, nationalities, ID
+                    numbers
+                  </td>
+                  <td class="severity-critical">Critical</td>
+                </tr>
+                <tr>
+                  <td><strong>Persona</strong></td>
+                  <td>FedRAMP endpoint live since Nov 2023; disclosed Feb 2026</td>
+                  <td>
+                    269 undisclosed surveillance checks, internal project codenames (SHADOW,
+                    LEGION), source architecture
+                  </td>
+                  <td class="severity-high">High</td>
+                </tr>
+                <tr>
+                  <td><strong>Discord / 5CA</strong></td>
+                  <td>October 2025</td>
+                  <td>70,000+ government-issued ID images from age appeal submissions</td>
+                  <td class="severity-critical">Critical</td>
+                </tr>
+                <tr>
+                  <td><strong>Veriff</strong></td>
+                  <td>December 2025</td>
+                  <td>
+                    Total Wireless customer identity data; third major IDV provider failure in 18
+                    months
+                  </td>
+                  <td class="severity-high">High</td>
+                </tr>
+                <tr>
+                  <td><strong>IDMerit</strong></td>
+                  <td>November 2025 (99-day exposure)</td>
+                  <td>
+                    1 billion records: full names, national ID numbers, DOBs, home addresses, phone
+                    numbers across 26 countries
+                  </td>
+                  <td class="severity-critical">Critical</td>
+                </tr>
+                <tr>
+                  <td><strong>Yoti</strong></td>
+                  <td>Ongoing (per Mint Secure GmbH investigation)</td>
+                  <td>
+                    Advertising IDs forwarded without consent to Adjust; email addresses shared with
+                    Equifax; national ID numbers retained by Serpro for 5 years (Brazil)
+                  </td>
+                  <td class="severity-high">High</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h3>AU10TIX</h3>
+          <p>
+            AU10TIX wasn't born in a garage in Silicon Valley. It was founded as the technology arm
+            of ICTS International, a Dutch security company that itself was established by former
+            members of the Shin Bet, Israel's domestic intelligence service. That lineage is not
+            incidental to what the company does &mdash; it is the point.
+          </p>
+          <p>
+            Multiple reports have connected AU10TIX founder and current chairman Ron Atzmon to Unit
+            8200, the IDF's elite signals intelligence division, though Israeli media have disputed
+            this, stating he served in the Israeli Navy.
+            <a
+              href="https://www.mintpressnews.com/identity-verification-or-data-exposure-twitter-using-israeli-tech-firm/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >MintPress News ↗</a
+            >
+            Regardless of Atzmon's personal service record, the company's engineering staff includes
+            confirmed Unit 8200 veterans. The unit is responsible for mass surveillance and is
+            widely documented to use collected information for political persecution and recruitment
+            of informants. Unit 8200 has been described as providing Israel with 90 percent of its
+            intelligence material, and functions explicitly as a pipeline into the private tech
+            sector &mdash; more than 1,000 companies have been founded by its veterans. Waze, Wix,
+            Viber, and NSO Group &mdash; creator of the Pegasus spyware &mdash; all share this
+            origin.
+          </p>
+          <p>
+            Atzmon is not AU10TIX's only connection to Israeli military intelligence. Several of the
+            company's engineers previously worked in Unit 8200 before joining the firm. Chief
+            marketing officer Amazia Keidar previously worked in senior marketing roles at
+            Cellebrite, the Israeli firm known for selling phone-cracking technology to law
+            enforcement agencies globally. VP of EMEA sales Edo Soroka previously served as sales
+            director at AnyVision, an Israeli startup accused of using facial recognition to surveil
+            Palestinians in the occupied West Bank. ICTS International's supervisory board chairman
+            Menachem Atzmon was convicted in 1996 of campaign finance fraud while serving as
+            co-treasurer of Netanyahu's Likud party.
+          </p>
+          <p>
+            AU10TIX is not a neutral technology company. Its leadership was trained in state-level
+            surveillance, its key personnel have cycled through the Israeli military-industrial
+            intelligence complex, and it now holds biometric identity data on tens of millions of
+            people globally &mdash; users of X, TikTok, Uber, PayPal, LinkedIn, Coinbase, eToro,
+            Fiverr, Bumble, and Upwork.
+          </p>
+          <p>
+            The facial recognition technology the company uses to authenticate users is not
+            incidental either. AU10TIX uses the same class of facial recognition technology
+            developed for Israeli military and intelligence operations &mdash; technology used to
+            compile images of Palestinians crossing into Israel from the West Bank as part of one of
+            the most comprehensive surveillance architectures in the world. When you upload a selfie
+            to verify your age on a platform using AU10TIX, the algorithmic pipeline your face
+            travels through was forged in that context.
+          </p>
+          <p>
+            <strong>The breach</strong>
+            <a
+              href="https://www.404media.co/id-verification-service-for-tiktok-uber-x-exposed-driver-licenses-au10tix/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >404 Media ↗</a
+            >
+          </p>
+          <p>
+            In December 2022, admin credentials at AU10TIX were likely first compromised through
+            malware. In March 2023, those credentials appeared on a public Telegram channel. In June
+            2024 &mdash; a full year and a half later &mdash; cybersecurity experts discovered the
+            credentials were <em>still working</em>.
+          </p>
+          <p>
+            The exposed credentials allowed access to a logging platform containing links to
+            identity documents and verification results, including names, dates of birth,
+            nationalities, ID numbers, and images of those documents. Passports. Driver's licenses.
+            Facial images. All sitting exposed behind credentials that were circulating on Telegram.
+          </p>
+          <p>
+            AU10TIX's initial response was dismissive. When 404 Media first contacted the company,
+            they claimed the credentials had been promptly revoked. Researchers then demonstrated
+            the credentials were still functional, directly contradicting that claim. The company
+            later admitted the data was "potentially accessible" but claimed no evidence of
+            exploitation. We have only their word for that.
+          </p>
+
+          <div class="pull-quote">
+            <p>
+              "Its algorithms may even tag those who haven't engaged in any such behavior, but who
+              might in the future. The point is, no one except AU10TIX and its clients know what the
+              algorithm is and how it makes such determinations."
+            </p>
+          </div>
+
+          <p>
+            Journalist and Israeli national security analyst Richard Silverstein noted that AU10TIX
+            must maintain a vast database containing personal information on millions of people to
+            deliver its fraud-detection product. The opacity is structural, not accidental.
+          </p>
+          <p>
+            Perhaps most telling: X's AU10TIX verification requirement is not available in the EU,
+            UK, or European Economic Area &mdash; almost certainly because data protection laws in
+            those jurisdictions would make the arrangement illegal. The company enforces these
+            requirements on users in countries with weak protections while quietly carving out
+            exemptions for the places where accountability has teeth. That tells you exactly what
+            the risk calculus looks like from the inside.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h3>Persona</h3>
+          <p>
+            Persona Identities, Inc. is a San Francisco-based identity verification startup founded
+            in 2018 by Charles Yeh and Rick Song, both former engineers at Dropbox and Square
+            respectively. Its pitch is clean and familiar: a privacy-respecting age verification
+            platform that checks who you are, then forgets you exist. Its client list tells a
+            different story. Persona currently runs identity and age verification for OpenAI's
+            ChatGPT, Roblox, LinkedIn, Square, Coursera, Lime, and others. OpenAI's own help
+            documentation confirms that users who need to verify being 18+ are routed to Persona,
+            which may ask for a live selfie and a government ID.
+          </p>
+          <p><strong>The Thiel problem</strong></p>
+          <p>
+            Persona's investors include Founders Fund, Peter Thiel's venture capital firm &mdash;
+            the same firm that co-founded Palantir, which is ICE's surveillance contractor of
+            choice. Founders Fund led Persona's $150 million Series C
+            <a
+              href="https://withpersona.com/blog/series-c"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >Persona ↗</a
+            >
+            and co-led its $200 million Series D alongside Ribbit Capital.
+            <a
+              href="https://withpersona.com/blog/series-d"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >Persona ↗</a
+            >
+          </p>
+          <p>
+            Persona has repeatedly denied any operational connection to Palantir or to government
+            agencies. In a customer email, the company stated it does not work with the Department
+            of Homeland Security or ICE, and that Thiel holds no board seat, offers no advice, and
+            plays no operational role. Founders Fund and other investors, Persona added, have zero
+            access to personal user data. Those denials may be technically accurate. They do not
+            resolve the structural concern &mdash; that a company handling the biometric identities
+            of millions of ordinary users is financially tied to the primary architect of ICE's
+            targeting and deportation infrastructure.
+          </p>
+          <p>
+            <strong>The government server</strong>
+            <a
+              href="https://vmfunc.re/blog/persona"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >Primary Source ↗</a
+            >
+          </p>
+          <p>
+            In February 2026, independent cybersecurity researchers discovered something that should
+            have been impossible. On February 16, 2026, researchers published a blog post
+            documenting that nearly 2,500 of Persona's frontend source files were publicly
+            accessible on a U.S. government-authorized FedRAMP endpoint. No exploit was required.
+            "We didn't even have to write or perform a single exploit; the entire architecture was
+            just on the doorstep," one researcher wrote.
+          </p>
+          <p>
+            What those files contained was the real revelation. The exposed code documented 269
+            distinct verification checks that Persona runs on users, far beyond simple age
+            confirmation. The system can screen users against global financial watchlists, flag
+            potential money launderers or terrorist financiers, run facial recognition against lists
+            of politically exposed persons, compare selfies to political figures using facial
+            similarity scoring, and flag individual users as a "suspicious entity" based on their
+            face alone. Built-in functionality includes filing Suspicious Activity Reports directly
+            with the U.S. Treasury's financial intelligence unit, FinCEN, and Canada's equivalent,
+            FINTRAC.
+          </p>
+
+          <p>
+            The checks are defined as a TypeScript enum in the exposed source. The structure
+            researchers found, paraphrased from the primary disclosure at
+            <a href="https://vmfunc.re/blog/persona" target="_blank" rel="noopener noreferrer"
+              >vmfunc.re</a
+            >:
+          </p>
+          <div
+            class="evidence-block"
+            aria-label="Paraphrased from exposed Persona source code (lib/verificationCheck.ts)"
+          >
+            <span class="comment"
+              >// lib/verificationCheck.ts — paraphrased from public researcher disclosure</span
+            ><br />
+            <span class="key">enum</span> <span class="val">CheckName</span> {<br />
+            &nbsp;&nbsp;SelfieSuspiciousEntityDetection,<br />
+            &nbsp;&nbsp;SelfiePublicFigureDetection,<br />
+            &nbsp;&nbsp;PoliticallyExposedPersonFacialMatch,<br />
+            &nbsp;&nbsp;FinancialWatchlistScreen,<br />
+            &nbsp;&nbsp;AgeInconsistencyDetection,<br />
+            &nbsp;&nbsp;<span class="comment">// ... 269 total checks documented</span><br />
+            }<br />
+          </div>
+
+          <p>
+            Persona's platform can collect and retain for up to three years: IP addresses, browser
+            and device fingerprints, government ID numbers, phone numbers, names, faces, and a
+            battery of selfie analytics including suspicious-entity detection, pose repeat
+            detection, and age inconsistency checks.
+          </p>
+          <p>
+            The company's CEO Rick Song moved quickly to downplay the findings. According to
+            Persona's public statements and correspondence with researchers, Song characterized the
+            exposure as less significant than it appeared, maintained that all data is deleted
+            immediately after verification, and denied any ties to Palantir, ICE, or government data
+            pipelines. Persona acknowledged the exposed endpoint as a development environment not
+            connected to live customer data, describing it as an oversight. Researchers responded
+            that the TLS certificates on the domain showed it had been active since November 2023
+            &mdash; nearly two years before it was discovered.
+          </p>
+          <p>
+            The FedRAMP endpoint detail warrants precision: Persona already holds FedRAMP Authorized
+            status at the Low Impact level, achieved on October 7, 2025. It is now pursuing Moderate
+            Impact authorization and confirmed it is in discussions around "a couple of potential
+            contracts" with the government, which it claims are limited to workforce account
+            security and do not involve ICE or DHS. The implication is more alarming than initially
+            framed &mdash; this was not a rogue development environment. The server where nearly
+            2,500 source files sat exposed is already an <em>authorized federal platform</em>.
+          </p>
+          <p><strong>Discord's short, damaging partnership</strong></p>
+          <p>
+            Discord had been using Persona to verify ages for UK users under the Online Safety Act,
+            requiring users to submit either a government ID or a video selfie. Following the
+            researcher disclosures, Discord announced it would not be proceeding with Persona for
+            identity verification. Both companies confirmed the partnership lasted less than a
+            month.
+          </p>
+          <p>
+            An archived version of Discord's FAQ &mdash; since deleted &mdash; appeared to
+            contradict the company's claims about data storage: "If you're located in the UK, you
+            may be part of an experiment where your information will be processed by an
+            age-assurance vendor, Persona. The information you submit will be temporarily stored for
+            up to 7 days, then deleted." The phrase "you may be part of an experiment" is not
+            something users had consented to. Discord never proactively disclosed it.
+          </p>
+          <p>
+            This wasn't even Discord's first third-party identity vendor disaster. In October 2025,
+            a separate breach exposed over 70,000 government-issued ID images belonging to users who
+            had submitted them in age appeal cases &mdash; that breach was attributed to Discord's
+            customer service provider, 5CA, not to Persona directly. Discord said it revoked the
+            provider's access and launched a forensic investigation.
+          </p>
+
+          <div class="pull-quote">
+            <p>
+              "It's dystopian that we want people to facedox themselves to everyone to be real
+              online." &mdash; Rick Song, CEO of Persona, whose LinkedIn verification badge notably
+              lacks a profile photo.
+              <a
+                href="https://fortune.com/2026/02/24/discord-peter-thiel-backed-persona-identity-verification-breach"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="source-chip"
+                >Fortune ↗</a
+              >
+            </p>
+          </div>
+
+          <p>
+            Song's defense was that Persona verifies identities privately to businesses, not that
+            users should publicly display their faces to the entire internet. The distinction is
+            technically valid &mdash; but it nevertheless underscores a basic asymmetry: the people
+            building these systems experience them very differently from the millions of ordinary
+            users being funneled through them.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h3>Yoti</h3>
+          <p>
+            Yoti is a British company founded in 2014 that operates age verification and digital
+            identity services. Its clients include many pornography websites, Instagram, and the
+            retailer John Lewis. In July 2025, the UK government announced it would begin testing
+            Yoti's facial age estimation technology to assist in official age assessments of asylum
+            seekers who arrive without valid documentation. That last sentence is worth rereading. A
+            company that started verifying ages on adult websites is now being used by the British
+            government to assess the ages of refugees. Yoti alone reported processing over 400
+            million age verifications globally by 2025. The company has raised $58 million, with
+            investors including HSBC and Lloyds Banking Group.
+          </p>
+          <p>
+            An investigation by Mint Secure GmbH found that Yoti extensively tracks users without
+            consent, likely in violation of GDPR. The investigation found Yoti's Android app
+            processes Advertising IDs and forwards them to a third-party analytics company called
+            Adjust. Yoti's own response confirmed the Advertising IDs are used in their apps. Their
+            explanation: this is "legitimate interests of the company." The company whose pitch is
+            privacy-by-design was shipping advertising trackers in their verification app.
+          </p>
+          <p>
+            Yoti's own privacy documentation reveals it shares your email address with Equifax,
+            which then "re-uses pseudonymised data to enrich their consumer insights and other fraud
+            identity products." For users in Brazil, Yoti shares your national ID number with a
+            federal company called Serpro, which independently retains that number for five years as
+            a billing record.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h3>Veriff and IDMerit</h3>
+          <p>
+            The breach problem is not isolated to AU10TIX. Veriff's systems were compromised in
+            December 2025, leaking Total Wireless customer identity data. This was the third major
+            identity verification provider security failure within 18 months.
+          </p>
+          <p>
+            In November 2025, an AI-powered identity verification company called IDMerit left one
+            billion personal records exposed on the public internet &mdash; full names, national ID
+            numbers, dates of birth, home addresses, and phone numbers across 26 countries &mdash;
+            in a MongoDB database with no password protection. The exposure occurred for 99 days
+            before public disclosure.
+          </p>
+          <p>
+            Age verification vendors charge between $0.10 and $2.00 per check, require proprietary
+            SDKs, demand API keys tied to commercial accounts, and operate cloud-only with no
+            self-hosted option. Your age verification data goes to a third-party cloud service.
+            Every time.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The School Infrastructure Problem</h2>
+          <p>
+            For students, this isn't abstract. Age verification doesn't live only on social media
+            apps. The same third-party identity vendors pitching services to Instagram and TikTok
+            are actively marketing to educational technology platforms, standardized testing
+            providers, and school districts. Proctoring software already uses facial recognition and
+            identity capture. Districts adopting ed-tech "safety" software are signing contracts
+            with companies that are one undisclosed partnership away from the same vendor landscape
+            described above.
+          </p>
+          <p>
+            The infrastructure bleeding into student life isn't hypothetical. ID.me, which became
+            infamous for its role in federal benefits verification, was simultaneously aggressively
+            pitching services to state education agencies. Proctorio, used by millions of students
+            for exam monitoring, operates continuous biometric capture during tests. These systems
+            are legally distinct from consumer age verification &mdash; but they are technically
+            identical. Same facial mapping. Same data retention. Same offshore cloud servers.
+          </p>
+
+          <div class="pull-quote">
+            <p>
+              While laws claim to protect kids, they force minors to hand over pristine, highly
+              valuable government IDs to companies with documented breach histories &mdash; setting
+              them up for lifelong synthetic identity fraud.
+            </p>
+          </div>
+
+          <div class="callout-warning">
+            <strong>The Irony of "Protection":</strong> Minors &mdash; who often lack the credit
+            history required to place a credit freeze or dispute fraudulent accounts &mdash; are
+            being required by law to hand their most pristine, valuable government-issued IDs
+            (learner's permits, state IDs) to companies like AU10TIX and IDMerit, which have
+            directly demonstrated they cannot secure this data. A breached adult ID is damaging. A
+            breached minor's ID, with no financial history to pollute and decades of usefulness
+            ahead, is a perfect instrument for synthetic identity fraud. Courts and creditors may
+            not flag it for years. The minor who "consents" to verification at 16 may not discover
+            the consequences until they apply for their first loan at 22.
+          </div>
+
+          <p>
+            The ACLU and EFF have flagged an additional vector: LGBTQ+ youth and minors seeking
+            information about reproductive health or mental health support are disproportionately
+            harmed by verification walls. These are young people who are specifically using
+            pseudonymous online access because they cannot safely seek information in their physical
+            environment &mdash; their school, their home, their community. Mandatory identity
+            disclosure at the point of access is functionally a ban for users who cannot afford to
+            be identified.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The Lobbying Machine</h2>
+          <p>
+            Understanding who's pushing these laws requires understanding that "child safety" has
+            become one of the most powerful political shields in Washington. It is almost impossible
+            to oppose a bill named the "Kids Online Safety Act" without being framed as wanting
+            children to suffer. Lobbyists and corporate strategists know this. They have built an
+            entire industry around exploiting it.
+          </p>
+
+          <h3>The KOSA Fight</h3>
+          <p>
+            The Kids Online Safety Act (KOSA) was first introduced in 2022 by Senators Richard
+            Blumenthal and Marsha Blackburn. KOSA has been supported by Microsoft, X, and Snap, as
+            well as the American Academy of Pediatrics, the American Psychological Association, The
+            Heritage Foundation, Focus on the Family, and Unilever. That is a remarkable coalition
+            &mdash; evangelical conservatives, corporate giants, and tech companies all united under
+            one banner.
+          </p>
+          <p>
+            KOSA has also drawn serious opposition. The ACLU warned it would "undermine the rights
+            of young people and adults alike." LGBTQ+ advocacy organizations raised concerns that
+            the bill's broadly worded provisions could be weaponized by state attorneys general to
+            restrict access to gender-affirming care and reproductive health information for minors.
+            Those aren't fringe concerns. They are what happens when you give state officials broad
+            discretion to define what "harms" children.
+          </p>
+          <p>
+            The bill passed the Senate 91&ndash;3 in 2024. It still failed to become law after tech
+            companies, led by Meta, spent $51 million in lobbying in the first three quarters of
+            that year to stop it in the House. The bill was reintroduced in 2025 and remains in
+            motion.
+          </p>
+
+          <h3>Meta's Astroturf Operation: A Timeline</h3>
+          <p>
+            Here is one of the most cynical corporate lobbying operations in recent memory,
+            documented in federal filings.
+            <a
+              href="https://www.opensecrets.org/federal-lobbying/clients/summary?id=D000033563"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >OpenSecrets ↗</a
+            >
+            <a
+              href="https://lda.gov/filings/public/filing/search/?registrant=Meta+Platforms"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="source-chip"
+              >Senate LDA Filings ↗</a
+            >
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">2022 &ndash; 2023</div>
+              <p>
+                KOSA introduced by Senators Blumenthal and Blackburn. Meta, facing billions in
+                potential fines under COPPA for knowingly hosting under-13 users, begins spending
+                record sums on federal lobbying to block the bill in the House after it clears the
+                Senate.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">2024 &mdash; KOSA passes Senate 91&ndash;3</div>
+              <p>
+                Big Tech companies collectively &mdash; including Meta, ByteDance, and others
+                &mdash; spend $51 million in the first three quarters lobbying to kill the bill in
+                the House.
+                <a
+                  href="https://issueone.org/press/congress-fails-to-include-kids-online-safety-act"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="source-chip"
+                  >Issue One ↗</a
+                >
+                Meta alone spent a record $24.4 million lobbying across all of 2024. The bill fails
+                to become law. Meta's own internal research &mdash; leaked &mdash; had already
+                confirmed Instagram damages teenage girls' mental health.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">Early 2025 &mdash; The pivot</div>
+              <p>
+                Rather than improving its platforms, Meta quietly funds the Digital Childhood
+                Alliance (DCA), a group that advocates not for social media reform, but for age
+                verification at the app store level &mdash; targeting Apple and Google. Meta spends
+                a record <strong>$26.3 million</strong> on federal lobbying and deploys 86 lobbyists
+                across 45 states.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">April 2025 &mdash; Louisiana</div>
+              <p>
+                At the Louisiana Senate Commerce Committee hearing, DCA Executive Director Casey
+                Stefanski confirms receiving tech company funding but refuses to name which
+                companies, and acknowledges under oath that Meta supports the legislation. Meta's
+                lobbying operation was deeply involved in advancing HB-570. The bill passes
+                99&ndash;0.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">July 2025 &mdash; Bloomberg confirms it</div>
+              <p>
+                Bloomberg confirms Meta's covert funding of the DCA. Neither organization responds
+                directly. Meta says only that it "collaborated" with the group. The App Store
+                Accountability Act, which the DCA backs, imposes zero requirements on social media
+                platforms like Facebook and Instagram; all liability falls on Apple and Google.
+              </p>
+            </div>
+          </div>
+
+          <div class="pull-quote">
+            <p>
+              "Meta creates the harmful content. Meta designs algorithms that research shows damage
+              our children's mental health. But the group they quietly support behind the scenes
+              wants laws that regulate Apple and Google instead." &mdash; Idaho state legislator,
+              co-founder of a parenting advocacy group
+            </p>
+          </div>
+
+          <p>
+            Why would Meta go to all this trouble? Because Meta faces a potential fine under federal
+            child privacy laws of tens of billions of dollars the moment it "actually knows" users
+            under 13 are on its platforms. If the App Store Accountability Act passes, the age
+            verification requirement &mdash; and the legal liability &mdash; moves to Apple and
+            Google. Meta gets clean hands while its competitors absorb the compliance costs.
+          </p>
+          <p>
+            The framing says it all: Meta is forcing Apple and Google to build, maintain, and bear
+            legal liability for a wildly complex state-by-state identity verification system, while
+            Meta's own apps face zero new mandates.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The Structural Problem</h2>
+          <p>
+            Even if every company in this space had the best intentions, the architecture itself is
+            broken.
+          </p>
+          <p>
+            Age verification systems are surveillance systems. Mandating them forces websites to
+            require visitors to submit information &mdash; government-issued identification &mdash;
+            to companies that are, empirically, not capable of securing it. Data breaches of this
+            sensitive information are not a hypothetical concern. It is simply a matter of when the
+            data will be exposed.
+          </p>
+          <p>
+            Unlike a password or credit card number, a government-issued ID number cannot be changed
+            once exposed. It remains a usable fraud instrument indefinitely, enabling synthetic
+            identity fraud, account takeover, SIM swap attacks, and targeted spear-phishing using
+            the victim's exact personal details.
+          </p>
+
+          <div class="pull-quote">
+            <p>
+              The vault is not a side effect of centralized verification; it is the product. Any
+              vendor that must hold identity data to deliver its service creates a permanent,
+              high-value target.
+            </p>
+          </div>
+
+          <p>
+            The AU10TIX breach, the Veriff breach, the IDMerit exposure, the Persona FedRAMP
+            disclosure &mdash; these are not aberrations. They are the predictable outcome of an
+            architecture built on centralized data retention at scale.
+          </p>
+          <p>
+            And it gets worse. Deepfake use has increased nearly 8,000% year over year, rendering
+            much of the verification software on the market essentially useless &mdash; which means
+            companies keep escalating toward more invasive methods to stay ahead of circumvention.
+            The answer to failed surveillance is always more surveillance.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>The Chilling Effects</h2>
+          <p>
+            For students and young people specifically, this matters beyond the abstract. Age
+            verification doesn't just expose your data. It changes what you can access.
+          </p>
+          <p>
+            When platforms implement verification requirements, they have every incentive to
+            over-restrict rather than under-restrict &mdash; the legal liability of accidentally
+            letting a minor through is higher than the cost of blocking legitimate users. LGBTQ+
+            advocacy organizations and civil liberties groups have repeatedly flagged that these
+            systems can be used to cut off minors from resources on gender identity, reproductive
+            health, mental health support, and other topics that may be framed as "harmful"
+            depending on which state's attorney general is doing the interpreting.
+          </p>
+          <p>
+            The ACLU called this clearly: KOSA "compounds nationwide attacks on young peoples' right
+            to learn and access information, on and offline." When book bans are sweeping school
+            libraries and classroom censorship is expanding, adding a federal framework that lets
+            state officials define what's harmful to minors online is not a neutral act.
+          </p>
+          <p>
+            The EFF has warned that mandatory verification undermines anonymous speech, threatening
+            LGBTQ+ youth, survivors of abuse, and political dissidents who rely on pseudonymity for
+            safe participation online. These are not hypothetical populations. They are your
+            classmates.
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>What Actually Works</h2>
+          <p>
+            None of this means children's safety online isn't a real issue. It is. Algorithmic
+            manipulation targeting minors is real. Predatory design is real. But the solutions being
+            deployed &mdash; mass identity collection, centralized biometric databases, legislative
+            frameworks written by lobbyists for corporate advantage &mdash; do not solve those
+            problems. They create new and larger ones.
+          </p>
+          <p>
+            Privacy-preserving alternatives exist. The most technically robust is the
+            <strong>zero-knowledge proof (ZKP)</strong>: instead of handing a bouncer your entire
+            ID, a ZKP is a cryptographic system that simply flashes a green light confirming you are
+            over 18 &mdash; leaving the verifier with zero knowledge of your name, address, or exact
+            birthdate. No data is transferred except the single boolean answer. No database is
+            created. Nothing can be breached because nothing is stored.
+          </p>
+          <p>
+            A second underutilized alternative is <strong>device-level age signaling</strong>.
+            Operating systems like iOS and Android already allow parents to configure managed
+            restrictions directly on the device &mdash; restricting app downloads, content
+            categories, and screen time &mdash; as a local setting that never leaves the phone. This
+            approach entirely negates the need to transmit biometric data to an offshore cloud
+            server. The verification happens on hardware the parent controls, with no third party
+            involved. The limitation is political, not technical: this model generates no recurring
+            revenue for the verification industry and cannot be mandated through legislation in a
+            way that benefits corporate lobbyists.
+          </p>
+          <p>
+            One promising institutional model involves third-party nonprofit infrastructure that
+            checks a government ID and immediately deletes the sensitive data, issuing only an
+            age-confirmation token. Ireland is developing a government-run verification app where
+            platforms query the app and receive only a yes/no answer &mdash; is this user 18 or not?
+            &mdash; with no identity information shared.
+          </p>
+          <p>
+            These aren't impossible. They're just less profitable for the age verification industry,
+            less useful as competitive weapons for Meta, and less legible as political slogans than
+            "protect the children."
+          </p>
+        </div>
+
+        <div class="reveal-item reveal-up">
+          <h2>What You Can Do</h2>
+          <p>
+            The Electronic Frontier Foundation (EFF) tracks age verification legislation and
+            provides tools for contacting your representatives. Fight for the Future runs active
+            campaigns against the most invasive legislation. Your state's ACLU chapter is almost
+            certainly monitoring bills in your legislature right now.
+          </p>
+          <p>
+            When you hear a politician say they're protecting kids with age verification, ask who
+            wrote the bill. Ask which companies are lobbying for it. Ask who bears the cost and who
+            bears the liability. Ask why the platform actually causing harm isn't the target of the
+            legislation.
+          </p>
+          <p>
+            AU10TIX was built by military intelligence veterans and left your passport sitting
+            exposed on Telegram for 18 months. Persona was funded by Peter Thiel's firm and was
+            running a government-authorized server with 269 undisclosed surveillance checks for
+            nearly two years before anyone noticed. Yoti was sharing your email with Equifax while
+            advertising itself as privacy-first. Meta funded a fake grassroots movement to make sure
+            it was someone else's problem.
+          </p>
+          <p>The answers are usually not what the press release says they are.</p>
+
+          <p>
+            <br />
+            <em
+              >hapara.fail's The Takedown is a student privacy research and advocacy publication. We
+              have no corporate sponsors, no advertising, and no institutional affiliation. If you
+              have tips, internal documents, or information about surveillance and privacy in
+              educational or consumer technology, please contact a9x@hapara.fail.</em
+            >
+          </p>
+
+          <a href="/blog" class="back-link">Back to Blog</a>
+        </div>
+      </article>
+    </main>
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a
+            href="https://discord.gg/KA66dHUF4P"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"
+              /></svg
+          ></a>
+          <a
+            href="https://github.com/hapara-fail"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              /></svg
+          ></a>
+          <a href="mailto:support@support.hapara.fail" aria-label="Contact via Email"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+              /></svg
+          ></a>
+        </div>
+        <p class="footer-copy">&copy; 2026 hapara.fail<br />People over profits</p>
+        <p class="footer-legal">
+          <a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> •
+          <a href="/license">License</a> • <a href="https://status.hapara.fail/">Status</a> •
+          <a href="https://docs.hapara.fail/">Docs</a>
+        </p>
+      </div>
+    </footer>
+
+    <div
+      class="cookie-notice"
+      id="cookieNotice"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Cookie notice"
+    >
+      <div class="cookie-content">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="256"
+          height="256"
+          viewBox="0 0 256 256"
+          aria-hidden="true"
+        >
+          <title>Cookie SVG Icon</title>
+          <path
+            fill="currentColor"
+            d="M164.49 163.51a12 12 0 1 1-17 0a12 12 0 0 1 17 0m-81-8a12 12 0 1 0 17 0a12 12 0 0 0-16.98 0Zm9-39a12 12 0 1 0-17 0a12 12 0 0 0 17-.02Zm48-1a12 12 0 1 0 0 17a12 12 0 0 0 0-17M232 128A104 104 0 1 1 128 24a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8a40 40 0 0 0 40 40a8 8 0 0 1 8 8m-16.31 7.39A56.13 56.13 0 0 1 168.5 87.5a56.13 56.13 0 0 1-47.89-47.19a88 88 0 1 0 95.08 95.08"
+          />
+        </svg>
+        <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
+      </div>
+      <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies">Okay</button>
+    </div>
+
+    <script src="/js/version-data.js" defer></script>
+    <script src="/js/nav.js" defer></script>
+    <script src="/js/scroll-reveal.js"></script>
+    <script src="/js/cookie-notice.js"></script>
+  </body>
+</html>
