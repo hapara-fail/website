@@ -6,6 +6,33 @@ export interface Env {
 
 const BLOG_SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/**
+ * Build a sanitized set of headers to forward when fetching assets.
+ * Only forwards a small set of safe, relevant headers (e.g., cache validators).
+ */
+function buildAssetRequestHeaders(request: Request): Headers {
+  const incoming = request.headers;
+  const forwarded = new Headers();
+
+  // Whitelist of headers to forward to the asset fetch.
+  const allowedHeaderNames = [
+    'if-none-match',
+    'if-modified-since',
+    'accept',
+    'accept-language',
+    'user-agent',
+  ];
+
+  for (const name of allowedHeaderNames) {
+    const value = incoming.get(name);
+    if (value !== null) {
+      forwarded.set(name, value);
+    }
+  }
+
+  return forwarded;
+}
+
 const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
   ['/dns', '/services/dns'],
@@ -50,7 +77,7 @@ function setSecurityHeaders(headers: Headers): void {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
       "font-src 'self' https://fonts.gstatic.com;",
       "script-src 'self';",
-      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com/hapara-fail/;",
+      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/;",
       "object-src 'none';",
       "base-uri 'self';",
       "form-action 'self' https://docs.google.com;",
@@ -137,14 +164,24 @@ export default {
       assetUrl.pathname = `/${htmlFilename}`;
       const response = await env.ASSETS.fetch(assetUrl, {
         method: request.method,
-        headers: request.headers,
+        headers: buildAssetRequestHeaders(request),
       });
       const mappedAssetResponse = handleAssetResponse(response);
       if (mappedAssetResponse) return mappedAssetResponse;
       // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
     } else {
-      // For static assets (CSS, JS, images, etc.), pass through
-      const response = await env.ASSETS.fetch(request);
+      // For static assets (CSS, JS, images, etc.), pass through with sanitized headers
+      let response: Response;
+      if (request.method === 'GET' || request.method === 'HEAD') {
+        const assetRequest = new Request(request.url, {
+          method: request.method,
+          headers: buildAssetRequestHeaders(request),
+        });
+        response = await env.ASSETS.fetch(assetRequest);
+      } else {
+        // For non-GET/HEAD methods, fall back to the original request to avoid altering semantics.
+        response = await env.ASSETS.fetch(request);
+      }
       const staticAssetResponse = handleAssetResponse(response);
       if (staticAssetResponse) return staticAssetResponse;
     }
@@ -155,7 +192,7 @@ export default {
 
     const notFoundResponse = await env.ASSETS.fetch(notFoundUrl, {
       method: request.method,
-      headers: request.headers,
+      headers: buildAssetRequestHeaders(request),
     });
 
     const processedNotFoundResponse = handleAssetResponse(notFoundResponse);

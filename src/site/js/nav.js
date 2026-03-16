@@ -255,7 +255,7 @@ function buildFooterMarkup() {
     footerText.innerHTML = `<div class="version-footer">
       <div class="version-footer-svg"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"><path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583 2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099 2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039 3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0 2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0 2.242 2.242 0 0 1 4.484 0zm8.221-9.715a2.242 2.242 0 1 1 0-4.485 2.242 2.242 0 0 1 0 4.485z"></path></svg></div>
       <a href="https://github.com/hapara-fail/website/commit/${safeCommit}" target="_blank" rel="noopener noreferrer" class="version-footer-link">${safeCommit}</a>
-      <span class="version-footer-sep">•</span>
+      <span class="version-footer-sep">&bull;</span>
       <span class="version-footer-msg" title="${safeMsg}">${safeMsg}</span>
     </div>`;
   } else {
@@ -396,7 +396,7 @@ function buildFooterMarkup() {
     });
 
     document.body.classList.add('body-lock');
-    var first = drawerEl.querySelector(focusableSelectors);
+    const first = drawerEl.querySelector(focusableSelectors);
     if (first) first.focus();
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('focusin', trapFocus);
@@ -498,7 +498,7 @@ function buildFooterMarkup() {
   function trapFocus(e) {
     if (!drawerEl.classList.contains('is-open')) return;
     if (!drawerEl.contains(e.target)) {
-      var first = drawerEl.querySelector(focusableSelectors);
+      const first = drawerEl.querySelector(focusableSelectors);
       if (first) first.focus();
     }
   }
@@ -511,9 +511,9 @@ function buildFooterMarkup() {
 
   // Submenus — polished toggle with WAAPI stagger
   // Uses an explicit state machine + monotonic token to prevent misalignment on spam clicks.
-  Array.prototype.forEach.call(drawerEl.querySelectorAll('.has-submenu'), function (group) {
-    var toggle = group.querySelector('.submenu-toggle');
-    var submenu = group.querySelector('.submenu');
+  Array.from(drawerEl.querySelectorAll('.has-submenu')).forEach(function (group) {
+    const toggle = group.querySelector('.submenu-toggle');
+    const submenu = group.querySelector('.submenu');
     if (!toggle || !submenu) return;
 
     // Source of truth: 'closed' | 'opening' | 'open' | 'closing'

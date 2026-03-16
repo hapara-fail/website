@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const osDetectionMessage = document.getElementById('os-detection-message');
   // Small delay to allow the browser to apply CSS transition classes
   // before we remove the slide direction helper classes.
-  // before we remove the slide direction helper classes.
   const TAB_TRANSITION_CLEANUP_DELAY_MS = 10;
 
   const DNS_MONITOR_ALLOWED_CONTENT_TYPES = ['application/json', 'text/plain'];
@@ -243,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
-  // Helper to set cookie (max-age in seconds, 31536000 = 1 year)
   // Helper to set cookie (max-age in seconds, 31536000 = 1 year)
   const setCookie = (name, value, maxAge) => {
     let cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
@@ -571,20 +569,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Multi-word: all query words appear somewhere in text
     const words = q.split(/\s+/).filter((w) => w.length > 0);
-    if (words.length > 1 && words.every((w) => t.includes(w))) return { match: true, score: 0.85 };
+    if (words.length === 1) {
+      // Single-word queries are perfectly handled by the exact and space-insensitive checks above.
+      // If a single word reaches here, it means it's not an exact match, so we intentionally
+      // let it fall through to character-skip matching to find typos or partial matches.
+    } else if (words.length > 1 && words.every((w) => t.includes(w))) {
+      return { match: true, score: 0.85 };
+    }
 
     // Character-skip subsequence: all query chars appear in order
-    if (qNoSpace.length >= 3) {
-      let ti = 0;
-      let matched = 0;
-      for (let qi = 0; qi < qNoSpace.length && ti < tNoSpace.length; ti++) {
-        if (tNoSpace[ti] === qNoSpace[qi]) {
-          matched++;
-          qi++;
+    if (qNoSpace.length >= 2) {
+      let textIndex = 0;
+      let matchedChars = 0;
+      let consecutiveMatches = 0;
+      let maxConsecutive = 0;
+
+      for (let queryIndex = 0; queryIndex < qNoSpace.length && textIndex < tNoSpace.length; textIndex++) {
+        if (tNoSpace[textIndex] === qNoSpace[queryIndex]) {
+          matchedChars++;
+          queryIndex++;
+          consecutiveMatches++;
+          if (consecutiveMatches > maxConsecutive) maxConsecutive = consecutiveMatches;
+        } else {
+          consecutiveMatches = 0;
         }
       }
-      if (matched === qNoSpace.length) {
-        const score = 0.5 + 0.3 * (matched / tNoSpace.length);
+
+      if (matchedChars === qNoSpace.length) {
+        // Boost score based on consecutive matches and starts-with bonus
+        const consecutiveBonus = 0.15 * (maxConsecutive / qNoSpace.length);
+        const startsWithBonus = tNoSpace.startsWith(qNoSpace[0]) ? 0.1 : 0;
+        const score = 0.4 + 0.2 * (matchedChars / tNoSpace.length) + consecutiveBonus + startsWithBonus;
         return { match: true, score: Math.min(score, 0.79) };
       }
     }
@@ -823,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const normalizedFilter = filterText.toLowerCase().trim();
     let hasResults = false;
-    let cardIndex = 0;
+    let cardAnimationIndex = 0;
     let isFuzzy = false;
 
     // Determine which groups to render based on category filter
@@ -846,9 +861,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Second pass: fuzzy matching if no exact results and query >= 3 chars
+    // Second pass: fuzzy matching if no exact results and query >= 2 chars
     let resultsToRender = exactResults;
-    if (exactResults.length === 0 && normalizedFilter.length >= 3) {
+    if (exactResults.length === 0 && normalizedFilter.length >= 2) {
       const fuzzyResults = [];
       filteredGroups.forEach((group) => {
         const matching = group.services
@@ -894,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Dynamic service count
       const countSpan = document.createElement('span');
       countSpan.className = 'category-count';
-      countSpan.textContent = ` (${group.total})`;
+      countSpan.textContent = ` (${group.services.length})`;
       headerEl.appendChild(countSpan);
 
       categoryEl.appendChild(headerEl);
@@ -905,8 +920,8 @@ document.addEventListener('DOMContentLoaded', () => {
       group.services.forEach((service) => {
         const card = document.createElement('div');
         card.className = 'service-card card-enter';
-        card.style.animationDelay = `${cardIndex * 30}ms`;
-        cardIndex++;
+        card.style.animationDelay = `${cardAnimationIndex * 30}ms`;
+        cardAnimationIndex++;
 
         const serviceInfo = document.createElement('div');
         serviceInfo.className = 'service-info service-info-flex';

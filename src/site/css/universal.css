@@ -508,6 +508,8 @@ body {
   border-radius: 12px 0 0 12px;
   overflow-y: auto;
   will-change: transform;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-drawer.is-open {
@@ -747,10 +749,13 @@ body {
 
 /* Nav Footer */
 .nav-footer {
-  position: absolute;
+  position: -webkit-sticky;
+  position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
+  margin-top: auto;
+  z-index: 10;
   padding: 18px 12px 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(180deg, transparent, rgba(10, 9, 26, 0.5) 30%, var(--bg-dark));

@@ -39,9 +39,6 @@
   margin-bottom: 1.5rem;
   line-height: 1.3;
   color: var(--text-primary);
-}
-/* Specific to legal pages */
-.article-body h2 {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 10px;
 }
