@@ -1,14 +1,147 @@
-/* Shared scroll-reveal animations for sub-pages */
-.reveal-item {
+/* ==========================================================================
+   Animation Design System — Scroll Reveal & Micro-Interactions
+   ========================================================================== */
+
+/* --- Design Tokens --- */
+:root {
+  --anim-duration: 0.7s;
+  --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --anim-stagger: 80ms;
+}
+
+/* --- Base Reveal State ---
+   All reveal elements start invisible and transition to visible
+   when the IntersectionObserver adds .is-visible.
+   ========================================================================== */
+
+.reveal {
   opacity: 0;
+  will-change: opacity, transform, filter;
   transition:
-    opacity 0.8s ease-out,
-    transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    opacity var(--anim-duration) var(--anim-ease),
+    transform var(--anim-duration) var(--anim-ease),
+    filter var(--anim-duration) var(--anim-ease);
 }
+
+/* --- Directional Modifiers ---
+   Apply one of these alongside .reveal to set the entrance direction.
+   ========================================================================== */
+
+/* Slide up (default, great for text & section headers) */
 .reveal-up {
-  transform: translateY(50px);
+  transform: translateY(32px);
 }
-.reveal-item.is-visible {
+
+/* Slide down (decorative accents, top-anchored elements) */
+.reveal-down {
+  transform: translateY(-32px);
+}
+
+/* Slide from left (left-aligned content, philosophy items) */
+.reveal-left {
+  transform: translateX(-40px);
+}
+
+/* Slide from right (right-aligned content, reversed featurettes) */
+.reveal-right {
+  transform: translateX(40px);
+}
+
+/* Scale in (cards, images, team photos) */
+.reveal-scale {
+  transform: scale(0.88);
+}
+
+/* Blur fade (hero text, quotes, stat numbers) */
+.reveal-blur {
+  filter: blur(8px);
+  transform: translateY(12px);
+}
+
+/* --- Visible State ---
+   Applied by scroll-reveal.js when element enters viewport.
+   ========================================================================== */
+
+.reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  filter: none;
+}
+
+/* --- Hover Micro-Animations ---
+   Utility classes for interactive hover effects.
+   ========================================================================== */
+
+/* Gentle lift on hover (cards, list items) */
+.hover-lift {
+  transition:
+    transform 0.3s var(--anim-ease),
+    box-shadow 0.3s var(--anim-ease),
+    border-color 0.3s var(--anim-ease);
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+}
+
+/* Soft glow on hover (icons, accent elements) */
+.hover-glow {
+  transition:
+    filter 0.35s ease,
+    transform 0.35s var(--anim-ease);
+}
+
+.hover-glow:hover {
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.5));
+  transform: scale(1.06);
+}
+
+/* Gentle float on hover (images, profile pics) */
+.hover-float {
+  transition:
+    transform 0.4s var(--anim-ease),
+    box-shadow 0.4s var(--anim-ease);
+}
+
+.hover-float:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* --- Graceful Degradation: No-JS Fallback ---
+   If JS is disabled, everything is visible immediately.
+   A <noscript> tag in HTML injects this override.
+   ========================================================================== */
+
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* --- Accessibility: Reduced Motion ---
+   Respects the user's motion preference.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .hover-lift,
+  .hover-glow,
+  .hover-float {
+    transition: none !important;
+  }
+
+  .hover-lift:hover,
+  .hover-glow:hover,
+  .hover-float:hover {
+    transform: none !important;
+    filter: none !important;
+  }
 }

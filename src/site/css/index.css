@@ -379,29 +379,22 @@
 }
 
 /* cookie notice styles moved to universal.css */
-/* Homepage-specific animations */
-.reveal-item {
-  opacity: 0;
-  transition:
-    opacity 0.7s ease-out,
-    transform 0.7s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.reveal-up {
-  transform: translateY(40px);
-}
-
-.reveal-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+/* Reduced motion: disable index-page-specific keyframe animations */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  .hero p,
+  .cta-button,
+  .scroll-indicator {
+    opacity: 1 !important;
     animation: none !important;
+  }
+
+  .hero h1 .word {
+    transform: none !important;
     transition: none !important;
+  }
+
+  .scroll-indicator svg {
+    animation: none !important;
   }
 
   .parallax-bg {
