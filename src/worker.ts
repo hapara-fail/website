@@ -14,7 +14,7 @@ function buildAssetRequestHeaders(request: Request): Headers {
   const incoming = request.headers;
   const forwarded = new Headers();
 
-  // Whitelist of headers to forward to the asset fetch.
+  // Allow list of headers to forward to the asset fetch.
   const allowedHeaderNames = [
     'if-none-match',
     'if-modified-since',
@@ -51,11 +51,10 @@ const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/', 'index.html'],
   ['/about', 'about.html'],
   ['/contribute', 'contribute.html'],
-  ['/terms', 'tos.html'],
+  ['/terms', 'terms.html'],
   ['/privacy', 'privacy.html'],
   ['/services/dns', 'dns-service.html'],
   ['/tool/gfu', 'gfu-tool.html'],
-
   ['/blog', 'blog.html'],
   ['/license', 'license.html'],
 ]);
@@ -171,17 +170,11 @@ export default {
       // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
     } else {
       // For static assets (CSS, JS, images, etc.), pass through with sanitized headers
-      let response: Response;
-      if (request.method === 'GET' || request.method === 'HEAD') {
-        const assetRequest = new Request(request.url, {
-          method: request.method,
-          headers: buildAssetRequestHeaders(request),
-        });
-        response = await env.ASSETS.fetch(assetRequest);
-      } else {
-        // For non-GET/HEAD methods, fall back to the original request to avoid altering semantics.
-        response = await env.ASSETS.fetch(request);
-      }
+      const assetRequest = new Request(request.url, {
+        method: request.method,
+        headers: buildAssetRequestHeaders(request),
+      });
+      const response = await env.ASSETS.fetch(assetRequest);
       const staticAssetResponse = handleAssetResponse(response);
       if (staticAssetResponse) return staticAssetResponse;
     }

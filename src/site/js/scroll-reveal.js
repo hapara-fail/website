@@ -11,7 +11,6 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const STAGGER_MS = 80; // matches --anim-stagger in CSS
-  const THRESHOLD = 0.15;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
