@@ -27,7 +27,10 @@ const NAV_CONFIG = {
         {
           href: '/services/dns',
           label: 'DNS',
-          icon: ['M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z', 'm9 12 2 2 4-4'],
+          icon: [
+            'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z',
+            'm9 12 2 2 4-4',
+          ],
         },
       ],
     },
@@ -53,7 +56,11 @@ const NAV_CONFIG = {
       type: 'link',
       href: 'https://support.hapara.fail/',
       label: 'Support',
-      icon: ['M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719', 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', 'M12 17h.01'],
+      icon: [
+        'M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719',
+        'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3',
+        'M12 17h.01',
+      ],
     },
   ],
   social: [
@@ -329,7 +336,7 @@ function buildFooterMarkup() {
     _closeId++;
 
     // Cancel any lingering close animations (this reverts fill:forwards state)
-    _itemAnims.forEach(a => a.cancel());
+    _itemAnims.forEach((a) => a.cancel());
     _itemAnims = [];
 
     // Reveal elements so they can be painted
@@ -352,7 +359,7 @@ function buildFooterMarkup() {
           const anim = li.animate(
             [
               { opacity: 0, transform: 'translateX(20px) scale(0.97)', filter: 'blur(3px)' },
-              { opacity: 1, transform: 'translateX(0)   scale(1)',    filter: 'blur(0px)' },
+              { opacity: 1, transform: 'translateX(0)   scale(1)', filter: 'blur(0px)' },
             ],
             {
               duration: 380,
@@ -410,7 +417,7 @@ function buildFooterMarkup() {
     const myCloseId = ++_closeId;
 
     // Cancel any running open-stagger animations
-    _itemAnims.forEach(a => a.cancel());
+    _itemAnims.forEach((a) => a.cancel());
     _itemAnims = [];
 
     // Clip overflow on drawer + list during close-out animations too
@@ -424,7 +431,7 @@ function buildFooterMarkup() {
     items.forEach((li, i) => {
       const anim = li.animate(
         [
-          { opacity: 1, transform: 'translateX(0)',    filter: 'blur(0px)' },
+          { opacity: 1, transform: 'translateX(0)', filter: 'blur(0px)' },
           { opacity: 0, transform: 'translateX(14px)', filter: 'blur(2px)' },
         ],
         {
@@ -455,11 +462,14 @@ function buildFooterMarkup() {
 
     // After items fade, slide drawer out via CSS transition
     const itemFadeDuration = total * 22 + 180;
-    setTimeout(() => {
-      if (_closeId !== myCloseId) return; // drawer was re-opened, bail
-      drawerEl.classList.remove('is-open');
-      overlayEl.classList.remove('is-open');
-    }, Math.min(itemFadeDuration, 240));
+    setTimeout(
+      () => {
+        if (_closeId !== myCloseId) return; // drawer was re-opened, bail
+        drawerEl.classList.remove('is-open');
+        overlayEl.classList.remove('is-open');
+      },
+      Math.min(itemFadeDuration, 240)
+    );
 
     document.removeEventListener('keydown', onKeyDown);
     document.removeEventListener('focusin', trapFocus);
@@ -474,7 +484,7 @@ function buildFooterMarkup() {
       drawerEl.style.overflow = '';
       if (navList) navList.style.overflow = '';
       document.body.classList.remove('body-lock');
-      _itemAnims.forEach(a => a.cancel());
+      _itemAnims.forEach((a) => a.cancel());
       _itemAnims = [];
       if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
     }
@@ -527,7 +537,7 @@ function buildFooterMarkup() {
       const myToken = ++_subToken;
 
       // Cancel any in-flight animations immediately
-      _subAnims.forEach(a => a.cancel());
+      _subAnims.forEach((a) => a.cancel());
       _subAnims = [];
 
       // Make sure submenu is visible before animating
@@ -575,7 +585,7 @@ function buildFooterMarkup() {
       const myToken = ++_subToken;
 
       // Cancel any in-flight animations immediately
-      _subAnims.forEach(a => a.cancel());
+      _subAnims.forEach((a) => a.cancel());
       _subAnims = [];
 
       // Update toggle state right away so re-clicks read correctly
@@ -609,7 +619,7 @@ function buildFooterMarkup() {
         lastAnim.onfinish = () => {
           if (_subToken !== myToken) return;
           submenu.hidden = true;
-          _subAnims.forEach(a => a.cancel());
+          _subAnims.forEach((a) => a.cancel());
           _subAnims = [];
           _subState = 'closed';
         };
@@ -619,7 +629,7 @@ function buildFooterMarkup() {
       setTimeout(function () {
         if (_subToken !== myToken) return;
         submenu.hidden = true;
-        _subAnims.forEach(a => a.cancel());
+        _subAnims.forEach((a) => a.cancel());
         _subAnims = [];
         _subState = 'closed';
       }, hideDur + 50);

@@ -584,7 +584,11 @@ document.addEventListener('DOMContentLoaded', () => {
       let consecutiveMatches = 0;
       let maxConsecutive = 0;
 
-      for (let queryIndex = 0; queryIndex < qNoSpace.length && textIndex < tNoSpace.length; textIndex++) {
+      for (
+        let queryIndex = 0;
+        queryIndex < qNoSpace.length && textIndex < tNoSpace.length;
+        textIndex++
+      ) {
         if (tNoSpace[textIndex] === qNoSpace[queryIndex]) {
           matchedChars++;
           queryIndex++;
@@ -599,7 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Boost score based on consecutive matches and starts-with bonus
         const consecutiveBonus = 0.15 * (maxConsecutive / qNoSpace.length);
         const startsWithBonus = tNoSpace.startsWith(qNoSpace[0]) ? 0.1 : 0;
-        const score = 0.4 + 0.2 * (matchedChars / tNoSpace.length) + consecutiveBonus + startsWithBonus;
+        const score =
+          0.4 + 0.2 * (matchedChars / tNoSpace.length) + consecutiveBonus + startsWithBonus;
         return { match: true, score: Math.min(score, 0.79) };
       }
     }
