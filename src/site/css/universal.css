@@ -476,11 +476,12 @@ body {
 .nav-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 500;
 }
 
@@ -498,24 +499,26 @@ body {
   width: min(90vw, 360px);
   background: var(--surface);
   border-left: 1px solid var(--border-color);
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.35);
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.45);
+  transform: translateX(105%);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 600;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 10px 0 0 10px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 12px 0 0 12px;
   overflow-y: auto;
+  will-change: transform;
 }
 
 .nav-drawer.is-open {
   transform: translateX(0);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* List */
 .nav-list {
   list-style: none;
-  padding: 16px 12px 110px;
+  padding: 12px 8px 110px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -524,6 +527,15 @@ body {
 
 .nav-list > li {
   margin: 0;
+  padding: 4px;
+  border-radius: 12px;
+  transition: background 0.25s ease;
+}
+
+/* Highlight the entire submenu group (toggle + children) when open */
+.nav-list > li.has-submenu.is-open {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .nav-list a,
@@ -553,12 +565,11 @@ body {
 .nav-list a:hover,
 .submenu-toggle:hover {
   background: rgba(255, 255, 255, 0.09);
-  transform: translateX(2px);
 }
 
 .nav-list a:active,
 .submenu-toggle:active {
-  transform: translateX(1px) scale(0.98);
+  transform: scale(0.98);
 }
 
 .nav-list a svg,
@@ -605,7 +616,7 @@ body {
   transform: rotate(90deg);
 }
 
-/* Submenu - Premium Animation System */
+/* Submenu - Clean Panel System */
 .has-submenu .submenu {
   list-style: none;
   margin: 0;
@@ -617,7 +628,8 @@ body {
   transition:
     max-height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    margin 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    padding 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .has-submenu.is-open .submenu {
@@ -625,10 +637,12 @@ body {
   opacity: 1;
   pointer-events: auto;
   margin-top: 4px;
+  padding: 0;
   transition:
     max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    margin 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    margin 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Ensure hidden submenus don't take space */
@@ -638,19 +652,27 @@ body {
 
 /* Submenu items styling */
 .has-submenu .submenu li {
-  margin: 0;
+  margin: 2px 0;
+}
+
+.has-submenu .submenu li:first-child {
+  margin-top: 0;
+}
+
+.has-submenu .submenu li:last-child {
+  margin-bottom: 0;
 }
 
 .has-submenu .submenu li a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 18px 11px 54px;
+  padding: 10px 18px;
   font-size: 0.92rem;
   font-weight: 400;
   color: var(--text-secondary);
   text-decoration: none;
-  border-radius: 11px;
+  border-radius: 9px;
   transition:
     background 0.15s ease,
     color 0.15s ease,
@@ -660,20 +682,28 @@ body {
 .has-submenu .submenu li a:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.07);
-  transform: translateX(2px);
+}
+
+.has-submenu .submenu li a:active {
+  transform: scale(0.98);
 }
 
 .has-submenu .submenu li a svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
+}
+
+.has-submenu .submenu li a:hover svg {
+  opacity: 1;
 }
 
 /* Submenu item animations - refined fade and slide */
 .has-submenu .submenu li {
   opacity: 0;
-  transform: translateY(-10px) scale(0.95);
+  transform: translateY(-8px) scale(0.96);
   transition:
     opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -691,19 +721,19 @@ body {
 }
 
 .has-submenu.is-open .submenu li:nth-child(1) {
-  transition-delay: 0.08s;
+  transition-delay: 0.06s;
 }
 
 .has-submenu.is-open .submenu li:nth-child(2) {
-  transition-delay: 0.14s;
+  transition-delay: 0.12s;
 }
 
 .has-submenu.is-open .submenu li:nth-child(3) {
-  transition-delay: 0.2s;
+  transition-delay: 0.18s;
 }
 
 .has-submenu.is-open .submenu li:nth-child(4) {
-  transition-delay: 0.26s;
+  transition-delay: 0.24s;
 }
 
 /* Closing: smooth simultaneous fade out */

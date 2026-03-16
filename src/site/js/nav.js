@@ -27,7 +27,7 @@ const NAV_CONFIG = {
         {
           href: '/services/dns',
           label: 'DNS',
-          icon: 'M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z',
+          icon: ['M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z', 'm9 12 2 2 4-4'],
         },
       ],
     },
@@ -47,13 +47,13 @@ const NAV_CONFIG = {
       type: 'link',
       href: '/contribute',
       label: 'Contribute',
-      icon: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z',
+      icon: 'M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5',
     },
     {
       type: 'link',
       href: 'https://support.hapara.fail/',
       label: 'Support',
-      icon: 'M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z',
+      icon: ['M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719', 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', 'M12 17h.01'],
     },
   ],
   social: [
@@ -86,12 +86,14 @@ function createSvgIcon(iconPath, role = null, ariaLabelledBy = null) {
   svg.setAttribute('stroke-width', '2');
   svg.setAttribute('stroke', 'currentColor');
 
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('stroke-linecap', 'round');
-  path.setAttribute('stroke-linejoin', 'round');
-  path.setAttribute('d', iconPath);
-
-  svg.appendChild(path);
+  const paths = Array.isArray(iconPath) ? iconPath : [iconPath];
+  paths.forEach((d) => {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('d', d);
+    svg.appendChild(path);
+  });
 
   if (role) svg.setAttribute('role', role);
   if (ariaLabelledBy) svg.setAttribute('aria-labelledby', ariaLabelledBy);
@@ -312,16 +314,87 @@ function buildFooterMarkup() {
   const focusableSelectors = 'a, button, [tabindex]:not([tabindex="-1"])';
   let lastFocused = null;
 
+  // Track running WAAPI animations so we can cancel on re-open / re-close
+  let _itemAnims = [];
+  // Monotonically-incrementing token used to invalidate stale close() cleanup
+  // callbacks (transitionend + safety setTimeout) when open() is called first.
+  let _closeId = 0;
+
   function open() {
     lastFocused = document.activeElement;
     btn.classList.add('active');
     btn.setAttribute('aria-expanded', 'true');
+
+    // Invalidate any in-flight close() cleanup handlers
+    _closeId++;
+
+    // Cancel any lingering close animations (this reverts fill:forwards state)
+    _itemAnims.forEach(a => a.cancel());
+    _itemAnims = [];
+
+    // Reveal elements so they can be painted
     drawerEl.hidden = false;
     overlayEl.hidden = false;
-    requestAnimationFrame(function () {
-      drawerEl.classList.add('is-open');
-      overlayEl.classList.add('is-open');
+
+    // Wait one frame so hidden=false paints, then trigger CSS transitions
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        drawerEl.classList.add('is-open');
+        overlayEl.classList.add('is-open');
+        drawerEl.style.overflow = 'hidden';
+        const navList = drawerEl.querySelector('.nav-list');
+        if (navList) navList.style.overflow = 'hidden';
+
+        // Stagger-animate each top-level nav item
+        const items = drawerEl.querySelectorAll('.nav-list > li');
+        let lastAnim = null;
+        items.forEach((li, i) => {
+          const anim = li.animate(
+            [
+              { opacity: 0, transform: 'translateX(20px) scale(0.97)', filter: 'blur(3px)' },
+              { opacity: 1, transform: 'translateX(0)   scale(1)',    filter: 'blur(0px)' },
+            ],
+            {
+              duration: 380,
+              delay: 60 + i * 45,
+              easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              fill: 'both',
+            }
+          );
+          _itemAnims.push(anim);
+          lastAnim = anim;
+        });
+
+        // Animate the footer in slightly after the items
+        const footer = drawerEl.querySelector('.nav-footer');
+        if (footer) {
+          const footerAnim = footer.animate(
+            [
+              { opacity: 0, transform: 'translateY(10px)' },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            {
+              duration: 340,
+              delay: 60 + items.length * 45 + 20,
+              easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              fill: 'both',
+            }
+          );
+          _itemAnims.push(footerAnim);
+          // Remove overflow clip once the last animation finishes
+          footerAnim.onfinish = () => {
+            drawerEl.style.overflow = '';
+            if (navList) navList.style.overflow = '';
+          };
+        } else if (lastAnim) {
+          lastAnim.onfinish = () => {
+            drawerEl.style.overflow = '';
+            if (navList) navList.style.overflow = '';
+          };
+        }
+      });
     });
+
     document.body.classList.add('body-lock');
     var first = drawerEl.querySelector(focusableSelectors);
     if (first) first.focus();
@@ -332,16 +405,90 @@ function buildFooterMarkup() {
   function close() {
     btn.classList.remove('active');
     btn.setAttribute('aria-expanded', 'false');
-    drawerEl.classList.remove('is-open');
-    overlayEl.classList.remove('is-open');
-    document.body.classList.remove('body-lock');
+
+    // Stamp this close so any async callbacks can check if they're still valid
+    const myCloseId = ++_closeId;
+
+    // Cancel any running open-stagger animations
+    _itemAnims.forEach(a => a.cancel());
+    _itemAnims = [];
+
+    // Clip overflow on drawer + list during close-out animations too
+    drawerEl.style.overflow = 'hidden';
+    const navList = drawerEl.querySelector('.nav-list');
+    if (navList) navList.style.overflow = 'hidden';
+
+    // Quick fade-out of items in reverse before drawer slides away
+    const items = drawerEl.querySelectorAll('.nav-list > li');
+    const total = items.length;
+    items.forEach((li, i) => {
+      const anim = li.animate(
+        [
+          { opacity: 1, transform: 'translateX(0)',    filter: 'blur(0px)' },
+          { opacity: 0, transform: 'translateX(14px)', filter: 'blur(2px)' },
+        ],
+        {
+          duration: 180,
+          delay: (total - 1 - i) * 22,
+          easing: 'cubic-bezier(0.4, 0, 1, 1)',
+          fill: 'forwards',
+        }
+      );
+      _itemAnims.push(anim);
+    });
+
+    const footer = drawerEl.querySelector('.nav-footer');
+    if (footer) {
+      const footerAnim = footer.animate(
+        [
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(8px)' },
+        ],
+        {
+          duration: 140,
+          easing: 'cubic-bezier(0.4, 0, 1, 1)',
+          fill: 'forwards',
+        }
+      );
+      _itemAnims.push(footerAnim);
+    }
+
+    // After items fade, slide drawer out via CSS transition
+    const itemFadeDuration = total * 22 + 180;
+    setTimeout(() => {
+      if (_closeId !== myCloseId) return; // drawer was re-opened, bail
+      drawerEl.classList.remove('is-open');
+      overlayEl.classList.remove('is-open');
+    }, Math.min(itemFadeDuration, 240));
+
     document.removeEventListener('keydown', onKeyDown);
     document.removeEventListener('focusin', trapFocus);
-    setTimeout(function () {
+
+    // Clean up after the CSS slide-out transition finishes
+    function onTransitionEnd(e) {
+      if (e.propertyName !== 'transform') return;
+      drawerEl.removeEventListener('transitionend', onTransitionEnd);
+      if (_closeId !== myCloseId) return;
       drawerEl.hidden = true;
       overlayEl.hidden = true;
+      drawerEl.style.overflow = '';
+      if (navList) navList.style.overflow = '';
+      document.body.classList.remove('body-lock');
+      _itemAnims.forEach(a => a.cancel());
+      _itemAnims = [];
       if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-    }, 300);
+    }
+    drawerEl.addEventListener('transitionend', onTransitionEnd);
+
+    // Safety fallback in case transitionend doesn't fire
+    setTimeout(() => {
+      if (_closeId !== myCloseId) return;
+      drawerEl.hidden = true;
+      overlayEl.hidden = true;
+      drawerEl.style.overflow = '';
+      if (navList) navList.style.overflow = '';
+      document.body.classList.remove('body-lock');
+    }, 620);
   }
 
   function onKeyDown(e) {
@@ -362,30 +509,128 @@ function buildFooterMarkup() {
   });
   overlayEl.addEventListener('click', close);
 
-  // Submenus
+  // Submenus — polished toggle with WAAPI stagger
+  // Uses an explicit state machine + monotonic token to prevent misalignment on spam clicks.
   Array.prototype.forEach.call(drawerEl.querySelectorAll('.has-submenu'), function (group) {
     var toggle = group.querySelector('.submenu-toggle');
     var submenu = group.querySelector('.submenu');
     if (!toggle || !submenu) return;
-    toggle.addEventListener('click', function () {
-      var willOpen = !group.classList.contains('is-open');
-      if (willOpen) {
-        // Opening: unhide, wait for paint, then animate
-        submenu.hidden = false;
+
+    // Source of truth: 'closed' | 'opening' | 'open' | 'closing'
+    let _subState = 'closed';
+    // Monotonically-incrementing token — stale async callbacks compare against this
+    let _subToken = 0;
+    let _subAnims = [];
+
+    function openSubmenu() {
+      _subState = 'opening';
+      const myToken = ++_subToken;
+
+      // Cancel any in-flight animations immediately
+      _subAnims.forEach(a => a.cancel());
+      _subAnims = [];
+
+      // Make sure submenu is visible before animating
+      submenu.hidden = false;
+      group.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+
+      requestAnimationFrame(function () {
+        if (_subToken !== myToken) return; // superseded by another click
         requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            group.classList.add('is-open');
-            toggle.setAttribute('aria-expanded', 'true');
+          if (_subToken !== myToken) return;
+
+          const subItems = submenu.querySelectorAll('li');
+          let lastAnim = null;
+          subItems.forEach((li, idx) => {
+            const a = li.animate(
+              [
+                { opacity: 0, transform: 'translateY(-10px) scale(0.95)' },
+                { opacity: 1, transform: 'translateY(0) scale(1)' },
+              ],
+              {
+                duration: 320,
+                delay: idx * 40,
+                easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                fill: 'both',
+              }
+            );
+            _subAnims.push(a);
+            lastAnim = a;
           });
+
+          if (lastAnim) {
+            lastAnim.onfinish = () => {
+              if (_subToken === myToken) _subState = 'open';
+            };
+          } else {
+            _subState = 'open';
+          }
         });
-      } else {
-        // Closing: animate out smoothly, then hide
-        group.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        // Wait for longest animation: max-height (0.45s) + buffer
-        setTimeout(function () {
+      });
+    }
+
+    function closeSubmenu() {
+      _subState = 'closing';
+      const myToken = ++_subToken;
+
+      // Cancel any in-flight animations immediately
+      _subAnims.forEach(a => a.cancel());
+      _subAnims = [];
+
+      // Update toggle state right away so re-clicks read correctly
+      group.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+
+      const subItems = submenu.querySelectorAll('li');
+      const count = subItems.length;
+      let lastAnim = null;
+      subItems.forEach((li, idx) => {
+        const a = li.animate(
+          [
+            { opacity: 1, transform: 'translateY(0) scale(1)' },
+            { opacity: 0, transform: 'translateY(-6px) scale(0.97)' },
+          ],
+          {
+            duration: 180,
+            delay: (count - 1 - idx) * 25,
+            easing: 'cubic-bezier(0.4, 0, 1, 1)',
+            fill: 'forwards',
+          }
+        );
+        _subAnims.push(a);
+        lastAnim = a;
+      });
+
+      const totalDur = count * 25 + 180;
+      const hideDur = Math.min(totalDur, 260);
+
+      if (lastAnim) {
+        lastAnim.onfinish = () => {
+          if (_subToken !== myToken) return;
           submenu.hidden = true;
-        }, 480);
+          _subAnims.forEach(a => a.cancel());
+          _subAnims = [];
+          _subState = 'closed';
+        };
+      }
+
+      // Safety fallback in case onfinish doesn't fire (e.g. zero items)
+      setTimeout(function () {
+        if (_subToken !== myToken) return;
+        submenu.hidden = true;
+        _subAnims.forEach(a => a.cancel());
+        _subAnims = [];
+        _subState = 'closed';
+      }, hideDur + 50);
+    }
+
+    toggle.addEventListener('click', function () {
+      // Decide intent based on explicit state, not DOM class (which lags behind)
+      if (_subState === 'closed' || _subState === 'closing') {
+        openSubmenu();
+      } else {
+        closeSubmenu();
       }
     });
   });
