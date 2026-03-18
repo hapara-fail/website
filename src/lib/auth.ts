@@ -6,6 +6,11 @@ import * as schema from './drizzle-schema';
 export interface AuthEnv {
   BETTER_AUTH_SECRET: string;
   BETTER_AUTH_URL: string;
+  /**
+   * When true, log full password reset URLs and tokens to the console.
+   * Enable only in local development; leave undefined/false in production.
+   */
+  BETTER_AUTH_ENABLE_RESET_LOGGING?: boolean;
 }
 
 export function getAuth(db: AppDatabase, env: AuthEnv) {
@@ -33,8 +38,13 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
       enabled: true,
       sendResetPassword: async ({ user, url, token }) => {
         // In production, replace this with a real email sender (e.g. Resend, Mailchannels).
-        // For local dev, the reset URL is logged to the wrangler console.
-        console.log(`\n🔑 PASSWORD RESET for ${user.email}\n   URL: ${url}\n   Token: ${token}\n`);
+        // For local dev, the reset URL can be logged by enabling BETTER_AUTH_ENABLE_RESET_LOGGING.
+        if (env.BETTER_AUTH_ENABLE_RESET_LOGGING) {
+          console.log(`\n🔑 PASSWORD RESET for ${user.email}\n   URL: ${url}\n   Token: ${token}\n`);
+        } else {
+          // Avoid logging sensitive reset credentials (URL/token) in production.
+          console.log(`Password reset requested for ${user.email}`);
+        }
       },
     },
   });

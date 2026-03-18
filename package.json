@@ -14,14 +14,14 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260317.1",
-    "drizzle-kit": "^0.30.6",
+    "drizzle-kit": "^0.31.10",
     "prettier": "3.8.1",
     "wrangler": "^4.75.0"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
     "better-auth": "^1.5.5",
-    "drizzle-orm": "^0.39.3",
+    "drizzle-orm": "^0.41.0",
     "hono": "^4.12.8"
   }
 }

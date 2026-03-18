@@ -3,6 +3,7 @@
 import { Hono } from 'hono';
 import { getDb } from './lib/db';
 import { getAuth } from './lib/auth';
+import type { Auth } from './lib/auth';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -13,9 +14,11 @@ export interface Env {
   DB: D1Database;
   BETTER_AUTH_SECRET: string;
   BETTER_AUTH_URL: string;
+  BETTER_AUTH_ENABLE_RESET_LOGGING?: boolean;
 }
 
-type AppType = { Bindings: Env };
+type AppVariables = { auth: Auth };
+type AppType = { Bindings: Env; Variables: AppVariables };
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -151,16 +154,27 @@ function handleAssetResponse(response: Response): Response | null {
 const app = new Hono<AppType>();
 
 // ---------------------------------------------------------------------------
+// Shared middleware – initialise auth once per /api/* request
+// ---------------------------------------------------------------------------
+
+app.use('/api/*', async (c, next) => {
+  const db = getDb(c.env.DB);
+  const auth = getAuth(db, {
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+    BETTER_AUTH_ENABLE_RESET_LOGGING: c.env.BETTER_AUTH_ENABLE_RESET_LOGGING,
+  });
+  c.set('auth', auth);
+  await next();
+});
+
+// ---------------------------------------------------------------------------
 // Auth API Routes – mounted BEFORE the static site catch-all
 // These accept POST and GET, so they must not be blocked by the method check.
 // ---------------------------------------------------------------------------
 
 app.on(['POST', 'GET'], '/api/auth/*', async (c) => {
-  const db = getDb(c.env.DB);
-  const auth = getAuth(db, {
-    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
-    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
-  });
+  const auth = c.get('auth');
   return auth.handler(c.req.raw);
 });
 
@@ -169,20 +183,20 @@ app.on(['POST', 'GET'], '/api/auth/*', async (c) => {
 // ---------------------------------------------------------------------------
 
 app.get('/api/me', async (c) => {
-  const db = getDb(c.env.DB);
-  const auth = getAuth(db, {
-    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
-    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
-  });
+  const auth = c.get('auth');
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   if (!session) {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  // Strip sensitive session fields before sending to the browser.
+  const { token, ipAddress, userAgent, ...safeSession } =
+    (session.session as Record<string, unknown>) ?? {};
+
   return c.json({
     user: session.user,
-    session: session.session,
+    session: safeSession,
   });
 });
 
