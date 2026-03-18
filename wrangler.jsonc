@@ -3,10 +3,21 @@
   "name": "hapara-fail",
   "main": "src/worker.ts",
   "compatibility_date": "2025-11-02",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "src/site",
     "binding": "ASSETS",
   },
   // Define Worker environment variables here
   "vars": {},
+  // Provide a real D1 database ID per environment.
+  // Run `wrangler d1 create hapara_fail` to create the database and obtain the ID,
+  // then set D1_DATABASE_ID in your CI/CD secrets or supply it directly here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hapara_fail",
+      "database_id": "${D1_DATABASE_ID}",
+    },
+  ],
 }

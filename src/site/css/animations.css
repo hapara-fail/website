@@ -59,7 +59,7 @@
 }
 
 /* --- Visible State ---
-   Applied by scroll-reveal.js when element enters viewport.
+   Applied by animations.js when element enters viewport.
    ========================================================================== */
 
 .reveal.is-visible {
