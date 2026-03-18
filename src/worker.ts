@@ -118,6 +118,10 @@ function setSecurityHeaders(headers: Headers): void {
   if (!headers.has('Permissions-Policy')) {
     headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
   }
+  // [M-4] Prevents Adobe Flash/PDF cross-domain data reads.
+  if (!headers.has('X-Permitted-Cross-Domain-Policies')) {
+    headers.set('X-Permitted-Cross-Domain-Policies', 'none');
+  }
 }
 
 function applySecurityHeaders(body: BodyInit | null, init: ResponseInit): Response;
@@ -158,6 +162,16 @@ const app = new Hono<AppType>();
 // ---------------------------------------------------------------------------
 
 app.use('/api/*', async (c, next) => {
+  // [H-4] Reject requests early if the auth secret is missing or too short.
+  // A secret shorter than 32 chars is cryptographically weak and allows
+  // session tokens to be forged.
+  if (!c.env.BETTER_AUTH_SECRET || c.env.BETTER_AUTH_SECRET.length < 32) {
+    return c.json(
+      { error: 'Server misconfiguration: invalid auth secret.' },
+      500
+    );
+  }
+
   const db = getDb(c.env.DB);
   const auth = getAuth(db, {
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
@@ -167,6 +181,14 @@ app.use('/api/*', async (c, next) => {
   c.set('auth', auth);
   await next();
 });
+
+// [H-1] Rate limiting for auth endpoints.
+// Configure Cloudflare WAF rules (Dashboard → Security → WAF → Rate Limiting)
+// targeting /api/auth/sign-in/email and /api/auth/sign-up/email:
+//   - Max 10 requests / 60 seconds per IP for sign-in (brute-force protection)
+//   - Max 5 requests / 60 seconds per IP for sign-up (spam prevention)
+//   - Max 3 requests / 300 seconds per IP for forget-password (reset flooding)
+// Workers KV-based rate limiting can be added here when KV is provisioned.
 
 // ---------------------------------------------------------------------------
 // Auth API Routes – mounted BEFORE the static site catch-all
@@ -190,12 +212,23 @@ app.get('/api/me', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
-  // Strip sensitive session fields before sending to the browser.
+  // [M-2] Whitelist only the fields the client actually needs.
+  // Do not spread the full session/user object — new fields added by library
+  // upgrades (e.g., tokens, internal flags) should not be auto-exposed.
   const { token, ipAddress, userAgent, ...safeSession } =
     (session.session as Record<string, unknown>) ?? {};
 
+  const rawUser = session.user as Record<string, unknown>;
+  const safeUser = {
+    id: rawUser.id,
+    name: rawUser.name,
+    email: rawUser.email,
+    image: rawUser.image ?? null,
+    emailVerified: rawUser.emailVerified ?? false,
+  };
+
   return c.json({
-    user: session.user,
+    user: safeUser,
     session: safeSession,
   });
 });

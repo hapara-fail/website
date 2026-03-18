@@ -225,9 +225,9 @@
           redirectTo: window.location.origin + '/reset-password',
         });
 
-        // Always show success to prevent email enumeration
+        // Always show a generic success message to prevent email enumeration.
         showSuccess(
-          'If an account with that email exists, a password reset link has been sent. Check the server console for the reset URL (local dev).'
+          'If an account with that email exists, a reset link has been sent to your inbox.'
         );
         setLoading(submitBtn, false);
         // Keep fields disabled after success
@@ -296,7 +296,8 @@
       try {
         var result = await authFetch('/api/auth/reset-password/' + encodeURIComponent(token), {
           newPassword: password,
-          token: token,
+          // Note: token is already encoded in the URL path above.
+          // Do NOT send it in the body again — avoid duplicating it in logs.
         });
 
         if (result.ok) {
