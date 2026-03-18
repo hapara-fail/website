@@ -1,5 +1,5 @@
 /**
- * Scroll Reveal Engine
+ * Animation Engine
  *
  * Uses IntersectionObserver to reveal `.reveal` elements as they enter the
  * viewport. Supports:

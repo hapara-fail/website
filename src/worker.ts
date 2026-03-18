@@ -1,10 +1,61 @@
 /// <reference types="@cloudflare/workers-types" />
 
+import { Hono } from 'hono';
+import { getDb } from './lib/db';
+import { getAuth } from './lib/auth';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
 export interface Env {
   ASSETS: Fetcher;
+  DB: D1Database;
+  BETTER_AUTH_SECRET: string;
+  BETTER_AUTH_URL: string;
 }
 
+type AppType = { Bindings: Env };
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
 const BLOG_SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const MAX_BLOG_SLUG_LENGTH = 200;
+const BLOG_PATH_PREFIX = '/blog/';
+
+const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
+  ['/bypass', '/services/dns'],
+  ['/dns', '/services/dns'],
+  ['/forms', '/tool/gfu'],
+
+  ['/discord', 'https://discord.gg/KA66dHUF4P'],
+  ['/github', 'https://github.com/hapara-fail'],
+]);
+
+const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
+  ['/', 'index.html'],
+  ['/about', 'about.html'],
+  ['/contribute', 'contribute.html'],
+  ['/terms', 'terms.html'],
+  ['/privacy', 'privacy.html'],
+  ['/services/dns', 'dns-service.html'],
+  ['/tool/gfu', 'gfu-tool.html'],
+  ['/blog', 'blog.html'],
+  ['/license', 'license.html'],
+
+  // Auth pages
+  ['/login', 'login.html'],
+  ['/signup', 'signup.html'],
+  ['/forgot-password', 'forgot-password.html'],
+  ['/reset-password', 'reset-password.html'],
+  ['/dashboard', 'dashboard.html'],
+]);
+
+// ---------------------------------------------------------------------------
+// Helpers (preserved from original worker)
+// ---------------------------------------------------------------------------
 
 /**
  * Build a sanitized set of headers to forward when fetching assets.
@@ -32,32 +83,6 @@ function buildAssetRequestHeaders(request: Request): Headers {
 
   return forwarded;
 }
-
-const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
-  ['/bypass', '/services/dns'],
-  ['/dns', '/services/dns'],
-  ['/forms', '/tool/gfu'],
-
-  ['/discord', 'https://discord.gg/KA66dHUF4P'],
-  ['/github', 'https://github.com/hapara-fail'],
-]);
-
-// Limit blog slugs to 200 characters to keep URLs reasonably short and well within
-// typical browser and server URL length limits. Adjust here if external limits change.
-const MAX_BLOG_SLUG_LENGTH = 200;
-const BLOG_PATH_PREFIX = '/blog/';
-
-const ROUTE_MAP: ReadonlyMap<string, string> = new Map<string, string>([
-  ['/', 'index.html'],
-  ['/about', 'about.html'],
-  ['/contribute', 'contribute.html'],
-  ['/terms', 'terms.html'],
-  ['/privacy', 'privacy.html'],
-  ['/services/dns', 'dns-service.html'],
-  ['/tool/gfu', 'gfu-tool.html'],
-  ['/blog', 'blog.html'],
-  ['/license', 'license.html'],
-]);
 
 function normalizePath(pathname: string): string {
   if (pathname === '/') return '/';
@@ -119,98 +144,145 @@ function handleAssetResponse(response: Response): Response | null {
   return null;
 }
 
-export default {
-  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
-    const url = new URL(request.url);
-    const normalizedPath = normalizePath(url.pathname);
-    const method = request.method.toUpperCase();
+// ---------------------------------------------------------------------------
+// Hono App
+// ---------------------------------------------------------------------------
 
-    // Only allow safe methods for static site
-    if (method !== 'GET' && method !== 'HEAD') {
-      return applySecurityHeaders('Method Not Allowed', {
-        status: 405,
-        headers: {
-          Allow: 'GET, HEAD',
-          'Content-Type': 'text/plain; charset=utf-8',
-        },
-      });
-    }
+const app = new Hono<AppType>();
 
-    // Check if this is a redirect
-    const redirectTarget = REDIRECT_MAP.get(normalizedPath);
-    if (redirectTarget) {
-      return applySecurityHeaders(null, {
-        status: 301,
-        headers: {
-          Location: redirectTarget,
-        },
-      });
-    }
+// ---------------------------------------------------------------------------
+// Auth API Routes – mounted BEFORE the static site catch-all
+// These accept POST and GET, so they must not be blocked by the method check.
+// ---------------------------------------------------------------------------
 
-    // Check if this is a mapped route
-    let htmlFilename = ROUTE_MAP.get(normalizedPath);
+app.on(['POST', 'GET'], '/api/auth/*', async (c) => {
+  const db = getDb(c.env.DB);
+  const auth = getAuth(db, {
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+  });
+  return auth.handler(c.req.raw);
+});
 
-    // /blog/[slug] -> blog-[slug].html
-    if (!htmlFilename && normalizedPath.startsWith(BLOG_PATH_PREFIX)) {
-      const slug = normalizedPath.slice(BLOG_PATH_PREFIX.length);
-      if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && BLOG_SLUG_REGEX.test(slug)) {
-        htmlFilename = `blog-${slug}.html`;
-      }
-    }
+// ---------------------------------------------------------------------------
+// Protected API route – /api/me
+// ---------------------------------------------------------------------------
 
-    // If we have a mapped HTML file, fetch it from assets
-    if (htmlFilename) {
-      const assetUrl = new URL(url);
-      assetUrl.pathname = `/${htmlFilename}`;
-      const response = await env.ASSETS.fetch(assetUrl, {
-        method: request.method,
-        headers: buildAssetRequestHeaders(request),
-      });
-      const mappedAssetResponse = handleAssetResponse(response);
-      if (mappedAssetResponse) return mappedAssetResponse;
-      // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
-    } else {
-      // For static assets (CSS, JS, images, etc.), pass through with sanitized headers
-      const assetRequest = new Request(request.url, {
-        method: request.method,
-        headers: buildAssetRequestHeaders(request),
-      });
-      const response = await env.ASSETS.fetch(assetRequest);
-      const staticAssetResponse = handleAssetResponse(response);
-      if (staticAssetResponse) return staticAssetResponse;
-    }
+app.get('/api/me', async (c) => {
+  const db = getDb(c.env.DB);
+  const auth = getAuth(db, {
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+  });
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
-    // 404 fallback - fetch 404.html
-    const notFoundUrl = new URL(url);
-    notFoundUrl.pathname = '/404.html';
+  if (!session) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
 
-    const notFoundResponse = await env.ASSETS.fetch(notFoundUrl, {
-      method: request.method,
-      headers: buildAssetRequestHeaders(request),
-    });
+  return c.json({
+    user: session.user,
+    session: session.session,
+  });
+});
 
-    const processedNotFoundResponse = handleAssetResponse(notFoundResponse);
-    // Only short-circuit 304 Not Modified responses; allow 200 OK to be rewrapped as 404 below.
-    if (processedNotFoundResponse && processedNotFoundResponse.status === 304) {
-      return processedNotFoundResponse;
-    }
+// ---------------------------------------------------------------------------
+// Static Site – All remaining routes (preserved original worker logic)
+// ---------------------------------------------------------------------------
 
-    // For successful responses, wrap in 404 status
-    if (notFoundResponse.ok) {
-      const resp = new Response(notFoundResponse.body, {
-        status: 404,
-        headers: notFoundResponse.headers,
-      });
-      return applySecurityHeaders(resp);
-    }
+app.all('*', async (c) => {
+  const request = c.req.raw;
+  const url = new URL(request.url);
+  const normalizedPath = normalizePath(url.pathname);
+  const method = request.method.toUpperCase();
 
-    // Ultimate fallback
-    const resp = new Response('Not Found', {
-      status: 404,
+  // Only allow safe methods for static site routes
+  if (method !== 'GET' && method !== 'HEAD') {
+    return applySecurityHeaders('Method Not Allowed', {
+      status: 405,
       headers: {
+        Allow: 'GET, HEAD',
         'Content-Type': 'text/plain; charset=utf-8',
       },
     });
+  }
+
+  // Check if this is a redirect
+  const redirectTarget = REDIRECT_MAP.get(normalizedPath);
+  if (redirectTarget) {
+    return applySecurityHeaders(null, {
+      status: 301,
+      headers: {
+        Location: redirectTarget,
+      },
+    });
+  }
+
+  // Check if this is a mapped route
+  let htmlFilename = ROUTE_MAP.get(normalizedPath);
+
+  // /blog/[slug] -> blog-[slug].html
+  if (!htmlFilename && normalizedPath.startsWith(BLOG_PATH_PREFIX)) {
+    const slug = normalizedPath.slice(BLOG_PATH_PREFIX.length);
+    if (slug && slug.length <= MAX_BLOG_SLUG_LENGTH && BLOG_SLUG_REGEX.test(slug)) {
+      htmlFilename = `blog-${slug}.html`;
+    }
+  }
+
+  // If we have a mapped HTML file, fetch it from assets
+  if (htmlFilename) {
+    const assetUrl = new URL(url);
+    assetUrl.pathname = `/${htmlFilename}`;
+    const response = await c.env.ASSETS.fetch(assetUrl, {
+      method: request.method,
+      headers: buildAssetRequestHeaders(request),
+    });
+    const mappedAssetResponse = handleAssetResponse(response);
+    if (mappedAssetResponse) return mappedAssetResponse;
+    // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
+  } else {
+    // For static assets (CSS, JS, images, etc.), pass through with sanitized headers
+    const assetRequest = new Request(request.url, {
+      method: request.method,
+      headers: buildAssetRequestHeaders(request),
+    });
+    const response = await c.env.ASSETS.fetch(assetRequest);
+    const staticAssetResponse = handleAssetResponse(response);
+    if (staticAssetResponse) return staticAssetResponse;
+  }
+
+  // 404 fallback - fetch 404.html
+  const notFoundUrl = new URL(url);
+  notFoundUrl.pathname = '/404.html';
+
+  const notFoundResponse = await c.env.ASSETS.fetch(notFoundUrl, {
+    method: request.method,
+    headers: buildAssetRequestHeaders(request),
+  });
+
+  const processedNotFoundResponse = handleAssetResponse(notFoundResponse);
+  // Only short-circuit 304 Not Modified responses; allow 200 OK to be rewrapped as 404 below.
+  if (processedNotFoundResponse && processedNotFoundResponse.status === 304) {
+    return processedNotFoundResponse;
+  }
+
+  // For successful responses, wrap in 404 status
+  if (notFoundResponse.ok) {
+    const resp = new Response(notFoundResponse.body, {
+      status: 404,
+      headers: notFoundResponse.headers,
+    });
     return applySecurityHeaders(resp);
-  },
-} satisfies ExportedHandler<Env>;
+  }
+
+  // Ultimate fallback
+  const resp = new Response('Not Found', {
+    status: 404,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+    },
+  });
+  return applySecurityHeaders(resp);
+});
+
+export default app;

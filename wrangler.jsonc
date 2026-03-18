@@ -3,10 +3,18 @@
   "name": "hapara-fail",
   "main": "src/worker.ts",
   "compatibility_date": "2025-11-02",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "src/site",
     "binding": "ASSETS",
   },
   // Define Worker environment variables here
   "vars": {},
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hapara_fail",
+      "database_id": "PLACEHOLDER_RUN_WRANGLER_D1_CREATE",
+    },
+  ],
 }
