@@ -76,7 +76,7 @@ function setSecurityHeaders(headers: Headers): void {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
       "font-src 'self' https://fonts.gstatic.com;",
       "script-src 'self';",
-      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/;",
+      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
       "form-action 'self' https://docs.google.com;",
@@ -99,12 +99,13 @@ function applySecurityHeaders(
   init?: ResponseInit
 ): Response {
   if (bodyOrResponse instanceof Response) {
-    const headers = new Headers(bodyOrResponse.headers);
+    const cloned = bodyOrResponse.clone();
+    const headers = new Headers(cloned.headers);
     setSecurityHeaders(headers);
-    if (bodyOrResponse.status === 304) {
+    if (cloned.status === 304) {
       return new Response(null, { status: 304, headers });
     }
-    return new Response(bodyOrResponse.body, { status: bodyOrResponse.status, headers });
+    return new Response(cloned.body, { status: cloned.status, headers });
   }
   const resp = new Response(bodyOrResponse, init);
   setSecurityHeaders(resp.headers);
