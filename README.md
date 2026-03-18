@@ -15,7 +15,7 @@ hapara.fail is dedicated to exposing the pervasive nature of student surveillanc
 This iteration of hapara.fail delivers a fast, modern, and privacy-respecting platform featuring:
 
 - **Educational Content:** In-depth blog posts and technical write-ups explaining how edtech surveillance works.
-- **Privacy Tools:** Interactive tools designed to bypass certain restrictions or reveal hidden information (e.g., DNS Service, Google Form Unlocker, WiFi Password Extractor).
+- **Privacy Tools:** Interactive tools designed to bypass certain restrictions or reveal hidden information (e.g., DNS Service, Google Form Unlocker).
 - **Community Focus:** Resources built by and for the student privacy community.
 
 ---
@@ -71,7 +71,6 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 - `/privacy` - Privacy Policy
 - `/services/dns` - DNS Service
 - `/tool/gfu` - Google Form Unlocker Tool
-- `/tool/wifi` - WiFi Password Extractor Tool
 - `/blog` - Blog index
 - `/blog/[slug]` - Individual blog posts (e.g., `/blog/dns`, `/blog/google-form-unlocker`, etc.)
 - `/license` - License information
@@ -81,7 +80,6 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 - `/bypass` → `/services/dns`
 - `/dns` → `/services/dns`
 - `/forms` → `/tool/gfu`
-- `/wifi` → `/tool/wifi`
 - `/discord` → [Discord Invite](https://www.hapara.fail/discord)
 - `/github` → [GitHub Profile](https://github.com/hapara-fail)
 
