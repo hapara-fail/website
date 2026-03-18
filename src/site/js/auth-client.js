@@ -220,7 +220,7 @@
       }
 
       try {
-        var result = await authFetch('/api/auth/forget-password', {
+        await authFetch('/api/auth/forget-password', {
           email: email,
           redirectTo: window.location.origin + '/reset-password',
         });
