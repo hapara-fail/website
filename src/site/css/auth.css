@@ -129,6 +129,13 @@
   cursor: not-allowed;
 }
 
+/* Turnstile widget */
+.cf-turnstile {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
 /* Submit button */
 .auth-submit {
   display: flex;

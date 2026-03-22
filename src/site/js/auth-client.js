@@ -62,10 +62,10 @@
     });
   }
 
-  async function authFetch(url, body) {
+  async function authFetch(url, body, extraHeaders = {}) {
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...extraHeaders },
       credentials: 'include',
       body: JSON.stringify(body),
     });
@@ -105,6 +105,7 @@
 
       var email = form.querySelector('#email').value.trim();
       var password = form.querySelector('#password').value;
+      var turnstileResponse = form.querySelector('[name="cf-turnstile-response"]')?.value;
 
       if (!email || !password) {
         showError('Please fill in all fields.');
@@ -113,11 +114,16 @@
         return;
       }
 
+      var extraHeaders = {};
+      if (turnstileResponse) {
+        extraHeaders['x-captcha-response'] = turnstileResponse;
+      }
+
       try {
         var result = await authFetch('/api/auth/sign-in/email', {
           email: email,
           password: password,
-        });
+        }, extraHeaders);
 
         if (result.ok) {
           window.location.href = '/dashboard';
@@ -152,6 +158,7 @@
       var email = form.querySelector('#email').value.trim();
       var password = form.querySelector('#password').value;
       var confirmPassword = form.querySelector('#confirm-password').value;
+      var turnstileResponse = form.querySelector('[name="cf-turnstile-response"]')?.value;
 
       if (!name || !email || !password || !confirmPassword) {
         showError('Please fill in all fields.');
@@ -174,12 +181,17 @@
         return;
       }
 
+      var extraHeaders = {};
+      if (turnstileResponse) {
+        extraHeaders['x-captcha-response'] = turnstileResponse;
+      }
+
       try {
         var result = await authFetch('/api/auth/sign-up/email', {
           name: name,
           email: email,
           password: password,
-        });
+        }, extraHeaders);
 
         if (result.ok) {
           window.location.href = '/dashboard';
@@ -211,6 +223,7 @@
       setFieldsDisabled(form, true);
 
       var email = form.querySelector('#email').value.trim();
+      var turnstileResponse = form.querySelector('[name="cf-turnstile-response"]')?.value;
 
       if (!email) {
         showError('Please enter your email address.');
@@ -219,11 +232,16 @@
         return;
       }
 
+      var extraHeaders = {};
+      if (turnstileResponse) {
+        extraHeaders['x-captcha-response'] = turnstileResponse;
+      }
+
       try {
         await authFetch('/api/auth/forget-password', {
           email: email,
           redirectTo: window.location.origin + '/reset-password',
-        });
+        }, extraHeaders);
 
         // Always show a generic success message to prevent email enumeration.
         showSuccess(
@@ -324,8 +342,8 @@
     var content = $('#dashboard-content');
     if (!content) return;
 
-    // Fetch session
-    fetch('/api/auth/get-session', {
+    // Fetch current user via safe endpoint
+    fetch('/api/me', {
       method: 'GET',
       credentials: 'include',
     })
@@ -334,9 +352,9 @@
         return res.json();
       })
       .then(function (data) {
-        if (!data || !data.user) throw new Error('No user');
+        var user = data && data.user ? data.user : data;
+        if (!user) throw new Error('No user');
 
-        var user = data.user;
         var avatarEl = $('#user-avatar');
         var nameEl = $('#user-name');
         var emailEl = $('#user-email');

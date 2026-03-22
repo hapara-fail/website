@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/universal.css" />
     <link rel="stylesheet" href="/css/auth.css" />
     <link rel="stylesheet" href="/css/animations.css" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
 
   <body>
@@ -54,6 +55,9 @@
                 <a href="/forgot-password">Forgot password?</a>
               </div>
             </div>
+            
+            <div class="cf-turnstile" data-sitekey="TURNSTILE_SITE_KEY_PLACEHOLDER"></div>
+            
             <button type="submit" class="auth-submit" id="submit-btn">
               <span class="auth-spinner"></span>
               <span class="auth-submit-text">Log In</span>

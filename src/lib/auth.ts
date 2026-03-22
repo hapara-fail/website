@@ -1,5 +1,9 @@
+// @ts-ignore - IDE may fail to resolve better-auth with Bundler resolution
 import { betterAuth } from 'better-auth';
+// @ts-ignore
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+// @ts-ignore
+import { captcha } from 'better-auth/plugins';
 import type { AppDatabase } from './db';
 import * as schema from './drizzle-schema';
 
@@ -11,6 +15,7 @@ export interface AuthEnv {
    * Enable only in local development; leave undefined/false in production.
    */
   BETTER_AUTH_ENABLE_RESET_LOGGING?: boolean;
+  TURNSTILE_SECRET_KEY: string;
 }
 
 /** Allowed hostnames for password-reset redirect links (H-2). */
@@ -42,6 +47,12 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
       'https://www.hapara.fail',
       'https://hapara.fail',
     ],
+    plugins: [
+      captcha({
+        provider: 'cloudflare-turnstile',
+        secretKey: env.TURNSTILE_SECRET_KEY,
+      }),
+    ],
 
     // ── Email & Password ──────────────────────────────────────────────────
 
@@ -52,7 +63,7 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
       // Prevents account squatting and throwaway registrations.
       requireEmailVerification: true,
 
-      sendResetPassword: async ({ user, url, token }) => {
+      sendResetPassword: async ({ user, url, token }: { user: any; url: string; token: string }) => {
         // [H-2] Validate the redirect origin before emailing the reset link.
         // Prevents open-redirect attacks that tunnel the token to an attacker.
         try {
@@ -83,7 +94,7 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
 
     emailVerification: {
       // [C-1] Stub: replace with Resend, Mailchannels, or similar before launch.
-      sendVerificationEmail: async ({ user, url }) => {
+      sendVerificationEmail: async ({ user, url }: { user: any; url: string }) => {
         if (env.BETTER_AUTH_ENABLE_RESET_LOGGING) {
           console.log(`\n📧 VERIFY EMAIL for ${user.email}\n   URL: ${url}\n`);
         } else {
@@ -115,7 +126,7 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
     databaseHooks: {
       user: {
         create: {
-          before: async (user) => {
+          before: async (user: any) => {
             if (
               user.image !== undefined &&
               user.image !== null &&
@@ -130,7 +141,7 @@ export function getAuth(db: AppDatabase, env: AuthEnv) {
           },
         },
         update: {
-          before: async (user) => {
+          before: async (user: any) => {
             if (
               'image' in user &&
               user.image !== undefined &&

@@ -4,7 +4,6 @@
 
 -- Session indexes
 CREATE INDEX IF NOT EXISTS idx_session_userId ON "session"("userId");
-CREATE INDEX IF NOT EXISTS idx_session_token  ON "session"("token");
 
 -- Account indexes
 CREATE INDEX IF NOT EXISTS idx_account_userId ON "account"("userId");

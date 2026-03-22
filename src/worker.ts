@@ -15,6 +15,8 @@ export interface Env {
   BETTER_AUTH_SECRET: string;
   BETTER_AUTH_URL: string;
   BETTER_AUTH_ENABLE_RESET_LOGGING?: boolean;
+  TURNSTILE_SITE_KEY: string;
+  TURNSTILE_SECRET_KEY: string;
 }
 
 type AppVariables = { auth: Auth };
@@ -103,7 +105,10 @@ function setSecurityHeaders(headers: Headers): void {
       "img-src 'self' data:;",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
       "font-src 'self' https://fonts.gstatic.com;",
-      "script-src 'self';",
+      // Cloudflare Turnstile requires its own origin for scripts and the
+      // challenge iframe. Without this, browsers silently block the widget.
+      "script-src 'self' https://challenges.cloudflare.com;",
+      "frame-src https://challenges.cloudflare.com;",
       "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
@@ -177,6 +182,7 @@ app.use('/api/*', async (c, next) => {
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
     BETTER_AUTH_ENABLE_RESET_LOGGING: c.env.BETTER_AUTH_ENABLE_RESET_LOGGING,
+    TURNSTILE_SECRET_KEY: c.env.TURNSTILE_SECRET_KEY,
   });
   c.set('auth', auth);
   await next();
@@ -284,7 +290,19 @@ app.all('*', async (c) => {
       method: request.method,
       headers: buildAssetRequestHeaders(request),
     });
-    const mappedAssetResponse = handleAssetResponse(response);
+    let mappedAssetResponse = handleAssetResponse(response);
+    
+    // Inject Turnstile Site Key into auth pages
+    if (mappedAssetResponse && ['login.html', 'signup.html', 'forgot-password.html'].includes(htmlFilename)) {
+      mappedAssetResponse = new HTMLRewriter()
+        .on('[data-sitekey="TURNSTILE_SITE_KEY_PLACEHOLDER"]', {
+          element(element) {
+            element.setAttribute('data-sitekey', c.env.TURNSTILE_SITE_KEY || '');
+          }
+        })
+        .transform(mappedAssetResponse);
+    }
+
     if (mappedAssetResponse) return mappedAssetResponse;
     // For mapped HTML routes, if the asset fetch fails, fall through to 404 handling below.
   } else {
