@@ -72,6 +72,8 @@ function setSecurityHeaders(headers: Headers): void {
   if (!headers.has('Content-Security-Policy')) {
     const cspDirectives = [
       "default-src 'self';",
+      "style-src 'self' 'unsafe-inline';",
+      "font-src 'self';",
       "img-src 'self' data:;",
       "script-src 'self';",
       "connect-src 'self' https://monitor.dns.hapara.fail https://raw.githubusercontent.com;",
