@@ -1083,4 +1083,60 @@ document.addEventListener('DOMContentLoaded', () => {
     showLoadingSkeleton();
     fetchServices();
   }
+
+  // --- DNS STATUS INLINE INDICATOR ---
+  async function checkSecureDNS() {
+    const start = Date.now();
+    try {
+      const res = await fetch('https://probe.dns.hapara.fail/dns-probe', {
+        signal: AbortSignal.timeout(2500),
+        cache: 'no-store',
+      });
+
+      // The probe resolved and returned a response — our DNS is NOT blocking it
+      return { usingYourDNS: false };
+    } catch (err) {
+      const elapsed = Date.now() - start;
+
+      // Our timeout fired (AbortError): the probe didn't resolve within 2.5s.
+      // This is a strong signal that our DNS blocked the hostname (NXDOMAIN hangs
+      // rather than outright failing on some network stacks / captive portals).
+      if (err.name === 'AbortError' || err.name === 'TimeoutError') {
+        return { usingYourDNS: true };
+      }
+
+      // NXDOMAIN / DNS resolution failure is almost instant (< ~300ms).
+      // Anything faster than 300ms is almost certainly a DNS-level block.
+      if (elapsed < 300) {
+        return { usingYourDNS: true };
+      }
+
+      // Slower errors (offline, captive portal, server error, etc.) are ambiguous.
+      // Give benefit of the doubt — don't falsely report "not using DNS".
+      return { usingYourDNS: true };
+    }
+  }
+
+  const dnsStatusInline = document.getElementById('dns-status-inline');
+  const dnsStatusIcon = document.getElementById('dns-status-icon');
+  const dnsStatusText = document.getElementById('dns-status-text');
+
+  if (dnsStatusInline && dnsStatusIcon && dnsStatusText) {
+    checkSecureDNS().then((res) => {
+      if (res.usingYourDNS) {
+        dnsStatusInline.classList.add('using-dns');
+        dnsStatusIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>';
+        dnsStatusText.textContent = 'Using hapara.fail DNS';
+      } else {
+        dnsStatusInline.classList.add('not-using-dns');
+        dnsStatusIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+        dnsStatusText.textContent = 'Not using hapara.fail DNS';
+      }
+
+      // Fade in
+      requestAnimationFrame(() => {
+        dnsStatusInline.classList.add('is-visible');
+      });
+    });
+  }
 });

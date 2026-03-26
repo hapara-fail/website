@@ -34,7 +34,6 @@ const REDIRECT_MAP: ReadonlyMap<string, string> = new Map<string, string>([
   ['/bypass', '/services/dns'],
   ['/dns', '/services/dns'],
   ['/forms', '/tool/gfu'],
-
   ['/discord', 'https://discord.gg/KA66dHUF4P'],
   ['/github', 'https://github.com/hapara-fail'],
 ]);
@@ -109,7 +108,7 @@ function setSecurityHeaders(headers: Headers): void {
       // challenge iframe. Without this, browsers silently block the widget.
       "script-src 'self' https://challenges.cloudflare.com;",
       "frame-src https://challenges.cloudflare.com;",
-      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
+      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com https://probe.dns.hapara.fail;",
       "object-src 'none';",
       "base-uri 'self';",
       "form-action 'self' https://docs.google.com;",
