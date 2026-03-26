@@ -3,10 +3,32 @@
   "name": "hapara-fail",
   "main": "src/worker.ts",
   "compatibility_date": "2025-11-02",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "src/site",
     "binding": "ASSETS",
+    // Run the Worker script first for auth pages (so HTMLRewriter can inject the
+    // Turnstile site key) and for all API routes. Static assets (CSS, JS, images)
+    // continue to be served directly from the asset store for best performance.
+    "run_worker_first": ["/login", "/signup", "/forgot-password", "/reset-password", "/dashboard", "/api/*"],
   },
-  // Define Worker environment variables here
-  "vars": {},
+  // Define Worker environment variables here.
+  // Secrets (BETTER_AUTH_SECRET, TURNSTILE_SECRET_KEY) must be set via
+  // `wrangler secret put` or the Cloudflare dashboard for production.
+  // For local dev, copy .dev.vars.example to .dev.vars and fill in values.
+  "vars": {
+    // Turnstile site key is public – safe to commit for non-production environments.
+    // Override with the real site key for production via wrangler secret or dashboard vars.
+    "TURNSTILE_SITE_KEY": "1x00000000000000000000AA",
+  },
+  // Provide a real D1 database ID per environment.
+  // Run `wrangler d1 create hapara_fail` to create the database and obtain the ID,
+  // then set D1_DATABASE_ID in your CI/CD secrets or supply it directly here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hapara_fail",
+      "database_id": "${D1_DATABASE_ID}",
+    },
+  ],
 }

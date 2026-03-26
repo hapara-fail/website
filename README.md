@@ -1,4 +1,4 @@
-# hapara.fail v2
+# hapara.fail v2.1
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hapara-fail/website)
 

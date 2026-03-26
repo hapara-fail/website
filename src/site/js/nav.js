@@ -688,19 +688,24 @@ function buildFooterMarkup() {
       const currentScrollY = window.scrollY;
       const scrollDifference = Math.abs(currentScrollY - lastScrollY);
 
+      const extraHeaders = document.querySelectorAll('.header-sync');
+
       // Always show header at the very top
       if (currentScrollY <= scrollThreshold) {
         header.classList.remove('header-hidden');
+        extraHeaders.forEach(el => el.classList.remove('header-hidden'));
       }
       // Hide when scrolling down fast (but not if focused element is in header)
       else if (currentScrollY > lastScrollY && scrollDifference > scrollSpeed) {
         if (!header.contains(document.activeElement)) {
           header.classList.add('header-hidden');
+          extraHeaders.forEach(el => el.classList.add('header-hidden'));
         }
       }
       // Show when scrolling up fast
       else if (currentScrollY < lastScrollY && scrollDifference > scrollSpeed) {
         header.classList.remove('header-hidden');
+        extraHeaders.forEach(el => el.classList.remove('header-hidden'));
       }
 
       lastScrollY = currentScrollY;

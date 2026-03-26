@@ -89,6 +89,7 @@
       </button>
     </header>
 
+
     <div class="nav-overlay" data-nav-overlay hidden></div>
     <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
 
@@ -108,6 +109,10 @@
           >
             View Addresses
           </button>
+          <div id="dns-status-inline" class="dns-status-inline" aria-live="polite">
+            <span id="dns-status-icon" class="dns-status-inline-icon"></span>
+            <span id="dns-status-text" class="dns-status-inline-text">Checking DNS…</span>
+          </div>
         </div>
       </section>
 
@@ -841,7 +846,7 @@
     <script src="/js/version-data.js" defer></script>
     <script src="/js/nav.js" defer></script>
     <script src="/js/dns-service.js"></script>
-    <script src="/js/scroll-reveal.js"></script>
+    <script src="/js/animations.js"></script>
     <script src="/js/cookie-notice.js"></script>
   </body>
 </html>

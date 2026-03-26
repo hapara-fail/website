@@ -3,56 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>404 Not Found | hapara.fail</title>
-    <meta
-      name="description"
-      content="The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance."
-    />
-    <link rel="canonical" href="https://www.hapara.fail/404" />
+    <title>Sign Up | hapara.fail</title>
+    <meta name="description" content="Create a hapara.fail account." />
     <meta name="robots" content="noindex, nofollow" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="hapara.fail" />
-    <meta property="og:title" content="404 Not Found | hapara.fail" />
-    <meta
-      property="og:description"
-      content="The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance."
-    />
-    <meta property="og:url" content="https://www.hapara.fail/404" />
-    <meta property="og:image" content="https://www.hapara.fail/images/og-twitter.png" />
-    <meta property="og:image:alt" content="hapara.fail wordmark on dark background." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="404 Not Found | hapara.fail" />
-    <meta
-      name="twitter:description"
-      content="The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance."
-    />
-    <meta name="twitter:image" content="https://www.hapara.fail/images/og-twitter.png" />
-    <meta name="twitter:image:alt" content="hapara.fail wordmark on dark background." />
     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     <link rel="shortcut icon" href="/images/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="hapara.fail" />
-    <link rel="manifest" href="/images/site.webmanifest" />
     <link rel="stylesheet" href="/fonts/poppins/poppins.css" />
     <link rel="stylesheet" href="/css/universal.css" />
-    <link rel="stylesheet" href="/css/404.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
     <link rel="stylesheet" href="/css/animations.css" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "404 Not Found | hapara.fail",
-        "url": "https://www.hapara.fail/404",
-        "description": "The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance.",
-        "isPartOf": {
-          "@type": "WebSite",
-          "name": "hapara.fail",
-          "url": "https://www.hapara.fail/"
-        }
-      }
-    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
 
   <body>
@@ -75,31 +37,43 @@
     <nav class="nav-drawer" id="site-drawer" aria-label="Main menu" data-nav-drawer hidden></nav>
 
     <main id="main-content">
-      <section class="error-hero">
+      <section class="auth-page">
         <div class="parallax-bg"></div>
-        <div class="error-card reveal reveal-up">
-          <h1 class="error-code gradient-text">404</h1>
-          <h2 class="error-title">Page Not Found</h2>
-          <p class="error-description">
-            This page doesn't exist. Unlike edtech surveillance, we don't log what you were looking
-            for or sell your search history to data brokers.
-          </p>
-          <a href="/" class="cta-button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-              />
-            </svg>
-            Go Home
-          </a>
+        <div class="auth-card reveal reveal-up">
+          <h1 class="gradient-text">Create Account</h1>
+          <p class="auth-subtitle">Join the fight for student privacy</p>
+
+          <form id="signup-form" class="auth-form" novalidate>
+            <div class="auth-field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name" />
+            </div>
+            <div class="auth-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+            </div>
+            <div class="auth-field">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password" />
+            </div>
+            <div class="auth-field">
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" name="confirmPassword" placeholder="••••••••" required minlength="8" autocomplete="new-password" />
+            </div>
+            
+            <div class="cf-turnstile" data-sitekey="TURNSTILE_SITE_KEY_PLACEHOLDER"></div>
+            
+            <button type="submit" class="auth-submit" id="submit-btn">
+              <span class="auth-spinner"></span>
+              <span class="auth-submit-text">Sign Up</span>
+            </button>
+          </form>
+
+          <div id="auth-error" class="auth-message auth-message--error" role="alert"></div>
+
+          <div class="auth-links">
+            <a href="/login" class="auth-link-primary">Already have an account? Log in</a>
+          </div>
         </div>
       </section>
     </main>
@@ -150,7 +124,8 @@
 
     <script src="/js/version-data.js" defer></script>
     <script src="/js/nav.js" defer></script>
-    <script src="/js/animations.js"></script>
-    <script src="/js/cookie-notice.js"></script>
+    <script src="/js/auth-client.js" defer></script>
+    <script src="/js/cookie-notice.js" defer></script>
+    <script src="/js/animations.js" defer></script>
   </body>
 </html>

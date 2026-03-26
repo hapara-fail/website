@@ -1,6 +1,6 @@
 {
   "name": "hapara-fail",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "format": "prettier --write .",
@@ -8,14 +8,20 @@
     "build": "pnpm run generate-version",
     "dev": "pnpm run build && wrangler dev",
     "preview": "pnpm run build && wrangler dev --remote",
-    "deploy": "pnpm run build && wrangler deploy"
+    "deploy": "pnpm run build && wrangler deploy",
+    "db:migrate:local": "wrangler d1 execute hapara_fail --local --file=migrations/0001_init_auth.sql && wrangler d1 execute hapara_fail --local --file=migrations/0002_add_indexes.sql",
+    "db:migrate:remote": "wrangler d1 execute hapara_fail --remote --file=migrations/0001_init_auth.sql && wrangler d1 execute hapara_fail --remote --file=migrations/0002_add_indexes.sql"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260317.1",
+    "drizzle-kit": "0.31.10",
     "prettier": "3.8.1",
-    "wrangler": "^4.75.0"
+    "wrangler": "^4.77.0"
   },
   "dependencies": {
-    "@fontsource/poppins": "^5.2.7"
+    "@fontsource/poppins": "^5.2.7",
+    "better-auth": "^1.5.6",
+    "drizzle-orm": "0.41.0",
+    "hono": "^4.12.9"
   }
 }

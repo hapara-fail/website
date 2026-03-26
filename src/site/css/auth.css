@@ -1,0 +1,316 @@
+/* --- Auth Pages: Shared Styles --- */
+
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 100px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page .parallax-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200vw;
+  height: 200vh;
+  z-index: -1;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--accent-1) 0%,
+    var(--accent-2) 30%,
+    #0a091a 60%,
+    var(--accent-1) 100%
+  );
+  animation: authRotateBg 40s linear infinite;
+  filter: blur(150px);
+  opacity: 0.25;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes authRotateBg {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-page .parallax-bg {
+    animation: none !important;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 44px 36px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 500px) {
+  .auth-card {
+    padding: 32px 22px;
+    border-radius: 16px;
+  }
+}
+
+.auth-card h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.auth-card .auth-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* Form layout */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  outline: none;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.auth-field input::placeholder {
+  color: rgba(160, 160, 204, 0.5);
+}
+
+.auth-field input:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px rgba(82, 74, 242, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.auth-field input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Turnstile widget */
+.cf-turnstile {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+/* Submit button */
+.auth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  margin-top: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(82, 74, 242, 0.35);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spinner */
+.auth-spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: authSpin 0.6s linear infinite;
+}
+
+.auth-submit.is-loading .auth-spinner {
+  display: inline-block;
+}
+
+.auth-submit.is-loading .auth-submit-text {
+  opacity: 0.7;
+}
+
+@keyframes authSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error and success messages */
+.auth-message {
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: none;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.auth-message.is-visible {
+  display: block;
+}
+
+.auth-message--error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.auth-message--success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+/* Links */
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.auth-links a {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+  color: var(--accent-2);
+}
+
+.auth-links .auth-link-primary {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.auth-links .auth-link-primary:hover {
+  color: var(--accent-2);
+}
+
+/* Dashboard-specific */
+.dashboard-card {
+  text-align: center;
+}
+
+.dashboard-card .user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.dashboard-card .user-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dashboard-card .user-email {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.auth-submit--outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.auth-submit--outline:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+/* Password hint */
+.auth-field-hint {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.auth-field-hint a {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-field-hint a:hover {
+  color: var(--accent-2);
+}
