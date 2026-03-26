@@ -73,10 +73,8 @@ function setSecurityHeaders(headers: Headers): void {
     const cspDirectives = [
       "default-src 'self';",
       "img-src 'self' data:;",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-      "font-src 'self' https://fonts.gstatic.com;",
       "script-src 'self';",
-      "connect-src 'self' https://dns-monitor.a9x.workers.dev https://raw.githubusercontent.com;",
+      "connect-src 'self' https://monitor.dns.hapara.fail https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
       "form-action 'self' https://docs.google.com;",

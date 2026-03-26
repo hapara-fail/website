@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const monitorUrl = 'https://dns-monitor.a9x.workers.dev/';
+      const monitorUrl = 'https://monitor.dns.hapara.fail/';
       const response = await fetch(monitorUrl, {
         signal: controller.signal,
       });
