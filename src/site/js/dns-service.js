@@ -309,8 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const checkDnsStatus = async () => {
-    const statusTag = document.getElementById('dns-status-tag');
+  const checkServerStatus = async (monitorUrl, statusTagId) => {
+    const statusTag = document.getElementById(statusTagId);
     if (!statusTag) return;
 
     const statusText = statusTag.querySelector('.status-text');
@@ -323,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const monitorUrl = 'https://monitor.dns.hapara.fail/';
       const response = await fetch(monitorUrl, {
         signal: controller.signal,
       });
@@ -351,10 +350,15 @@ document.addEventListener('DOMContentLoaded', () => {
       statusTag.classList.add('status-up');
       if (statusText) statusText.textContent = 'Operational';
     } catch (error) {
-      console.error('DNS Status Check Failed:', error);
+      console.error('DNS Status Check Failed (' + statusTagId + '):', error);
       statusTag.classList.add('status-down');
       if (statusText) statusText.textContent = 'Service Issue';
     }
+  };
+
+  const checkDnsStatus = () => {
+    checkServerStatus('https://monitor.dns.hapara.fail/', 'dns-status-tag');
+    checkServerStatus('https://monitor.dns2.hapara.fail/', 'dns2-status-tag');
   };
 
   const onModalKeyDown = (e) => {

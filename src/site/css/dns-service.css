@@ -367,7 +367,9 @@
   border-radius: 16px;
   padding: 30px;
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
   position: relative;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   transform: scale(0.95);
@@ -624,6 +626,30 @@
 
 .dns-info-group {
   margin-bottom: 20px;
+}
+
+.dns-info-group:last-child {
+  margin-bottom: 0;
+}
+
+/* DNS Server Blocks */
+.dns-server-block {
+  padding: 0;
+}
+
+.dns-server-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.dns-server-divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 20px 0;
 }
 
 .dns-info-group label {

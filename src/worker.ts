@@ -76,7 +76,7 @@ function setSecurityHeaders(headers: Headers): void {
       "font-src 'self';",
       "img-src 'self' data:;",
       "script-src 'self';",
-      "connect-src 'self' https://monitor.dns.hapara.fail https://raw.githubusercontent.com;",
+      "connect-src 'self' https://monitor.dns.hapara.fail https://monitor.dns2.hapara.fail https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
       "form-action 'self' https://docs.google.com;",
