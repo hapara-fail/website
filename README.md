@@ -31,57 +31,120 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 
 ## 💻 Technology Stack
 
-- **Runtime:** [Cloudflare Workers](https://workers.cloudflare.com/) - Serverless execution environment on the edge.
-- **Static Assets:** [Workers Assets](https://developers.cloudflare.com/workers/static-assets/) - Optimized hosting for site assets.
-- **Routing & Logic:** [TypeScript](https://www.typescriptlang.org/) - Type-safe code for the Worker.
-- **Code Formatter:** [Prettier](https://prettier.io/) - Opinionated code formatter.
-- **Development/Deployment:** [Wrangler 4](https://developers.cloudflare.com/workers/wrangler/) - The Cloudflare CLI tool.
-- **Core:** HTML5, CSS3, Vanilla JavaScript (ES6+) - For the frontend structure, style, and interactivity.
+- **Runtime:** [Cloudflare Workers](https://workers.cloudflare.com/) — Serverless execution environment on the edge.
+- **Static Assets:** [Workers Assets](https://developers.cloudflare.com/workers/static-assets/) — Optimized hosting for site assets.
+- **Routing & Logic:** [TypeScript](https://www.typescriptlang.org/) — Type-safe code for the Worker entry point.
+- **Package Manager:** [pnpm](https://pnpm.io/) v9+
+- **Code Formatter:** [Prettier](https://prettier.io/) — Opinionated code formatter.
+- **Development/Deployment:** [Wrangler 4](https://developers.cloudflare.com/workers/wrangler/) — The Cloudflare CLI tool.
+- **Core Frontend:** HTML5, CSS3, Vanilla JavaScript (ES6+) — Structure, style, and interactivity.
+- **Fonts:** [Poppins](https://fonts.google.com/specimen/Poppins) via `@fontsource/poppins` (self-hosted, no external requests).
 
 ---
 
 ## 📁 Project Structure
 
 ```
-
+├── scripts/
+│   └── generate-version.js     # Build-time script to stamp version-data.js
 ├── src/
-│   ├── site/           \# Static assets (HTML, CSS, JS, Images) served by Workers Assets
+│   ├── site/                   # Static assets served by Workers Assets
 │   │   ├── css/
+│   │   │   ├── universal.css       # Global styles, resets, shared components
+│   │   │   ├── animations.css      # Shared animation keyframes & utilities
+│   │   │   ├── index.css           # Homepage styles
+│   │   │   ├── about.css           # About page styles
+│   │   │   ├── article.css         # Blog article styles
+│   │   │   ├── blog-index.css      # Blog index styles
+│   │   │   ├── contribute.css      # Contribute page styles
+│   │   │   ├── dns-service.css     # DNS service page styles
+│   │   │   ├── gfu-tool.css        # Google Form Unlocker tool styles
+│   │   │   ├── license.css         # License page styles
+│   │   │   ├── tool-page.css       # Shared tool page layout styles
+│   │   │   └── 404.css             # 404 error page styles
 │   │   ├── js/
-│   │   ├── images/
-│   │   └── \*.html
-│   └── worker.ts       \# Cloudflare Worker entry point (routing logic)
-├── package.json        \# Project dependencies and scripts
-├── tsconfig.json       \# TypeScript configuration
-├── wrangler.jsonc      \# Cloudflare Workers configuration
-└── README.md           \# This file
-
+│   │   │   ├── nav.js              # Shared navigation logic
+│   │   │   ├── cookie-notice.js    # Cookie/notice banner logic
+│   │   │   ├── scroll-reveal.js    # Scroll-triggered reveal animations
+│   │   │   ├── index.js            # Homepage interactivity
+│   │   │   ├── contribute.js       # Contribute page logic
+│   │   │   ├── dns-service.js      # DNS service tool (status checks, UI)
+│   │   │   ├── gfu-tool.js         # Google Form Unlocker logic
+│   │   │   ├── license.js          # License page logic
+│   │   │   └── version-data.js     # Auto-generated build version info
+│   │   ├── images/                 # Site images and icons
+│   │   ├── fonts/                  # Self-hosted Poppins font files
+│   │   ├── downloads/              # Downloadable files
+│   │   ├── index.html              # Homepage
+│   │   ├── about.html              # About page
+│   │   ├── contribute.html         # Contribute/donate page
+│   │   ├── blog.html               # Blog index page
+│   │   ├── blog-dns.html           # Blog: DNS
+│   │   ├── blog-adguard-home.html  # Blog: AdGuard Home
+│   │   ├── blog-age-verification.html           # Blog: Age Verification
+│   │   ├── blog-chromeos-wifi-password-extractor.html  # Blog: ChromeOS Wi-Fi Password Extractor
+│   │   ├── blog-death-of-learning.html          # Blog: Death of Learning
+│   │   ├── blog-google-form-unlocker.html       # Blog: Google Form Unlocker
+│   │   ├── blog-google-form-unlocker-percautions.html  # Blog: GFU Precautions
+│   │   ├── dns-service.html        # DNS service page
+│   │   ├── gfu-tool.html           # Google Form Unlocker tool page
+│   │   ├── terms.html              # Terms of Service
+│   │   ├── privacy.html            # Privacy Policy
+│   │   ├── license.html            # License information
+│   │   └── 404.html                # Custom 404 error page
+│   └── worker.ts               # Cloudflare Worker entry point (routing & security headers)
+├── .dev.vars                   # Local development secrets (not committed)
+├── package.json                # Project dependencies and scripts
+├── pnpm-workspace.yaml         # pnpm workspace config
+├── tsconfig.json               # TypeScript configuration
+├── wrangler.jsonc              # Cloudflare Workers configuration
+└── README.md                   # This file
 ```
 
 ---
 
 ## 🗺️ Routes
 
-### Primary
+### Primary Pages
 
-- `/` - Homepage
-- `/about` - About page
-- `/contribute` - Contribute page
-- `/terms` - Terms of Service
-- `/privacy` - Privacy Policy
-- `/services/dns` - DNS Service
-- `/tool/gfu` - Google Form Unlocker Tool
-- `/blog` - Blog index
-- `/blog/[slug]` - Individual blog posts (e.g., `/blog/dns`, `/blog/google-form-unlocker`, etc.)
-- `/license` - License information
+| Route           | Description                       |
+| --------------- | --------------------------------- |
+| `/`             | Homepage                          |
+| `/about`        | About page                        |
+| `/contribute`   | Contribute / donate page          |
+| `/terms`        | Terms of Service                  |
+| `/privacy`      | Privacy Policy                    |
+| `/license`      | License information               |
+| `/blog`         | Blog index                        |
+| `/blog/[slug]`  | Individual blog posts (see below) |
+| `/services/dns` | DNS service page & tool           |
+| `/tool/gfu`     | Google Form Unlocker tool         |
+
+### Blog Posts
+
+| Route                                    | Title                             |
+| ---------------------------------------- | --------------------------------- |
+| `/blog/dns`                              | DNS                               |
+| `/blog/adguard-home`                     | AdGuard Home                      |
+| `/blog/age-verification`                 | Age Verification                  |
+| `/blog/chromeos-wifi-password-extractor` | ChromeOS Wi-Fi Password Extractor |
+| `/blog/death-of-learning`                | Death of Learning                 |
+| `/blog/google-form-unlocker`             | Google Form Unlocker              |
+| `/blog/google-form-unlocker-percautions` | Google Form Unlocker Precautions  |
+
+Blog slugs are dynamically resolved: `/blog/[slug]` maps to the static file `blog-[slug].html`. Slugs are validated against `[a-z0-9-]` and capped at 200 characters.
 
 ### Redirects & Shortcuts
 
-- `/bypass` → `/services/dns`
-- `/dns` → `/services/dns`
-- `/forms` → `/tool/gfu`
-- `/discord` → [Discord Invite](https://www.hapara.fail/discord)
-- `/github` → [GitHub Profile](https://github.com/hapara-fail)
+| Route      | Destination                                      |
+| ---------- | ------------------------------------------------ |
+| `/bypass`  | `/services/dns`                                  |
+| `/dns`     | `/services/dns`                                  |
+| `/forms`   | `/tool/gfu`                                      |
+| `/discord` | [Discord Invite](https://discord.gg/KA66dHUF4P)  |
+| `/github`  | [GitHub Profile](https://github.com/hapara-fail) |
+
+All redirects are permanent (HTTP 301).
 
 ---
 
@@ -91,35 +154,68 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 
 - Node.js (v18 or higher recommended)
 - [pnpm](https://pnpm.io/) (v9 or higher)
+- A Cloudflare account with Wrangler authenticated (`wrangler login`)
 
 ### Local Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/hapara-fail/website.git
-    cd website
-    ```
-2.  **Install dependencies:**
-    ```bash
-    pnpm install
-    ```
-3.  **Start the local development server:**
-    ```bash
-    pnpm run dev
-    ```
-    This command uses Wrangler to build the Worker and serve the site locally, typically at `http://127.0.0.1:8787`.
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/hapara-fail/website.git
+   cd website
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Configure local secrets** (optional):
+   Create or edit `.dev.vars` for any local environment variables needed during development.
+
+4. **Start the local development server:**
+   ```bash
+   pnpm run dev
+   ```
+   This runs `generate-version` then `wrangler dev`, serving the site locally at `http://127.0.0.1:8787`.
+
+### Available Scripts
+
+| Script             | Description                                                 |
+| ------------------ | ----------------------------------------------------------- |
+| `pnpm run dev`     | Generate version data + start local Wrangler dev server     |
+| `pnpm run preview` | Generate version data + run Wrangler dev in `--remote` mode |
+| `pnpm run deploy`  | Generate version data + deploy to Cloudflare Workers        |
+| `pnpm run build`   | Run `generate-version` only (stamps `version-data.js`)      |
+| `pnpm run format`  | Format all files with Prettier                              |
 
 ---
 
 ## ☁️ Deployment
 
-Ensure you have Wrangler installed and configured (`wrangler login`).
+Ensure you have Wrangler installed and authenticated (`wrangler login`).
 
 ```bash
 pnpm run deploy
 ```
 
-This command will build the project and deploy it to the Cloudflare Workers environment specified in `wrangler.jsonc`.
+This command generates the version stamp, then builds and deploys the project to the `hapara-fail` Worker specified in `wrangler.jsonc`.
+
+---
+
+## 🔒 Security
+
+The Worker enforces a strict set of security response headers on every request:
+
+- `Content-Security-Policy` — restricts asset origins; allows connections to `monitor.dns.hapara.fail` and `monitor.dns2.hapara.fail` for DNS status checks.
+- `Strict-Transport-Security` — HSTS with `includeSubDomains; preload` (1 year).
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: SAMEORIGIN`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy` — disables camera, microphone, geolocation, and payment APIs.
+
+Only `GET` and `HEAD` HTTP methods are accepted; all others return `405 Method Not Allowed`.
 
 ---
 
