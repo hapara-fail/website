@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy | hapara.fail"
+  description="We don’t track, sell, or profile you. Read our minimal logging for DNS abuse prevention, retention policy, data rights, and security practices."
+  canonicalUrl="https://www.hapara.fail/privacy"
+  pageStyles={["/css/article.css"]}
+  
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "PrivacyPolicy",
+    "name": "Privacy Policy | hapara.fail",
+    "url": "https://www.hapara.fail/privacy",
+    "description": "We don’t track, sell, or profile you. Read our minimal logging for DNS abuse prevention, retention policy, data rights, and security practices.",
+    "dateModified": "2026-01-04",
+    "publisher": {
+      "@type": "Organization",
+      "name": "hapara.fail",
+      "url": "https://www.hapara.fail/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.hapara.fail/images/favicon-96x96.png"
+      }
+    }
+  }}
+>
+<section class="article-hero">
+        <div class="parallax-bg"></div>
+        <div class="container">
+          <h1 class="gradient-text">Privacy Policy</h1>
+          <div class="article-meta">Last Updated: January 4, 2026</div>
+        </div>
+      </section>
+
+      <article class="article-body container">
+        <div>
+          <h2>1. Our Commitment to Privacy</h2>
+          <p>
+            The hapara.fail project ("we," "us," or "our") is fundamentally committed to user
+            privacy. Our mission is to provide tools and information that empower individuals
+            against surveillance, not to create new systems of tracking. This Privacy Policy
+            explains the minimal data we collect and why it is necessary to operate our services,
+            including our website, tools, and public DNS resolver (collectively, the "Services").
+          </p>
+        </div>
+
+        <div>
+          <h2>2. Information We Do NOT Collect</h2>
+          <p>
+            We believe in collecting as little data as possible. We want to be clear about what we
+            intentionally avoid:
+          </p>
+          <ul>
+            <li>
+              <strong>Personal Information:</strong> We do not require you to create an account or
+              provide any personal information like your name, email address, or phone number to use
+              our Services.
+            </li>
+            <li>
+              <strong>Tracking Cookies:</strong> Our website does not use tracking cookies,
+              advertising trackers, or fingerprinting scripts.
+            </li>
+            <li>
+              <strong>Website Analytics:</strong> We do not use services like Google Analytics. We
+              are not interested in building profiles of our visitors.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>3. Information We Collect and Why</h2>
+          <h3>3.1 Website Visitors</h3>
+          <p>
+            Our website is hosted on Cloudflare's network. We may see basic, aggregated, and
+            anonymous metrics provided by Cloudflare, such as the total number of visitors per day
+            or the countries from which traffic originates.
+            <strong>This data cannot be used to identify or track individual users.</strong> It
+            helps us understand our bandwidth usage and protect against attacks. For more
+            information on how Cloudflare processes traffic, please review the
+            <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener"
+              >Cloudflare Privacy Policy</a
+            >.
+          </p>
+
+          <h3>3.2 DNS Service Users</h3>
+          <p>
+            To be completely transparent, when you use our DNS service, our server temporarily
+            generates a log entry for each query. This entry contains the minimal technical
+            information required for us to identify and mitigate abuse. An example of what this log
+            entry looks like is shown below:
+          </p>
+          <pre><code>Time: 2026-01-04 14:02:00 | Status: Processed (3 ms)                | Type: A, Plain DNS      | Domain: google.com | Client: 108.201.34.55 (Dallas, US)
+Time: 2026-01-01 18:19:25 | Status: Blocked (hapara.fail Blocklist) | Type: A, DNS-over-HTTPS | Domain: hapara.com | Client: 73.17.201.142 (New Haven, US)</code></pre>
+          <p>
+            The <strong>sole and explicit purpose</strong> of these logs is for anti-abuse measures.
+            We analyze this data to identify and mitigate malicious activity, such as DDoS attacks,
+            DNS amplification attacks, or botnet activity that could overwhelm our servers and
+            degrade the service for everyone. We do not care what specific websites you are visiting
+            for any other reason.
+          </p>
+        </div>
+
+        <div>
+          <h2>4. Data Retention</h2>
+          <p>We believe in storing data for the shortest period necessary.</p>
+          <ul>
+            <li>
+              DNS query logs are automatically rotated and
+              <strong>typically deleted within 30 days</strong>.
+            </li>
+            <li>
+              In the rare event that we are actively investigating a security incident or a
+              significant violation of our Terms of Service, specific logs related to that incident
+              may be retained for <strong>up to 6 months</strong> to ensure the stability and
+              security of our platform.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>5. Data Sharing</h2>
+          <p>
+            <strong>We do not sell, trade, or rent your data. Ever.</strong> We will not share the
+            limited data we collect with third parties except in the following, very specific
+            circumstances:
+          </p>
+          <ul>
+            <li>To comply with a valid and legally binding court order or subpoena.</li>
+            <li>
+              To investigate and report malicious activity that violates our Terms of Service (for
+              example, reporting an attacking IP address to its hosting provider).
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>6. Your Rights and Data Requests</h2>
+          <p>
+            We recognize your right to control your data. Since we collect minimal information, your
+            rights are focused on the DNS query logs associated with your IP address.
+          </p>
+          <h3>6.1 Data Access and Deletion</h3>
+          <p>
+            You have the right to request access to or deletion of the DNS query data associated
+            with your IP address. We will process your request promptly, subject to our data
+            retention schedule and any legal or security obligations. Please note that this deletion
+            right does not extend to data required for ongoing security measures.
+            <strong
+              >If your IP address has been identified as abusive and blocked by our firewall, it
+              will not be removed even upon request.</strong
+            >
+            This is to protect the integrity and safety of our Services for all users.
+          </p>
+          <h3>6.2 How to Make a Request</h3>
+          <p>
+            To submit a data access or deletion request, please email us at
+            <strong
+              ><a href="mailto:support@support.hapara.fail">support@support.hapara.fail</a></strong
+            >. Since we do not store names or emails, we must verify that you control the specific
+            IP address you wish to purge. We may ask you to click a unique system-generated link to
+            confirm that your current IP matches the data in question. This process temporarily logs
+            your IP address for verification purposes only; once your request is processed, this log
+            is immediately deleted.
+          </p>
+        </div>
+
+        <div>
+          <h2>7. Data Security</h2>
+          <p>
+            We implement reasonable technical and administrative security measures to protect the
+            limited log data we store from loss, misuse, and unauthorized access or disclosure.
+            However, no method of transmission over the Internet or method of electronic storage is
+            100% secure, and we cannot guarantee its absolute security.
+          </p>
+        </div>
+
+        <div>
+          <h2>8. Children's Privacy</h2>
+          <p>
+            Our Services are not directed to individuals under the age of 13. We do not knowingly
+            collect personal information from children under 13. If we become aware that a child
+            under 13 has provided us with personal information, we will take steps to delete such
+            information immediately.
+          </p>
+        </div>
+
+        <div>
+          <h2>9. Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. Any changes will be posted on this
+            page, and the "Last Updated" date will be revised. We encourage you to review this
+            policy periodically.
+          </p>
+        </div>
+
+        <div>
+          <h2>10. Contact Us</h2>
+          <p>
+            If you have any questions, concerns, or feedback regarding this Privacy Policy, please
+            do not hesitate to contact us at
+            <strong
+              ><a href="mailto:support@support.hapara.fail">support@support.hapara.fail</a></strong
+            >.
+          </p>
+        </div>
+      </article>
+</BaseLayout>

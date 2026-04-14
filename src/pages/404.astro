@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import House from '@lucide/astro/icons/house';
+---
+
+<BaseLayout
+  title="404 Not Found | hapara.fail"
+  description="The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance."
+  canonicalUrl="https://www.hapara.fail/404"
+  pageStyles={["/css/404.css"]}
+  extraScripts={["/js/scroll-reveal.js"]}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "404 Not Found | hapara.fail",
+    "url": "https://www.hapara.fail/404",
+    "description": "The page you’re looking for doesn’t exist. We don’t track you—ever. Return home to explore tools and research that fight classroom surveillance.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "hapara.fail",
+      "url": "https://www.hapara.fail/"
+    }
+  }}
+>
+<section class="error-hero">
+        <div class="parallax-bg"></div>
+        <div class="error-card reveal reveal-up">
+          <h1 class="error-code gradient-text">404</h1>
+          <h2 class="error-title">Page Not Found</h2>
+          <p class="error-description">
+            This page doesn't exist. Unlike edtech surveillance, we don't log what you were looking
+            for or sell your search history to data brokers.
+          </p>
+          <a href="/" class="cta-button">
+            <House size={20} aria-hidden="true" />
+            Go Home
+          </a>
+        </div>
+      </section>
+</BaseLayout>

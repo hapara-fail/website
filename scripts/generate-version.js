@@ -31,7 +31,7 @@ try {
 
   commitHash = sanitizeCommitHash(commitHash);
 
-  const outputPath = path.join(__dirname, '../src/site/js/version-data.js');
+  const outputPath = path.join(__dirname, '../public/js/version-data.js');
 
   // Only output the data — nav.js handles rendering
   const jsContent = `// Auto-generated – do not edit (${new Date().toISOString()})

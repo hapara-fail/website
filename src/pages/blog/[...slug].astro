@@ -1,0 +1,86 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const { title, description, author, publishedDate, modifiedDate, tag, credits } = post.data;
+
+const publishedISO = publishedDate.toISOString().split('T')[0];
+const modifiedISO = modifiedDate.toISOString().split('T')[0];
+
+const publishedFormatted = publishedDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;
+---
+
+<BaseLayout
+  title={`${title} | hapara.fail Blog`}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogType="article"
+  pageStyles={["/css/article.css"]}
+  articleMeta={{
+    author,
+    publishedTime: publishedISO,
+    modifiedTime: modifiedISO,
+  }}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "author": {
+      "@type": "Person",
+      "name": author,
+    },
+    "datePublished": publishedISO,
+    "dateModified": modifiedISO,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "hapara.fail",
+      "url": "https://www.hapara.fail/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.hapara.fail/images/favicon-96x96.png",
+      },
+    },
+    "url": canonicalUrl,
+    "image": "https://www.hapara.fail/images/og-twitter.png",
+  }}
+>
+  <section class="article-hero">
+    <div class="parallax-bg"></div>
+    <div class="container">
+      <div class="article-tag" transition:name={`tag-${post.id}`}>{tag}</div>
+      <h1 class="gradient-text" transition:name={`title-${post.id}`}>{title}</h1>
+      <div class="article-meta">By <span>{author}</span> &bull; Published on {publishedFormatted}</div>
+    </div>
+  </section>
+
+  <article class="article-body container">
+    <Content />
+
+    <a href="/blog" class="back-link">Back to Blog</a>
+    {credits && (
+      <div class="credits">{credits}</div>
+    )}
+  </article>
+</BaseLayout>

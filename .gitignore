@@ -23,7 +23,9 @@ Thumbs.db
 
 # Build outputs
 src/site/js/version-data.js
+public/js/version-data.js
 dist/
+.astro/
 .cache/
 worker-configuration.d.ts
 

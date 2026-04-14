@@ -1,0 +1,18 @@
+# hapara.fail
+> Expose and counter edtech surveillance. Tools, research, and a custom DNS to block Hapara, GoGuardian, and more. Protect student privacy and reclaim autonomy.
+
+We are a student-led collective dedicated to exposing how the modern classroom has become a laboratory for mass surveillance. By providing an open-source, fast, and secure custom DNS blocklist, we empower a generation to disable invasive school spyware, bypass restrictive web filters, and reclaim their digital autonomy.
+
+## Core Content
+### Services
+- [DNS Service](https://www.hapara.fail/services/dns): Free DNS that blocks Hapara, GoGuardian, Securly, Gaggle, and more. Includes step-by-step setup instructions for ChromeOS, Windows, macOS, iOS, Android, and Linux, plus a compatibility checker. (Updated 2026)
+
+### Organization
+- [Our Mission](https://www.hapara.fail/about): Learn about the harms of 24/7 digital leashes like GoGuardian and Hapara, our philosophy on privacy in education, and the team behind hapara.fail.
+- [Contribute](https://www.hapara.fail/contribute): How to support our student-led mission via donations (PayPal, Buy Me a Coffee, Crypto) or by contributing code and research on GitHub.
+
+### Updates & Research
+- [Blog](https://www.hapara.fail/blog): Research articles, technical breakdowns of edtech spyware, and updates on the hapara.fail project.
+
+## Additional Context
+Our primary offering is a zero-logging, open-source DNS service configured with the HaGeZi blocklist and tailored to neutralize connection attempts from surveillance tools. All code and blocklist intelligence is maintained publicly on GitHub.

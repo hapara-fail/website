@@ -1,8 +1,8 @@
-# hapara.fail v2
+# hapara.fail v3
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hapara-fail/website)
 
-hapara.fail is dedicated to exposing the pervasive nature of student surveillance technology used in educational environments. We provide technical insights, practical tools, and resources to empower students and advocate for digital privacy. This repository contains the source code for the v2 website, built on Cloudflare Workers.
+hapara.fail is dedicated to exposing the pervasive nature of student surveillance technology used in educational environments. We provide technical insights, practical tools, and resources to empower students and advocate for digital privacy. This repository contains the source code for the v3 website, built on Cloudflare Workers.
 
 **Live Site:** **[https://www.hapara.fail](https://www.hapara.fail)**
 
@@ -15,7 +15,7 @@ hapara.fail is dedicated to exposing the pervasive nature of student surveillanc
 This iteration of hapara.fail delivers a fast, modern, and privacy-respecting platform featuring:
 
 - **Educational Content:** In-depth blog posts and technical write-ups explaining how edtech surveillance works.
-- **Privacy Tools:** Interactive tools designed to bypass certain restrictions or reveal hidden information (e.g., DNS Service, Google Form Unlocker).
+- **Privacy Tools:** Interactive tools designed to bypass certain restrictions or reveal hidden information (e.g., DNS Service).
 - **Community Focus:** Resources built by and for the student privacy community.
 
 ---
@@ -58,9 +58,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 │   │   │   ├── blog-index.css      # Blog index styles
 │   │   │   ├── contribute.css      # Contribute page styles
 │   │   │   ├── dns-service.css     # DNS service page styles
-│   │   │   ├── gfu-tool.css        # Google Form Unlocker tool styles
 │   │   │   ├── license.css         # License page styles
-│   │   │   ├── tool-page.css       # Shared tool page layout styles
 │   │   │   └── 404.css             # 404 error page styles
 │   │   ├── js/
 │   │   │   ├── nav.js              # Shared navigation logic
@@ -69,7 +67,6 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 │   │   │   ├── index.js            # Homepage interactivity
 │   │   │   ├── contribute.js       # Contribute page logic
 │   │   │   ├── dns-service.js      # DNS service tool (status checks, UI)
-│   │   │   ├── gfu-tool.js         # Google Form Unlocker logic
 │   │   │   ├── license.js          # License page logic
 │   │   │   └── version-data.js     # Auto-generated build version info
 │   │   ├── images/                 # Site images and icons
@@ -84,10 +81,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 │   │   ├── blog-age-verification.html           # Blog: Age Verification
 │   │   ├── blog-chromeos-wifi-password-extractor.html  # Blog: ChromeOS Wi-Fi Password Extractor
 │   │   ├── blog-death-of-learning.html          # Blog: Death of Learning
-│   │   ├── blog-google-form-unlocker.html       # Blog: Google Form Unlocker
-│   │   ├── blog-google-form-unlocker-percautions.html  # Blog: GFU Precautions
 │   │   ├── dns-service.html        # DNS service page
-│   │   ├── gfu-tool.html           # Google Form Unlocker tool page
 │   │   ├── terms.html              # Terms of Service
 │   │   ├── privacy.html            # Privacy Policy
 │   │   ├── license.html            # License information
@@ -118,7 +112,6 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 | `/blog`         | Blog index                        |
 | `/blog/[slug]`  | Individual blog posts (see below) |
 | `/services/dns` | DNS service page & tool           |
-| `/tool/gfu`     | Google Form Unlocker tool         |
 
 ### Blog Posts
 
@@ -129,8 +122,6 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 | `/blog/age-verification`                 | Age Verification                  |
 | `/blog/chromeos-wifi-password-extractor` | ChromeOS Wi-Fi Password Extractor |
 | `/blog/death-of-learning`                | Death of Learning                 |
-| `/blog/google-form-unlocker`             | Google Form Unlocker              |
-| `/blog/google-form-unlocker-percautions` | Google Form Unlocker Precautions  |
 
 Blog slugs are dynamically resolved: `/blog/[slug]` maps to the static file `blog-[slug].html`. Slugs are validated against `[a-z0-9-]` and capped at 200 characters.
 
@@ -140,7 +131,6 @@ Blog slugs are dynamically resolved: `/blog/[slug]` maps to the static file `blo
 | ---------- | ------------------------------------------------ |
 | `/bypass`  | `/services/dns`                                  |
 | `/dns`     | `/services/dns`                                  |
-| `/forms`   | `/tool/gfu`                                      |
 | `/discord` | [Discord Invite](https://discord.gg/KA66dHUF4P)  |
 | `/github`  | [GitHub Profile](https://github.com/hapara-fail) |
 

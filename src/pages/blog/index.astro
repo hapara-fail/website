@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import Rocket from '@lucide/astro/icons/rocket';
+import BlogSearch from '../../components/svelte/BlogSearch.svelte';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime()
+);
+
+// Build search index with body content stripped of MDX/HTML
+const searchIndex = sortedPosts.map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  excerpt: post.data.excerpt,
+  tag: post.data.tag,
+  author: post.data.author,
+  publishedDate: post.data.publishedDate.toISOString(),
+  // Strip MDX components, HTML tags, and frontmatter from body
+  body: (post.body ?? '')
+    .replace(/^---[\s\S]*?---/, '')           // remove frontmatter
+    .replace(/<[^>]+>/g, '')                  // remove HTML tags
+    .replace(/import\s+.*?from\s+['"].*?['"]/g, '') // remove imports
+    .replace(/!\[.*?\]\(.*?\)/g, '')          // remove images
+    .replace(/\[([^\]]+)\]\(.*?\)/g, '$1')    // links → text
+    .replace(/#{1,6}\s/g, '')                 // remove heading markers
+    .replace(/[*_~`>]/g, '')                  // remove markdown formatting
+    .replace(/\s+/g, ' ')                     // collapse whitespace
+    .trim()
+    .slice(0, 2000),                          // cap per post for perf
+}));
+
+// Collect unique tags
+const allTags = [...new Set(sortedPosts.map((p) => p.data.tag))].sort();
+---
+
+<BaseLayout
+  title="Blog | hapara.fail"
+  description="Technical analyses and guides on defeating edtech surveillance. Deep dives into DNS, ChromeOS forensics, and tool breakdowns from hapara.fail."
+  canonicalUrl="https://www.hapara.fail/blog"
+  pageStyles={["/css/blog-index.css"]}
+  extraScripts={["/js/scroll-reveal.js"]}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "hapara.fail Blog",
+    "url": "https://www.hapara.fail/blog",
+    "description": "Technical analyses and guides on defeating edtech surveillance. Deep dives into DNS, ChromeOS forensics, and tool breakdowns from hapara.fail.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "hapara.fail",
+      "url": "https://www.hapara.fail/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.hapara.fail/images/favicon-96x96.png"
+      }
+    }
+  }}
+>
+  <section class="page-hero">
+    <div class="parallax-bg"></div>
+    <div class="container reveal reveal-blur">
+      <h1 class="gradient-text">The Takedown</h1>
+      <p>
+        Technical analyses, tool breakdowns, and strategic insights into the world of edtech
+        surveillance. This is our research hub for exposing the systems designed to watch you.
+      </p>
+    </div>
+  </section>
+
+  <section class="content-section blog-content-section">
+    <div class="container">
+      <BlogSearch client:load posts={searchIndex} tags={allTags} />
+    </div>
+  </section>
+
+  <section class="rss-cta">
+    <a href="/rss.xml" class="rss-btn" aria-label="Subscribe to RSS feed">
+      <Rocket size={14} aria-hidden="true" />
+      Subscribe via RSS
+    </a>
+  </section>
+
+</BaseLayout>

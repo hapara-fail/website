@@ -1,0 +1,13 @@
+---
+interface Props {
+  label?: string;
+}
+const { label = 'Identity Verification Vendor Breach Tracker' } = Astro.props;
+---
+
+<span class="section-label">{label}</span>
+<div class="breach-table-wrapper">
+  <table class="breach-table" aria-label={label}>
+    <slot />
+  </table>
+</div>
