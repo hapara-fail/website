@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260408.1",
-    "prettier": "3.8.1",
+    "prettier": "3.8.2",
     "wrangler": "^4.81.0"
   },
   "dependencies": {
