@@ -350,3 +350,19 @@
   margin-bottom: 0.5rem;
   display: block;
 }
+
+/* Text to Speech word highlight */
+::highlight(tts-highlight) {
+  background-color: rgba(167, 139, 250, 0.4);
+  color: #ffffff;
+  border-radius: 2px;
+}
+
+/* Fallback highlight for unsupported browsers */
+.article-body .tts-active-block {
+  background-color: rgba(167, 139, 250, 0.1);
+  border-left: 3px solid var(--accent, #a78bfa);
+  padding-left: 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TextToSpeech from '../../components/svelte/TextToSpeech.svelte';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -71,7 +72,10 @@ const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;
     <div class="container">
       <div class="article-tag" transition:name={`tag-${post.id}`}>{tag}</div>
       <h1 class="gradient-text" transition:name={`title-${post.id}`}>{title}</h1>
-      <div class="article-meta">By <span>{author}</span> &bull; Published on {publishedFormatted}</div>
+      <div class="article-meta" style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <div>By <span>{author}</span> &bull; Published on {publishedFormatted}</div>
+        <TextToSpeech client:only="svelte" />
+      </div>
     </div>
   </section>
 
