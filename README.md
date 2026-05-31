@@ -114,18 +114,18 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 
 ### Primary Pages
 
-| Route           | Description                  |
-| --------------- | ---------------------------- |
-| `/`             | Homepage                     |
-| `/about`        | About page                   |
-| `/contribute`   | Contribute / donate page     |
-| `/terms`        | Terms of Service             |
-| `/privacy`      | Privacy Policy               |
-| `/license`      | License information          |
-| `/blog`         | Blog index                   |
-| `/blog/[slug]`  | Individual blog posts        |
-| `/services/dns` | DNS service page & tool      |
-| `/rss.xml`      | RSS feed                     |
+| Route           | Description              |
+| --------------- | ------------------------ |
+| `/`             | Homepage                 |
+| `/about`        | About page               |
+| `/contribute`   | Contribute / donate page |
+| `/terms`        | Terms of Service         |
+| `/privacy`      | Privacy Policy           |
+| `/license`      | License information      |
+| `/blog`         | Blog index               |
+| `/blog/[slug]`  | Individual blog posts    |
+| `/services/dns` | DNS service page & tool  |
+| `/rss.xml`      | RSS feed                 |
 
 ### Blog Posts
 
@@ -185,14 +185,14 @@ Configured in `astro.config.mjs`:
 
 ### Available Scripts
 
-| Script                       | Description                                               |
-| ---------------------------- | --------------------------------------------------------- |
-| `pnpm run dev`               | Start the Astro development server                        |
-| `pnpm run build`             | Generate version stamp + build the site to `dist/`        |
-| `pnpm run preview`           | Build + run Wrangler dev server against the built `dist/` |
-| `pnpm run deploy`            | Build + deploy to Cloudflare Workers                      |
-| `pnpm run format` / `fmt`    | Format all files with Prettier                            |
-| `pnpm run generate-version`  | Stamp `version-data` only (called automatically by build) |
+| Script                      | Description                                               |
+| --------------------------- | --------------------------------------------------------- |
+| `pnpm run dev`              | Start the Astro development server                        |
+| `pnpm run build`            | Generate version stamp + build the site to `dist/`        |
+| `pnpm run preview`          | Build + run Wrangler dev server against the built `dist/` |
+| `pnpm run deploy`           | Build + deploy to Cloudflare Workers                      |
+| `pnpm run format` / `fmt`   | Format all files with Prettier                            |
+| `pnpm run generate-version` | Stamp `version-data` only (called automatically by build) |
 
 ---
 

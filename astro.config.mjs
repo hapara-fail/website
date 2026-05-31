@@ -24,10 +24,10 @@ export default defineConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: ['@lucide/astro']
+      exclude: ['@lucide/astro'],
     },
     ssr: {
-      noExternal: ['@lucide/astro']
+      noExternal: ['@lucide/astro'],
     },
     server: {
       watch: {
