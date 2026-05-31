@@ -23,6 +23,12 @@ export default defineConfig({
     '/github': 'https://github.com/hapara-fail',
   },
   vite: {
+    optimizeDeps: {
+      exclude: ['@lucide/astro']
+    },
+    ssr: {
+      noExternal: ['@lucide/astro']
+    },
     server: {
       watch: {
         usePolling: true,

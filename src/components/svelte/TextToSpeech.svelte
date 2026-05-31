@@ -5,210 +5,681 @@
   import Square from '@lucide/svelte/icons/square';
   import Settings from '@lucide/svelte/icons/settings';
   import X from '@lucide/svelte/icons/x';
+  import SkipBack from '@lucide/svelte/icons/skip-back';
+  import SkipForward from '@lucide/svelte/icons/skip-forward';
+
+  const BASE_WORDS_PER_MINUTE = 185;
+  const SKIP_WORDS = 30;
+  const PREFERENCES_KEY = 'hapara:blog-tts';
+  const READABLE_SELECTOR = [
+    '.section-label',
+    '.timeline-date',
+    '.evidence-block',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'p',
+    'li',
+    'cite',
+    'th',
+    'td',
+    'caption',
+  ].join(', ');
 
   let isActive = $state(false);
   let isPlaying = $state(false);
   let progress = $state(0);
-  let timeEstimate = $state(0);
-  
+  let currentWordIndex = $state(0);
+  let totalWords = $state(0);
+  let totalTimeLabel = $state('');
+  let remainingTimeLabel = $state('');
+
   let synth = null;
-  let elements = $state([]);
-  let totalWords = 0;
-  let currentElementIndex = -1;
+  let segments = $state([]);
+  let currentSegmentIndex = -1;
   let currentUtterance = null;
+  let boundaryFallbackTimer = null;
+  let fallbackSegment = null;
+  let fallbackStartedAt = 0;
+  let fallbackStartWordIndex = 0;
+  let lastAdvancingBoundaryAt = 0;
+  let activeWordElement = null;
   let isSupported = $state(false);
-  let cumulativeWords = $state([]); // Precalculated word counts per element index
-  let playbackRate = $state(1); // Default speed
+
+  let playbackRate = $state(1);
+  let playbackPitch = $state(1);
+  let playbackVolume = $state(1);
+  let autoScroll = $state(true);
+  let highlightWords = $state(true);
+  let clickToRead = $state(true);
+  let persistPreferences = $state(true);
 
   let availableVoices = $state([]);
   let selectedVoiceURI = $state('');
   let showSettings = $state(false);
 
-  function loadVoices() {
-    if (!synth) return;
-    availableVoices = synth.getVoices().filter(v => v.lang.startsWith('en'));
-    if (!selectedVoiceURI && availableVoices.length > 0) {
-      const defaultVoice = availableVoices.find(v => v.default) || availableVoices[0];
-      selectedVoiceURI = defaultVoice.voiceURI;
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function roundToStep(value, step = 0.1) {
+    return Math.round(Number(value) / step) * step;
+  }
+
+  function formatNumber(value) {
+    return Number(value).toFixed(1).replace(/\.0$/, '');
+  }
+
+  function rangePercent(value, min, max) {
+    return `${clamp(((Number(value) - min) / (max - min)) * 100, 0, 100)}%`;
+  }
+
+  function formatDuration(seconds) {
+    const roundedSeconds = Math.max(30, Math.round(seconds / 30) * 30);
+
+    if (roundedSeconds < 60) {
+      return '<1 min';
     }
+
+    const minutes = Math.round(roundedSeconds / 60);
+    if (minutes < 60) {
+      return `${minutes} min`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return remainingMinutes ? `${hours} hr ${remainingMinutes} min` : `${hours} hr`;
   }
 
-  function countWords(str) {
-    return str.trim().split(/\s+/).filter(Boolean).length;
+  function normalizeText(value) {
+    return value.replace(/\s+/g, ' ').trim();
   }
 
-  function getTextNodeAtCharIndex(container, targetIndex) {
-    const treeWalker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
-    let currentIndex = 0;
-    let currentNode;
+  function isExcludedElement(el) {
+    return Boolean(
+      el.closest(
+        '.back-link, .credits, .tts-component, script, style, [hidden], [aria-hidden="true"]',
+      ),
+    );
+  }
 
-    while ((currentNode = treeWalker.nextNode())) {
-      const textLength = currentNode.textContent.length;
-      if (currentIndex + textLength > targetIndex) {
-        return {
-          node: currentNode,
-          offset: targetIndex - currentIndex
-        };
+  function shouldUseReadableElement(el) {
+    if (isExcludedElement(el) || !normalizeText(el.textContent || '')) return false;
+
+    if (el.matches('p') && el.closest('td, th, .evidence-block')) return false;
+    if (el.matches('li') && el.querySelector('p, ul, ol')) return false;
+
+    return true;
+  }
+
+  function collectWordsForElement(element) {
+    const textParts = [];
+    const words = [];
+    const walker = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent || isExcludedElement(parent) || !normalizeText(node.textContent || '')) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      },
+      false,
+    );
+
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node);
+    }
+
+    textNodes.forEach((textNode) => {
+      const text = textNode.textContent || '';
+      const matches = Array.from(text.matchAll(/\S+/g)).map((match) => ({
+        rawWord: match[0],
+        originalStart: match.index || 0,
+        originalEnd: (match.index || 0) + match[0].length,
+        element: null,
+      }));
+
+      for (let i = matches.length - 1; i >= 0; i -= 1) {
+        const match = matches[i];
+        const range = new Range();
+        const span = document.createElement('span');
+
+        span.className = 'tts-word';
+        range.setStart(textNode, match.originalStart);
+        range.setEnd(textNode, match.originalEnd);
+        range.surroundContents(span);
+        match.element = span;
       }
-      currentIndex += textLength;
+
+      matches.forEach((match) => {
+        const startChar = textParts.length ? textParts.join(' ').length + 1 : 0;
+        const endChar = startChar + match.rawWord.length;
+        const wordRange = new Range();
+        const wordNode = match.element.firstChild;
+
+        wordRange.selectNodeContents(match.element);
+        textParts.push(match.rawWord);
+        words.push({
+          range: wordRange,
+          element: match.element,
+          node: wordNode,
+          startOffset: 0,
+          endOffset: match.rawWord.length,
+          startChar,
+          endChar,
+        });
+      });
+    });
+
+    return {
+      text: textParts.join(' '),
+      words,
+    };
+  }
+
+  function estimateSegmentSeconds(segment) {
+    if (!segment.wordCount) return 0;
+
+    const text = segment.text;
+    const wordsPerSecond = (BASE_WORDS_PER_MINUTE * playbackRate) / 60;
+    const speakingSeconds = segment.wordCount / wordsPerSecond;
+    const sentencePauses = (text.match(/[.!?]/g) || []).length * 0.22;
+    const phrasePauses = (text.match(/[;:]/g) || []).length * 0.14;
+    const commaPauses = (text.match(/,/g) || []).length * 0.08;
+    const structuralPause = segment.element.matches('h1, h2, h3, h4, h5, h6, .section-label')
+      ? 0.45
+      : 0.12;
+
+    return speakingSeconds + (sentencePauses + phrasePauses + commaPauses + structuralPause) / playbackRate;
+  }
+
+  function estimateSecondsFromWord(wordIndex) {
+    if (!segments.length || totalWords === 0) return 0;
+
+    return segments.reduce((seconds, segment) => {
+      const segmentStart = segment.startWordIndex;
+      const segmentEnd = segment.startWordIndex + segment.wordCount;
+      const segmentSeconds = estimateSegmentSeconds(segment);
+
+      if (wordIndex <= segmentStart) return seconds + segmentSeconds;
+      if (wordIndex >= segmentEnd) return seconds;
+
+      const remainingFraction = (segmentEnd - wordIndex) / segment.wordCount;
+      return seconds + segmentSeconds * remainingFraction;
+    }, 0);
+  }
+
+  function updateTiming(wordIndex = currentWordIndex) {
+    const totalSeconds = estimateSecondsFromWord(0);
+    const remainingSeconds = estimateSecondsFromWord(wordIndex);
+
+    totalTimeLabel = formatDuration(totalSeconds);
+    remainingTimeLabel = formatDuration(remainingSeconds);
+  }
+
+  function setCurrentWordIndex(wordIndex) {
+    currentWordIndex = clamp(Math.round(Number(wordIndex) || 0), 0, totalWords);
+    progress = totalWords > 0 ? (currentWordIndex / totalWords) * 100 : 0;
+    updateTiming(currentWordIndex);
+  }
+
+  function findSegmentForWord(wordIndex) {
+    if (!segments.length) return null;
+
+    const normalizedIndex = clamp(wordIndex, 0, Math.max(0, totalWords - 1));
+    return (
+      segments.find((segment) => {
+        const start = segment.startWordIndex;
+        const end = start + segment.wordCount;
+        return normalizedIndex >= start && normalizedIndex < end;
+      }) || segments[segments.length - 1]
+    );
+  }
+
+  function getWordFromBoundary(segment, charIndex) {
+    if (!segment || !segment.words.length) return null;
+
+    return (
+      segment.words.find((word) => charIndex >= word.startChar && charIndex < word.endChar) ||
+      segment.words.find((word) => charIndex <= word.startChar) ||
+      segment.words[segment.words.length - 1]
+    );
+  }
+
+  function highlightWord(globalWordIndex) {
+    if (!highlightWords) {
+      clearHighlight();
+      return;
     }
-    return null;
+
+    const segment = findSegmentForWord(globalWordIndex);
+    if (!segment) return;
+
+    const localIndex = clamp(globalWordIndex - segment.startWordIndex, 0, segment.words.length - 1);
+    const word = segment.words[localIndex];
+    if (!word) return;
+
+    if (activeWordElement) {
+      activeWordElement.classList.remove('tts-active-word');
+    }
+    word.element.classList.add('tts-active-word');
+    activeWordElement = word.element;
   }
 
   function clearHighlight() {
     if (window.CSS && CSS.highlights) {
-      CSS.highlights.delete("tts-highlight");
+      CSS.highlights.delete('tts-highlight');
     }
-    elements.forEach(el => el.classList.remove('tts-active-block'));
+    if (activeWordElement) {
+      activeWordElement.classList.remove('tts-active-word');
+      activeWordElement = null;
+    }
+    segments.forEach((segment) => segment.element.classList.remove('tts-active-block'));
+  }
+
+  function clearBoundaryFallback() {
+    if (boundaryFallbackTimer) {
+      window.clearInterval(boundaryFallbackTimer);
+      boundaryFallbackTimer = null;
+    }
+  }
+
+  function startBoundaryFallback(segment, localWordIndex) {
+    clearBoundaryFallback();
+    fallbackSegment = segment;
+    fallbackStartedAt = performance.now();
+    fallbackStartWordIndex = localWordIndex;
+    lastAdvancingBoundaryAt = 0;
+
+    boundaryFallbackTimer = window.setInterval(() => {
+      if (!isActive || !isPlaying || !fallbackSegment) return;
+
+      const now = performance.now();
+      if (lastAdvancingBoundaryAt && now - lastAdvancingBoundaryAt < 700) return;
+
+      const elapsed = now - fallbackStartedAt;
+      const estimatedSegmentDuration = estimateSegmentSeconds(fallbackSegment) * 1000;
+      if (elapsed > estimatedSegmentDuration + 700) {
+        const nextWordIndex = fallbackSegment.startWordIndex + fallbackSegment.wordCount;
+        if (nextWordIndex >= totalWords) {
+          stopPlaying();
+        } else {
+          startReadingAtWord(nextWordIndex);
+        }
+        return;
+      }
+
+      const wordsPerMs = (BASE_WORDS_PER_MINUTE * playbackRate) / 60000;
+      const estimatedLocalIndex = clamp(
+        fallbackStartWordIndex + Math.floor(elapsed * wordsPerMs),
+        fallbackStartWordIndex,
+        fallbackSegment.wordCount - 1,
+      );
+      const estimatedGlobalIndex = fallbackSegment.startWordIndex + estimatedLocalIndex;
+
+      if (estimatedGlobalIndex > currentWordIndex) {
+        setCurrentWordIndex(estimatedGlobalIndex);
+        highlightWord(estimatedGlobalIndex);
+      }
+    }, 180);
+  }
+
+  function clearCurrentUtteranceHandlers() {
+    if (!currentUtterance) return;
+
+    currentUtterance.onend = null;
+    currentUtterance.onerror = null;
+    currentUtterance.onboundary = null;
+    currentUtterance.onstart = null;
   }
 
   function stopPlaying() {
-    if (currentUtterance) {
-      currentUtterance.onend = null;
-      currentUtterance.onerror = null;
-      currentUtterance.onboundary = null;
-    }
+    clearCurrentUtteranceHandlers();
+    clearBoundaryFallback();
     if (synth) synth.cancel();
     isPlaying = false;
     isActive = false;
-    progress = 0;
-    currentElementIndex = -1;
+    setCurrentWordIndex(0);
+    currentSegmentIndex = -1;
+    currentUtterance = null;
     clearHighlight();
     showSettings = false;
+  }
+
+  function applyVoice(utterance) {
+    if (!selectedVoiceURI) return;
+
+    const voice = availableVoices.find((item) => item.voiceURI === selectedVoiceURI);
+    if (voice) utterance.voice = voice;
+  }
+
+  function startReadingAtWord(wordIndex) {
+    if (!synth || totalWords === 0) return;
+
+    clearCurrentUtteranceHandlers();
+    clearBoundaryFallback();
+    synth.cancel();
+    clearHighlight();
+
+    const segment = findSegmentForWord(wordIndex);
+    if (!segment) {
+      stopPlaying();
+      return;
+    }
+
+    const localWordIndex = clamp(wordIndex - segment.startWordIndex, 0, segment.words.length - 1);
+    const startWord = segment.words[localWordIndex];
+    const text = segment.text.slice(startWord.startChar).trim();
+
+    if (!text) {
+      startReadingAtWord(segment.startWordIndex + segment.wordCount);
+      return;
+    }
+
+    currentSegmentIndex = segments.indexOf(segment);
+    setCurrentWordIndex(segment.startWordIndex + localWordIndex);
+    highlightWord(currentWordIndex);
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = playbackRate;
+    utterance.pitch = playbackPitch;
+    utterance.volume = playbackVolume;
+    applyVoice(utterance);
+
+    utterance.onstart = () => {
+      isPlaying = true;
+      if (autoScroll) {
+        segment.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      highlightWord(currentWordIndex);
+    };
+
+    utterance.onboundary = (event) => {
+      if (event.name && event.name !== 'word') return;
+
+      const absoluteCharIndex = startWord.startChar + event.charIndex;
+      const boundaryWord = getWordFromBoundary(segment, absoluteCharIndex);
+      if (!boundaryWord) return;
+
+      const localBoundaryIndex = segment.words.indexOf(boundaryWord);
+      const globalBoundaryIndex = segment.startWordIndex + localBoundaryIndex;
+      if (globalBoundaryIndex > currentWordIndex) {
+        lastAdvancingBoundaryAt = performance.now();
+      }
+      setCurrentWordIndex(globalBoundaryIndex);
+      highlightWord(globalBoundaryIndex);
+    };
+
+    utterance.onend = () => {
+      clearBoundaryFallback();
+      const nextWordIndex = segment.startWordIndex + segment.wordCount;
+      setCurrentWordIndex(nextWordIndex);
+
+      if (nextWordIndex >= totalWords) {
+        stopPlaying();
+        progress = 100;
+        currentWordIndex = totalWords;
+        remainingTimeLabel = '0 min';
+        return;
+      }
+
+      startReadingAtWord(nextWordIndex);
+    };
+
+    utterance.onerror = (event) => {
+      clearBoundaryFallback();
+      if (event.error === 'interrupted' || event.error === 'canceled') return;
+
+      const nextSegment = segments[currentSegmentIndex + 1];
+      if (nextSegment) {
+        startReadingAtWord(nextSegment.startWordIndex);
+      } else {
+        stopPlaying();
+      }
+    };
+
+    currentUtterance = utterance;
+    isActive = true;
+    isPlaying = true;
+    startBoundaryFallback(segment, localWordIndex);
+    window.setTimeout(() => {
+      if (currentUtterance !== utterance || !isActive) return;
+      synth.speak(utterance);
+      synth.resume();
+    }, 0);
   }
 
   function togglePlay() {
     if (!isActive) {
       isActive = true;
-      startReading(0);
+      startReadingAtWord(currentWordIndex >= totalWords ? 0 : currentWordIndex);
     } else if (isPlaying) {
+      clearBoundaryFallback();
       synth.pause();
       isPlaying = false;
     } else {
-      synth.resume();
-      isPlaying = true;
+      startReadingAtWord(currentWordIndex);
     }
   }
 
-  function startReading(index) {
-    if (currentUtterance) {
-      currentUtterance.onend = null;
-      currentUtterance.onerror = null;
-      currentUtterance.onboundary = null;
+  function seekToWord(wordIndex) {
+    const targetIndex = clamp(Math.round(Number(wordIndex) || 0), 0, Math.max(0, totalWords - 1));
+    setCurrentWordIndex(targetIndex);
+    highlightWord(targetIndex);
+
+    if (isActive) {
+      startReadingAtWord(targetIndex);
     }
-    if (synth) synth.cancel();
-    clearHighlight();
-    currentElementIndex = index;
-    
-    if (index >= elements.length) {
-      stopPlaying();
+  }
+
+  function skipWords(delta) {
+    seekToWord(currentWordIndex + delta);
+  }
+
+  function handleProgressInput(event) {
+    const targetIndex = Number(event.target.value);
+    setCurrentWordIndex(targetIndex);
+    if (!isPlaying) highlightWord(targetIndex);
+  }
+
+  function handleProgressChange(event) {
+    seekToWord(Number(event.target.value));
+  }
+
+  function getCaretFromPoint(x, y) {
+    if (document.caretPositionFromPoint) {
+      const position = document.caretPositionFromPoint(x, y);
+      if (!position) return null;
+      return {
+        node: position.offsetNode,
+        offset: position.offset,
+      };
+    }
+
+    if (document.caretRangeFromPoint) {
+      const range = document.caretRangeFromPoint(x, y);
+      if (!range) return null;
+      return {
+        node: range.startContainer,
+        offset: range.startOffset,
+      };
+    }
+
+    return null;
+  }
+
+  function getClickedWordIndex(event) {
+    const targetSegment = segments.find((segment) => segment.element.contains(event.target));
+    if (!targetSegment) return -1;
+
+    const caret = getCaretFromPoint(event.clientX, event.clientY);
+    if (caret) {
+      const localIndex = targetSegment.words.findIndex((word) => {
+        return word.node === caret.node && caret.offset >= word.startOffset && caret.offset <= word.endOffset;
+      });
+
+      if (localIndex >= 0) return targetSegment.startWordIndex + localIndex;
+    }
+
+    let closestIndex = -1;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    targetSegment.words.forEach((word, index) => {
+      for (const rect of word.range.getClientRects()) {
+        const horizontalDistance =
+          event.clientX < rect.left ? rect.left - event.clientX : Math.max(0, event.clientX - rect.right);
+        const verticalDistance =
+          event.clientY < rect.top ? rect.top - event.clientY : Math.max(0, event.clientY - rect.bottom);
+        const distance = horizontalDistance + verticalDistance;
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      }
+    });
+
+    return closestIndex >= 0 ? targetSegment.startWordIndex + closestIndex : targetSegment.startWordIndex;
+  }
+
+  function handleGlobalClick(event) {
+    if (!isActive || !clickToRead) return;
+    if (event.target.closest('.tts-controls, .settings-popup')) return;
+
+    const clickedWordIndex = getClickedWordIndex(event);
+    if (clickedWordIndex < 0) return;
+
+    event.preventDefault();
+    seekToWord(clickedWordIndex);
+  }
+
+  function savePreferences() {
+    if (!persistPreferences) {
+      localStorage.removeItem(PREFERENCES_KEY);
       return;
     }
 
-    const el = elements[index];
-    const text = el.textContent;
-    
-    if (!text.trim()) {
-      startReading(index + 1);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    if (selectedVoiceURI) {
-      const voice = availableVoices.find(v => v.voiceURI === selectedVoiceURI);
-      if (voice) utterance.voice = voice;
-    }
-    
-    utterance.onstart = () => {
-      isPlaying = true;
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      if (!(window.CSS && CSS.highlights)) {
-        el.classList.add('tts-active-block');
-      }
-    };
-    
-    utterance.onboundary = (e) => {
-      if (e.name !== 'word') return;
-      
-      if (window.CSS && CSS.highlights) {
-        const startObj = getTextNodeAtCharIndex(el, e.charIndex);
-        let length = e.charLength;
-        if (!length) {
-          const match = text.slice(e.charIndex).match(/^\S+/);
-          length = match ? match[0].length : 1;
-        }
-        const endObj = getTextNodeAtCharIndex(el, e.charIndex + length);
-        
-        if (startObj && endObj) {
-          const range = new Range();
-          range.setStart(startObj.node, startObj.offset);
-          range.setEnd(endObj.node, endObj.offset);
-          const highlight = new Highlight(range);
-          CSS.highlights.set("tts-highlight", highlight);
-        }
-      }
-
-      const wordsSoFar = text.slice(0, e.charIndex).split(/\s+/).filter(Boolean).length;
-      const totalWordsBefore = index > 0 ? cumulativeWords[index - 1] : 0;
-      progress = ((totalWordsBefore + wordsSoFar) / totalWords) * 100;
-      if (progress > 100) progress = 100;
-    };
-    
-    utterance.onend = () => {
-      startReading(index + 1);
-    };
-
-    utterance.onerror = (e) => {
-      if (e.error !== 'interrupted' && e.error !== 'canceled') {
-        startReading(index + 1);
-      }
-    };
-
-    utterance.rate = playbackRate;
-    currentUtterance = utterance;
-    synth.speak(utterance);
+    localStorage.setItem(
+      PREFERENCES_KEY,
+      JSON.stringify({
+        selectedVoiceURI,
+        playbackRate,
+        playbackPitch,
+        playbackVolume,
+        autoScroll,
+        highlightWords,
+        clickToRead,
+        persistPreferences,
+      }),
+    );
   }
 
-  function handleProgressClick(e) {
-    if (!isActive || totalWords === 0) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = Math.max(0, Math.min(1, x / rect.width));
-    
-    const targetWordIndex = Math.floor(percentage * totalWords);
-    
-    let wordCountSoFar = 0;
-    for(let i = 0; i < elements.length; i++) {
-      const pWords = countWords(elements[i].textContent);
-      if (wordCountSoFar + pWords > targetWordIndex || i === elements.length - 1) {
-        startReading(i);
-        progress = percentage * 100;
-        break;
-      }
-      wordCountSoFar += pWords;
+  function loadPreferences() {
+    try {
+      const rawPreferences = localStorage.getItem(PREFERENCES_KEY);
+      if (!rawPreferences) return;
+
+      const preferences = JSON.parse(rawPreferences);
+      selectedVoiceURI = preferences.selectedVoiceURI || selectedVoiceURI;
+      playbackRate = clamp(Number(preferences.playbackRate) || playbackRate, 0.5, 2);
+      playbackPitch = clamp(Number(preferences.playbackPitch) || playbackPitch, 0.5, 1.5);
+      playbackVolume = clamp(Number(preferences.playbackVolume) || playbackVolume, 0, 1);
+      autoScroll = preferences.autoScroll ?? autoScroll;
+      highlightWords = preferences.highlightWords ?? highlightWords;
+      clickToRead = preferences.clickToRead ?? clickToRead;
+      persistPreferences = preferences.persistPreferences ?? persistPreferences;
+    } catch {
+      localStorage.removeItem(PREFERENCES_KEY);
     }
   }
 
-  function handleGlobalClick(e) {
-    if (!isActive) return;
-    // Don't intercept clicks inside the tts controls
-    if (e.target.closest('.tts-controls') || e.target.closest('.settings-popup')) return;
-    
-    for(let i = 0; i < elements.length; i++) {
-      if (elements[i].contains(e.target)) {
-        e.preventDefault();
-        startReading(i);
-        break;
-      }
+  function restartIfActive() {
+    updateTiming();
+    savePreferences();
+
+    if (isActive) {
+      startReadingAtWord(currentWordIndex);
     }
   }
 
   function handleVoiceChange(event) {
     selectedVoiceURI = event.target.value;
-    if (isActive) {
-      startReading(currentElementIndex);
+    restartIfActive();
+  }
+
+  function handleRateChange(event) {
+    playbackRate = roundToStep(clamp(Number(event.target.value), 0.5, 2));
+    restartIfActive();
+  }
+
+  function handlePitchChange(event) {
+    playbackPitch = roundToStep(clamp(Number(event.target.value), 0.5, 1.5));
+    restartIfActive();
+  }
+
+  function handleVolumeChange(event) {
+    playbackVolume = roundToStep(clamp(Number(event.target.value), 0, 1));
+    restartIfActive();
+  }
+
+  function handleToggleChange(setting, checked) {
+    if (setting === 'autoScroll') autoScroll = checked;
+    if (setting === 'highlightWords') {
+      highlightWords = checked;
+      if (!highlightWords) clearHighlight();
+      else highlightWord(currentWordIndex);
     }
+    if (setting === 'clickToRead') clickToRead = checked;
+    if (setting === 'persistPreferences') persistPreferences = checked;
+
+    savePreferences();
+  }
+
+  function loadVoices() {
+    if (!synth) return;
+
+    const voices = synth.getVoices();
+    const englishVoices = voices.filter((voice) => voice.lang.startsWith('en'));
+    availableVoices = englishVoices.length > 0 ? englishVoices : voices;
+    if (selectedVoiceURI && !availableVoices.some((voice) => voice.voiceURI === selectedVoiceURI)) {
+      selectedVoiceURI = '';
+    }
+    if (!selectedVoiceURI && availableVoices.length > 0) {
+      const defaultVoice = availableVoices.find((voice) => voice.default) || availableVoices[0];
+      selectedVoiceURI = defaultVoice.voiceURI;
+    }
+  }
+
+  function collectReadableSegments() {
+    const container = document.querySelector('.article-body');
+    if (!container) return [];
+
+    let startWordIndex = 0;
+    return Array.from(container.querySelectorAll(READABLE_SELECTOR))
+      .filter(shouldUseReadableElement)
+      .map((element) => {
+        const readable = collectWordsForElement(element);
+        const segment = {
+          element,
+          text: readable.text,
+          words: readable.words,
+          wordCount: readable.words.length,
+          startWordIndex,
+        };
+
+        startWordIndex += segment.wordCount;
+        return segment;
+      })
+      .filter((segment) => segment.wordCount > 0);
   }
 
   onMount(() => {
@@ -216,42 +687,30 @@
     if (!isSupported) return;
 
     synth = window.speechSynthesis;
-    
-    const container = document.querySelector('.article-body');
-    if (!container) return;
-    
-    const nodes = container.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li');
-    elements = Array.from(nodes).filter(el => {
-       if (el.closest('.back-link') || el.closest('.credits') || el.closest('.tts-component')) return false;
-       return el.textContent.trim().length > 0;
-    });
-
-    totalWords = elements.reduce((acc, el) => {
-       const count = countWords(el.textContent);
-       cumulativeWords.push((cumulativeWords[cumulativeWords.length - 1] || 0) + count);
-       return acc + count;
-    }, 0);
-    timeEstimate = Math.max(1, Math.ceil(totalWords / (200 * playbackRate)));
+    loadPreferences();
+    segments = collectReadableSegments();
+    totalWords = segments.reduce((count, segment) => count + segment.wordCount, 0);
+    updateTiming(0);
 
     loadVoices();
     if (synth.onvoiceschanged !== undefined) {
       synth.onvoiceschanged = loadVoices;
     }
 
-    document.addEventListener('click', handleGlobalClick);
+    document.addEventListener('click', handleGlobalClick, true);
   });
 
   onDestroy(() => {
+    clearBoundaryFallback();
     if (synth) synth.cancel();
     clearHighlight();
     if (typeof document !== 'undefined') {
-      document.removeEventListener('click', handleGlobalClick);
+      document.removeEventListener('click', handleGlobalClick, true);
     }
   });
-
 </script>
 
-{#if isSupported && elements.length > 0}
+{#if isSupported && segments.length > 0}
   <div class="tts-component">
     {#if !isActive}
       <button class="tts-starter-btn" onclick={togglePlay} aria-label="Listen to this article">
@@ -259,25 +718,28 @@
           <Play size={14} fill="currentColor" />
         </span>
         <span class="btn-text">
-          Listen <span class="time-est">({timeEstimate} min)</span>
+          Listen <span class="time-est">({totalTimeLabel})</span>
         </span>
       </button>
     {/if}
 
     {#if isActive}
       <div class="tts-floating-bubble fade-up">
-        
         {#if showSettings}
-          <div class="settings-popup fade-up">
+          <div class="settings-popup fade-up" role="dialog" aria-label="Read aloud settings">
             <div class="settings-header">
-              <h3>Voice Settings</h3>
-              <button class="close-btn" onclick={() => showSettings = false}>
+              <div>
+                <h3>Read aloud</h3>
+                <p>{remainingTimeLabel} left</p>
+              </div>
+              <button class="close-btn" onclick={() => (showSettings = false)} aria-label="Close settings">
                 <X size={16} />
               </button>
             </div>
+
             <div class="settings-body">
               <div class="setting-group">
-                <label for="voice-select">Available Voices</label>
+                <label for="voice-select">Voice</label>
                 <select id="voice-select" onchange={handleVoiceChange} class="voice-select">
                   {#each availableVoices as voice}
                     <option value={voice.voiceURI} selected={voice.voiceURI === selectedVoiceURI}>
@@ -289,20 +751,88 @@
 
               <div class="setting-group">
                 <div class="label-row">
-                  <label for="speed-range">Reading Speed</label>
-                  <span class="speed-val">{playbackRate}x</span>
+                  <label for="speed-range">Speed</label>
+                  <span class="setting-value">{formatNumber(playbackRate)}x</span>
                 </div>
-                <input 
-                  type="range" 
-                  id="speed-range" 
-                  min="0.5" 
-                  max="2" 
-                  step="0.1" 
-                  bind:value={playbackRate}
-                  onchange={() => {
-                    if (isActive) startReading(currentElementIndex);
-                  }}
+                <input
+                  type="range"
+                  id="speed-range"
+                  min="0.5"
+                  max="2"
+                  step="0.1"
+                  value={playbackRate}
+                  oninput={handleRateChange}
+                  style={`--range-fill: ${rangePercent(playbackRate, 0.5, 2)}`}
                 />
+              </div>
+
+              <div class="setting-group">
+                <div class="label-row">
+                  <label for="pitch-range">Pitch</label>
+                  <span class="setting-value">{formatNumber(playbackPitch)}x</span>
+                </div>
+                <input
+                  type="range"
+                  id="pitch-range"
+                  min="0.5"
+                  max="1.5"
+                  step="0.1"
+                  value={playbackPitch}
+                  oninput={handlePitchChange}
+                  style={`--range-fill: ${rangePercent(playbackPitch, 0.5, 1.5)}`}
+                />
+              </div>
+
+              <div class="setting-group">
+                <div class="label-row">
+                  <label for="volume-range">Volume</label>
+                  <span class="setting-value">{Math.round(playbackVolume * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  id="volume-range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={playbackVolume}
+                  oninput={handleVolumeChange}
+                  style={`--range-fill: ${rangePercent(playbackVolume, 0, 1)}`}
+                />
+              </div>
+
+              <div class="toggle-list">
+                <label class="toggle-row">
+                  <span>Auto-scroll</span>
+                  <input
+                    type="checkbox"
+                    checked={autoScroll}
+                    onchange={(event) => handleToggleChange('autoScroll', event.target.checked)}
+                  />
+                </label>
+                <label class="toggle-row">
+                  <span>Word highlight</span>
+                  <input
+                    type="checkbox"
+                    checked={highlightWords}
+                    onchange={(event) => handleToggleChange('highlightWords', event.target.checked)}
+                  />
+                </label>
+                <label class="toggle-row">
+                  <span>Click to read</span>
+                  <input
+                    type="checkbox"
+                    checked={clickToRead}
+                    onchange={(event) => handleToggleChange('clickToRead', event.target.checked)}
+                  />
+                </label>
+                <label class="toggle-row">
+                  <span>Remember settings</span>
+                  <input
+                    type="checkbox"
+                    checked={persistPreferences}
+                    onchange={(event) => handleToggleChange('persistPreferences', event.target.checked)}
+                  />
+                </label>
               </div>
             </div>
           </div>
@@ -313,22 +843,45 @@
             {#if isPlaying}
               <Pause size={18} fill="currentColor" />
             {:else}
-              <Play size={18} fill="currentColor" left={2} />
+              <Play size={18} fill="currentColor" />
             {/if}
           </button>
-          
+
+          <button class="control-btn" onclick={() => skipWords(-SKIP_WORDS)} aria-label="Skip back 30 words">
+            <SkipBack size={17} />
+          </button>
+
           <div class="progress-container">
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div class="progress-bar-wrapper" onclick={handleProgressClick}>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: {progress}%"></div>
-              </div>
+            <input
+              class="progress-slider"
+              type="range"
+              min="0"
+              max={Math.max(0, totalWords - 1)}
+              step="1"
+              value={Math.min(currentWordIndex, Math.max(0, totalWords - 1))}
+              aria-label="Reading progress"
+              aria-valuetext={`${Math.round(progress)} percent, ${remainingTimeLabel} remaining`}
+              oninput={handleProgressInput}
+              onchange={handleProgressChange}
+              style={`--tts-progress: ${progress}%`}
+            />
+            <div class="progress-meta" aria-live="polite">
+              <span>{Math.round(progress)}%</span>
+              <span>{remainingTimeLabel} left</span>
             </div>
           </div>
 
+          <button class="control-btn" onclick={() => skipWords(SKIP_WORDS)} aria-label="Skip forward 30 words">
+            <SkipForward size={17} />
+          </button>
+
           <div class="right-controls">
-            <button class="control-btn settings-btn" onclick={() => showSettings = !showSettings} aria-label="Voice settings">
+            <button
+              class="control-btn settings-btn"
+              onclick={() => (showSettings = !showSettings)}
+              aria-label="Read aloud settings"
+              aria-expanded={showSettings}
+            >
               <Settings size={18} />
             </button>
             <button class="control-btn stop" onclick={stopPlaying} aria-label="Stop playback">
@@ -351,8 +904,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, rgba(82, 74, 242, 0.15), rgba(168, 85, 247, 0.15));
-    border: 1px solid rgba(168, 85, 247, 0.4);
+    background: linear-gradient(135deg, rgba(82, 74, 242, 0.16), rgba(168, 85, 247, 0.2));
+    border: 1px solid rgba(168, 85, 247, 0.45);
     padding: 6px 14px 6px 8px;
     border-radius: 99px;
     color: var(--text-primary);
@@ -362,15 +915,28 @@
     cursor: pointer;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
   }
 
   .tts-starter-btn:hover {
-    background: linear-gradient(135deg, rgba(82, 74, 242, 0.25), rgba(168, 85, 247, 0.25));
-    border-color: rgba(168, 85, 247, 0.6);
+    background: linear-gradient(135deg, rgba(82, 74, 242, 0.26), rgba(168, 85, 247, 0.28));
+    border-color: rgba(168, 85, 247, 0.7);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.22);
+  }
+
+  .tts-starter-btn:focus-visible,
+  .control-btn:focus-visible,
+  .close-btn:focus-visible,
+  .voice-select:focus-visible,
+  input:focus-visible {
+    outline: 2px solid rgba(168, 85, 247, 0.9);
+    outline-offset: 3px;
   }
 
   .icon-wrapper {
@@ -389,7 +955,6 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    letter-spacing: 0.02em;
   }
 
   .time-est {
@@ -397,34 +962,45 @@
     font-weight: 500;
   }
 
-  /* Floating Bubble */
+  :global(.tts-word) {
+    border-radius: 3px;
+  }
+
+  :global(.tts-active-word) {
+    background: rgba(168, 85, 247, 0.36);
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12);
+  }
+
   .tts-floating-bubble {
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, rgba(22, 21, 46, 0.95), rgba(10, 9, 26, 0.98));
+    background: linear-gradient(135deg, rgba(18, 17, 38, 0.98), rgba(8, 8, 20, 0.99));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    border-radius: 99px;
-    padding: 10px 16px;
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 999px;
+    padding: 10px 14px;
     z-index: 1000;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-    width: 90%;
-    max-width: 480px;
+    box-shadow:
+      0 18px 50px rgba(0, 0, 0, 0.65),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    width: min(92vw, 620px);
     font-family: 'Poppins', sans-serif;
   }
 
   .tts-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
   }
 
   .control-btn {
-    background: transparent;
-    border: none;
+    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     color: var(--text-secondary);
     cursor: pointer;
     display: flex;
@@ -433,33 +1009,37 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    transition: all 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
 
   .control-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.14);
     color: var(--text-primary);
   }
 
   .control-btn.play-pause {
     background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
     color: #fff;
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.32);
   }
 
   .control-btn.play-pause:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(168, 85, 247, 0.5);
-    background: linear-gradient(135deg, rgba(82, 74, 242, 1), rgba(168, 85, 247, 1));
   }
 
   .control-btn.settings-btn:hover {
-    color: var(--accent-2);
-    transform: rotate(45deg);
+    color: #d8b4fe;
   }
 
   .control-btn.stop:hover {
-    color: #ef4444; /* red tint */
+    color: #fca5a5;
   }
 
   .right-controls {
@@ -470,66 +1050,116 @@
 
   .progress-container {
     flex: 1;
+    min-width: 130px;
     display: flex;
-    align-items: center;
-    border-radius: 8px;
+    flex-direction: column;
+    gap: 2px;
   }
 
-  .progress-bar-wrapper {
+  .progress-slider {
     width: 100%;
-    height: 24px;
-    display: flex;
-    align-items: center;
+    height: 22px;
+    margin: 0;
     cursor: pointer;
-    position: relative;
-  }
-  
-  .progress-bar-wrapper:hover .progress-bar {
-    height: 6px;
+    appearance: none;
+    background: transparent;
   }
 
-  .progress-bar {
-    width: 100%;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: height 0.2s ease;
+  .progress-slider::-webkit-slider-runnable-track {
+    height: 7px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      #8b5cf6 0%,
+      #a855f7 var(--tts-progress),
+      rgba(10, 9, 26, 0.92) var(--tts-progress),
+      rgba(10, 9, 26, 0.92) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.55);
   }
 
-  .progress-fill {
-    height: 100%;
-    background: var(--silver-gradient);
-    border-radius: 4px;
-    transition: width 0.15s ease-out;
+  .progress-slider::-moz-range-track {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(10, 9, 26, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.55);
   }
 
-  /* Settings Popup */
+  .progress-slider::-moz-range-progress {
+    height: 7px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #8b5cf6, #a855f7);
+  }
+
+  .progress-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -4px;
+    border: 2px solid rgba(224, 224, 255, 0.92);
+    border-radius: 50%;
+    background: #17142f;
+    box-shadow:
+      0 0 0 4px rgba(168, 85, 247, 0.16),
+      0 3px 10px rgba(0, 0, 0, 0.55);
+  }
+
+  .progress-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(224, 224, 255, 0.92);
+    border-radius: 50%;
+    background: #17142f;
+    box-shadow:
+      0 0 0 4px rgba(168, 85, 247, 0.16),
+      0 3px 10px rgba(0, 0, 0, 0.55);
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
   .settings-popup {
     position: absolute;
-    bottom: calc(100% + 15px);
-    right: 18px;
-    width: 280px;
-    background: var(--surface);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    bottom: calc(100% + 16px);
+    right: 14px;
+    width: min(380px, calc(100vw - 28px));
+    max-height: min(72vh, 560px);
+    overflow-y: auto;
+    background:
+      linear-gradient(180deg, rgba(23, 20, 47, 0.98), rgba(9, 8, 24, 0.99)),
+      #0a091a;
+    border: 1px solid rgba(168, 85, 247, 0.26);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow:
+      0 26px 80px rgba(0, 0, 0, 0.76),
+      0 0 0 1px rgba(255, 255, 255, 0.045) inset,
+      0 0 42px rgba(82, 74, 242, 0.13);
     color: var(--text-primary);
+    text-align: left;
+    scrollbar-color: rgba(168, 85, 247, 0.65) rgba(10, 9, 26, 0.75);
+    scrollbar-width: thin;
   }
 
   .settings-popup::after {
     content: '';
     position: absolute;
-    bottom: -6px;
-    right: 22px;
-    width: 12px;
-    height: 12px;
-    background: var(--bg-offset);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    bottom: -7px;
+    right: 24px;
+    width: 14px;
+    height: 14px;
+    background: #0f0d26;
+    border-right: 1px solid rgba(168, 85, 247, 0.32);
+    border-bottom: 1px solid rgba(168, 85, 247, 0.32);
     transform: rotate(45deg);
     pointer-events: none;
   }
@@ -537,99 +1167,243 @@
   .settings-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+    padding: 4px 4px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   }
 
   .settings-header h3 {
     margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .settings-header p {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 
   .close-btn {
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 4px;
-    border-radius: 6px;
-    transition: all 0.2s;
+    padding: 6px;
+    border-radius: 8px;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
 
   .close-btn:hover {
     background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
     color: var(--text-primary);
   }
 
   .settings-body {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
   }
 
   .setting-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-radius: 12px;
   }
 
-  .label-row {
+  .label-row,
+  .toggle-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
   }
 
-  .speed-val {
-    font-size: 0.75rem;
-    color: var(--accent-2);
-    font-weight: 600;
+  .setting-value {
+    color: #c4b5fd;
+    font-size: 0.76rem;
+    font-weight: 700;
   }
 
   .voice-select {
     width: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
+    background-color: rgba(8, 8, 20, 0.96);
+    border: 1px solid rgba(168, 85, 247, 0.18);
     color: var(--text-primary);
-    padding: 10px 12px;
-    border-radius: 8px;
+    padding: 11px 36px 11px 12px;
+    border-radius: 10px;
     font-family: 'Poppins', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     outline: none;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a0cc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c4b5fd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 10px center;
+    background-position: right 12px center;
     background-size: 16px;
-    transition: border-color 0.2s;
-  }
-
-  input[type="range"] {
-    width: 100%;
-    accent-color: var(--accent-2);
-    cursor: pointer;
-  }
-
-  .settings-body label {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin: 0;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
   }
 
   .voice-select:focus {
-    border-color: var(--accent-1);
+    border-color: rgba(168, 85, 247, 0.75);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+    background-color: rgba(10, 9, 26, 1);
   }
 
   .voice-select option {
     background: var(--bg-dark);
     color: var(--text-primary);
+  }
+
+  input[type='range']:not(.progress-slider) {
+    width: 100%;
+    cursor: pointer;
+    appearance: none;
+    height: 18px;
+    background: transparent;
+  }
+
+  input[type='range']:not(.progress-slider)::-webkit-slider-runnable-track {
+    height: 7px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      #6d5dfc 0%,
+      #a855f7 var(--range-fill),
+      rgba(7, 7, 18, 0.94) var(--range-fill),
+      rgba(7, 7, 18, 0.94) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.55);
+  }
+
+  input[type='range']:not(.progress-slider)::-moz-range-track {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(7, 7, 18, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.55);
+  }
+
+  input[type='range']:not(.progress-slider)::-moz-range-progress {
+    height: 7px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6d5dfc, #a855f7);
+  }
+
+  input[type='range']:not(.progress-slider)::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -5px;
+    border: 2px solid rgba(224, 224, 255, 0.9);
+    border-radius: 50%;
+    background: #17142f;
+    box-shadow:
+      0 0 0 4px rgba(168, 85, 247, 0.15),
+      0 3px 10px rgba(0, 0, 0, 0.52);
+  }
+
+  input[type='range']:not(.progress-slider)::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(224, 224, 255, 0.9);
+    border-radius: 50%;
+    background: #17142f;
+    box-shadow:
+      0 0 0 4px rgba(168, 85, 247, 0.15),
+      0 3px 10px rgba(0, 0, 0, 0.52);
+  }
+
+  .setting-group > label,
+  .toggle-row span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .toggle-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    padding: 11px 12px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-radius: 12px;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .toggle-row:hover {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(168, 85, 247, 0.22);
+  }
+
+  .toggle-row input {
+    position: relative;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 20px;
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(7, 7, 18, 0.96);
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .toggle-row input::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .toggle-row input:checked {
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    border-color: rgba(224, 224, 255, 0.28);
+  }
+
+  .toggle-row input:checked::before {
+    transform: translateX(16px);
+    background: #ffffff;
   }
 
   .fade-up {
@@ -660,6 +1434,35 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tts-floating-bubble {
+      bottom: 18px;
+      width: calc(100vw - 24px);
+      border-radius: 18px;
+      padding: 10px;
+    }
+
+    .tts-controls {
+      gap: 6px;
+    }
+
+    .control-btn {
+      width: 34px;
+      height: 34px;
+    }
+
+    .progress-meta {
+      font-size: 0.64rem;
+    }
+
+    .settings-popup {
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+      width: calc(100vw - 24px);
     }
   }
 </style>
