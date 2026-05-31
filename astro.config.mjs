@@ -12,7 +12,7 @@ EventEmitter.defaultMaxListeners = 20;
 export default defineConfig({
   site: 'https://www.hapara.fail',
   output: 'static',
-  adapter: cloudflare({ imageService: 'compile' }),
+  adapter: cloudflare({ imageService: 'passthrough' }),
   outDir: './dist',
   publicDir: './public',
   integrations: [mdx(), sitemap(), svelte()],
