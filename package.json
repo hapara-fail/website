@@ -13,23 +13,23 @@
     "deploy": "pnpm run build && wrangler deploy"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260413.1",
+    "@cloudflare/workers-types": "^4.20260531.1",
     "prettier": "3.8.1",
-    "wrangler": "^4.82.2"
+    "wrangler": "^4.95.0"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.9",
-    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/cloudflare": "^13.6.0",
+    "@astrojs/mdx": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/svelte": "^8.0.5",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/svelte": "^8.1.2",
     "@fontsource/fira-code": "^5.2.7",
     "@fontsource/poppins": "^5.2.7",
-    "@lucide/astro": "^1.8.0",
-    "@lucide/svelte": "^1.8.0",
-    "astro": "^6.1.6",
+    "@lucide/astro": "^1.17.0",
+    "@lucide/svelte": "^1.17.0",
+    "astro": "^6.4.2",
     "astro-seo": "^1.1.0",
-    "svelte": "^5.55.3",
+    "svelte": "^5.56.0",
     "typescript": "^5.9.3"
   }
 }
