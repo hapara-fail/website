@@ -13,7 +13,9 @@
     "deploy": "pnpm run build && wrangler deploy"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@cloudflare/workers-types": "^4.20260531.1",
+    "@playwright/test": "^1.60.0",
     "prettier": "3.8.3",
     "wrangler": "^4.95.0"
   },

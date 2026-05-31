@@ -9,6 +9,10 @@
   import SkipForward from '@lucide/svelte/icons/skip-forward';
 
   const BASE_WORDS_PER_MINUTE = 185;
+  const FALLBACK_WORDS_PER_MINUTE = 145;
+  const FALLBACK_INITIAL_GRACE_MS = 1800;
+  const FALLBACK_BOUNDARY_GRACE_MS = 1400;
+  const FALLBACK_BOUNDARY_AHEAD_LIMIT = 2;
   const SKIP_WORDS = 30;
   const PREFERENCES_KEY = 'hapara:blog-tts';
   const READABLE_SELECTOR = [
@@ -45,6 +49,7 @@
   let fallbackSegment = null;
   let fallbackStartedAt = 0;
   let fallbackStartWordIndex = 0;
+  let fallbackAnchorWordIndex = 0;
   let lastAdvancingBoundaryAt = 0;
   let lastBoundaryEventAt = 0;
   let activeWordElement = null;
@@ -299,6 +304,7 @@
     fallbackSegment = segment;
     fallbackStartedAt = performance.now();
     fallbackStartWordIndex = localWordIndex;
+    fallbackAnchorWordIndex = localWordIndex;
     lastAdvancingBoundaryAt = 0;
     lastBoundaryEventAt = 0;
 
@@ -306,28 +312,30 @@
       if (!isActive || !isPlaying || !fallbackSegment) return;
 
       const now = performance.now();
-      if (!lastBoundaryEventAt && now - fallbackStartedAt < 1200) return;
-      if (lastBoundaryEventAt && now - lastBoundaryEventAt < 1200) return;
+      if (!lastBoundaryEventAt && now - fallbackStartedAt < FALLBACK_INITIAL_GRACE_MS) return;
+      if (lastBoundaryEventAt && now - lastBoundaryEventAt < FALLBACK_BOUNDARY_GRACE_MS) return;
       if (lastAdvancingBoundaryAt && now - lastAdvancingBoundaryAt < 700) return;
 
-      const elapsed = now - fallbackStartedAt;
       const estimatedSegmentDuration = estimateSegmentSeconds(fallbackSegment) * 1000;
-      if (elapsed > estimatedSegmentDuration + 700) {
-        const nextWordIndex = fallbackSegment.startWordIndex + fallbackSegment.wordCount;
-        if (nextWordIndex >= totalWords) {
-          stopPlaying();
-        } else {
-          startReadingAtWord(nextWordIndex);
-        }
+      const elapsed = now - fallbackStartedAt;
+      if (elapsed > estimatedSegmentDuration + 700 && currentWordIndex >= fallbackSegment.startWordIndex) {
         return;
       }
 
-      const wordsPerMs = (BASE_WORDS_PER_MINUTE * playbackRate) / 60000;
-      const estimatedLocalIndex = clamp(
-        fallbackStartWordIndex + Math.floor(elapsed * wordsPerMs),
-        fallbackStartWordIndex,
+      const anchorWordIndex = lastBoundaryEventAt ? fallbackAnchorWordIndex : fallbackStartWordIndex;
+      const anchorStartedAt = lastBoundaryEventAt || fallbackStartedAt;
+      const wordsPerMs = (FALLBACK_WORDS_PER_MINUTE * playbackRate) / 60000;
+      let estimatedLocalIndex = clamp(
+        anchorWordIndex + Math.floor((now - anchorStartedAt) * wordsPerMs),
+        anchorWordIndex,
         fallbackSegment.wordCount - 1,
       );
+      if (lastBoundaryEventAt) {
+        estimatedLocalIndex = Math.min(
+          estimatedLocalIndex,
+          fallbackAnchorWordIndex + FALLBACK_BOUNDARY_AHEAD_LIMIT,
+        );
+      }
       const estimatedGlobalIndex = fallbackSegment.startWordIndex + estimatedLocalIndex;
 
       if (estimatedGlobalIndex > currentWordIndex) {
@@ -410,17 +418,24 @@
     utterance.onboundary = (event) => {
       if (event.name && event.name !== 'word') return;
 
-      lastBoundaryEventAt = performance.now();
+      const boundaryReceivedAt = performance.now();
+      lastBoundaryEventAt = boundaryReceivedAt;
       const absoluteCharIndex = startWord.startChar + event.charIndex;
       const boundaryWord = getWordFromBoundary(segment, absoluteCharIndex);
       if (!boundaryWord) return;
 
       const localBoundaryIndex = segment.words.indexOf(boundaryWord);
       const globalBoundaryIndex = segment.startWordIndex + localBoundaryIndex;
-      if (globalBoundaryIndex < currentWordIndex) return;
+      fallbackAnchorWordIndex = localBoundaryIndex;
+
+      if (globalBoundaryIndex < currentWordIndex) {
+        setCurrentWordIndex(globalBoundaryIndex);
+        highlightWord(globalBoundaryIndex);
+        return;
+      }
 
       if (globalBoundaryIndex > currentWordIndex) {
-        lastAdvancingBoundaryAt = performance.now();
+        lastAdvancingBoundaryAt = boundaryReceivedAt;
       }
       setCurrentWordIndex(globalBoundaryIndex);
       highlightWord(globalBoundaryIndex);
@@ -1153,22 +1168,6 @@
       0 0 42px rgba(82, 74, 242, 0.13);
     color: var(--text-primary);
     text-align: left;
-    scrollbar-color: rgba(168, 85, 247, 0.65) rgba(10, 9, 26, 0.75);
-    scrollbar-width: thin;
-  }
-
-  .settings-popup::after {
-    content: '';
-    position: absolute;
-    bottom: -7px;
-    right: 24px;
-    width: 14px;
-    height: 14px;
-    background: #0f0d26;
-    border-right: 1px solid rgba(168, 85, 247, 0.32);
-    border-bottom: 1px solid rgba(168, 85, 247, 0.32);
-    transform: rotate(45deg);
-    pointer-events: none;
   }
 
   .settings-header {
