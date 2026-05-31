@@ -46,6 +46,7 @@
   let fallbackStartedAt = 0;
   let fallbackStartWordIndex = 0;
   let lastAdvancingBoundaryAt = 0;
+  let lastBoundaryEventAt = 0;
   let activeWordElement = null;
   let isSupported = $state(false);
 
@@ -299,11 +300,14 @@
     fallbackStartedAt = performance.now();
     fallbackStartWordIndex = localWordIndex;
     lastAdvancingBoundaryAt = 0;
+    lastBoundaryEventAt = 0;
 
     boundaryFallbackTimer = window.setInterval(() => {
       if (!isActive || !isPlaying || !fallbackSegment) return;
 
       const now = performance.now();
+      if (!lastBoundaryEventAt && now - fallbackStartedAt < 1200) return;
+      if (lastBoundaryEventAt && now - lastBoundaryEventAt < 1200) return;
       if (lastAdvancingBoundaryAt && now - lastAdvancingBoundaryAt < 700) return;
 
       const elapsed = now - fallbackStartedAt;
@@ -406,12 +410,15 @@
     utterance.onboundary = (event) => {
       if (event.name && event.name !== 'word') return;
 
+      lastBoundaryEventAt = performance.now();
       const absoluteCharIndex = startWord.startChar + event.charIndex;
       const boundaryWord = getWordFromBoundary(segment, absoluteCharIndex);
       if (!boundaryWord) return;
 
       const localBoundaryIndex = segment.words.indexOf(boundaryWord);
       const globalBoundaryIndex = segment.startWordIndex + localBoundaryIndex;
+      if (globalBoundaryIndex < currentWordIndex) return;
+
       if (globalBoundaryIndex > currentWordIndex) {
         lastAdvancingBoundaryAt = performance.now();
       }
