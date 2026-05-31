@@ -17,6 +17,7 @@ function setSecurityHeaders(headers: Headers): void {
       "font-src 'self';",
       "img-src 'self' data:;",
       "script-src 'self' 'unsafe-inline';",
+      "script-src-attr 'none';",
       "connect-src 'self' https://monitor.dns.hapara.fail https://monitor.dns2.hapara.fail https://raw.githubusercontent.com;",
       "object-src 'none';",
       "base-uri 'self';",
