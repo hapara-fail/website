@@ -460,6 +460,7 @@
   border-radius: 12px;
   border: 1px solid var(--border-color);
   cursor: pointer;
+  position: relative;
   transition:
     background 0.2s ease,
     border-color 0.2s ease;
@@ -474,8 +475,20 @@
 .dns-checkbox-wrapper input[type='checkbox'] {
   position: absolute;
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 22px;
+  height: 22px;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.dns-checkbox-wrapper input[type='checkbox']:focus-visible + .dns-custom-checkbox {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--focus-ring-shadow);
 }
 
 /* Custom Checkbox Container */
@@ -490,6 +503,7 @@
   background: transparent;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
+  pointer-events: none;
 }
 
 /* Checked State - Box */
@@ -507,6 +521,7 @@
   opacity: 0;
   transform: scale(0.5);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
 /* Checked State - Icon */
@@ -652,7 +667,7 @@
   margin: 20px 0;
 }
 
-.dns-info-group label {
+.dns-info-label {
   display: block;
   font-size: 0.85rem;
   color: var(--text-secondary);

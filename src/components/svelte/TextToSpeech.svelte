@@ -66,6 +66,7 @@
   let availableVoices = $state([]);
   let selectedVoiceURI = $state('');
   let showSettings = $state(false);
+  let settingsButton = $state(null);
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -367,6 +368,14 @@
     showSettings = false;
   }
 
+  function pausePlaying() {
+    clearCurrentUtteranceHandlers();
+    clearBoundaryFallback();
+    if (synth) synth.cancel();
+    currentUtterance = null;
+    isPlaying = false;
+  }
+
   function applyVoice(utterance) {
     if (!selectedVoiceURI) return;
 
@@ -485,9 +494,7 @@
       isActive = true;
       startReadingAtWord(currentWordIndex >= totalWords ? 0 : currentWordIndex);
     } else if (isPlaying) {
-      clearBoundaryFallback();
-      synth.pause();
-      isPlaying = false;
+      pausePlaying();
     } else {
       startReadingAtWord(currentWordIndex);
     }
@@ -666,6 +673,21 @@
     savePreferences();
   }
 
+  function toggleSettings() {
+    showSettings = !showSettings;
+  }
+
+  function closeSettings() {
+    showSettings = false;
+    settingsButton?.focus();
+  }
+
+  function handleDocumentKeydown(event) {
+    if (event.key === 'Escape' && showSettings) {
+      closeSettings();
+    }
+  }
+
   function loadVoices() {
     if (!synth) return;
 
@@ -720,6 +742,7 @@
     }
 
     document.addEventListener('click', handleGlobalClick, true);
+    document.addEventListener('keydown', handleDocumentKeydown);
   });
 
   onDestroy(() => {
@@ -728,6 +751,7 @@
     clearHighlight();
     if (typeof document !== 'undefined') {
       document.removeEventListener('click', handleGlobalClick, true);
+      document.removeEventListener('keydown', handleDocumentKeydown);
     }
   });
 </script>
@@ -737,7 +761,7 @@
     {#if !isActive}
       <button class="tts-starter-btn" onclick={togglePlay} aria-label="Listen to this article">
         <span class="icon-wrapper">
-          <Play size={14} fill="currentColor" />
+          <Play size={14} fill="currentColor" aria-hidden="true" />
         </span>
         <span class="btn-text">
           Listen <span class="time-est">({totalTimeLabel})</span>
@@ -746,16 +770,22 @@
     {/if}
 
     {#if isActive}
-      <div class="tts-floating-bubble fade-up">
+      <div class="tts-floating-bubble fade-up" role="region" aria-label="Read aloud controls">
         {#if showSettings}
-          <div class="settings-popup fade-up" role="dialog" aria-label="Read aloud settings">
+          <div
+            id="tts-settings-popup"
+            class="settings-popup fade-up"
+            role="dialog"
+            aria-labelledby="tts-settings-title"
+            aria-describedby="tts-settings-description"
+          >
             <div class="settings-header">
               <div>
-                <h3>Read aloud</h3>
-                <p>{remainingTimeLabel} left</p>
+                <h3 id="tts-settings-title">Read aloud</h3>
+                <p id="tts-settings-description">{remainingTimeLabel} left</p>
               </div>
-              <button class="close-btn" onclick={() => (showSettings = false)} aria-label="Close settings">
-                <X size={16} />
+              <button class="close-btn" onclick={closeSettings} aria-label="Close read aloud settings">
+                <X size={16} aria-hidden="true" />
               </button>
             </div>
 
@@ -783,6 +813,7 @@
                   max="2"
                   step="0.1"
                   value={playbackRate}
+                  aria-valuetext={`${formatNumber(playbackRate)} times normal speed`}
                   oninput={handleRateChange}
                   style={`--range-fill: ${rangePercent(playbackRate, 0.5, 2)}`}
                 />
@@ -800,6 +831,7 @@
                   max="1.5"
                   step="0.1"
                   value={playbackPitch}
+                  aria-valuetext={`${formatNumber(playbackPitch)} times normal pitch`}
                   oninput={handlePitchChange}
                   style={`--range-fill: ${rangePercent(playbackPitch, 0.5, 1.5)}`}
                 />
@@ -817,6 +849,7 @@
                   max="1"
                   step="0.1"
                   value={playbackVolume}
+                  aria-valuetext={`${Math.round(playbackVolume * 100)} percent volume`}
                   oninput={handleVolumeChange}
                   style={`--range-fill: ${rangePercent(playbackVolume, 0, 1)}`}
                 />
@@ -863,14 +896,14 @@
         <div class="tts-controls">
           <button class="control-btn play-pause" onclick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
             {#if isPlaying}
-              <Pause size={18} fill="currentColor" />
+              <Pause size={18} fill="currentColor" aria-hidden="true" />
             {:else}
-              <Play size={18} fill="currentColor" />
+              <Play size={18} fill="currentColor" aria-hidden="true" />
             {/if}
           </button>
 
           <button class="control-btn" onclick={() => skipWords(-SKIP_WORDS)} aria-label="Skip back 30 words">
-            <SkipBack size={17} />
+            <SkipBack size={17} aria-hidden="true" />
           </button>
 
           <div class="progress-container">
@@ -894,20 +927,22 @@
           </div>
 
           <button class="control-btn" onclick={() => skipWords(SKIP_WORDS)} aria-label="Skip forward 30 words">
-            <SkipForward size={17} />
+            <SkipForward size={17} aria-hidden="true" />
           </button>
 
           <div class="right-controls">
             <button
+              bind:this={settingsButton}
               class="control-btn settings-btn"
-              onclick={() => (showSettings = !showSettings)}
+              onclick={toggleSettings}
               aria-label="Read aloud settings"
               aria-expanded={showSettings}
+              aria-controls={showSettings ? 'tts-settings-popup' : undefined}
             >
-              <Settings size={18} />
+              <Settings size={18} aria-hidden="true" />
             </button>
             <button class="control-btn stop" onclick={stopPlaying} aria-label="Stop playback">
-              <Square size={16} fill="currentColor" />
+              <Square size={16} fill="currentColor" aria-hidden="true" />
             </button>
           </div>
         </div>

@@ -4,11 +4,13 @@
   --bg-offset: #0e0d21;
   --surface: rgba(22, 21, 46, 0.5);
   --text-primary: #e0e0ff;
-  --text-secondary: #a0a0cc;
+  --text-secondary: #c4c4ee;
   --accent-1: #524af2;
   --accent-2: #a855f7;
   --border-color: rgba(255, 255, 255, 0.08);
   --silver-gradient: linear-gradient(180deg, #ffffff, #e0e0ff);
+  --focus-ring: #ffffff;
+  --focus-ring-shadow: rgba(168, 85, 247, 0.55);
 }
 
 *,
@@ -21,6 +23,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 110px;
+  scroll-padding-bottom: 120px;
 }
 
 body {
@@ -30,6 +34,16 @@ body {
   overflow-x: hidden;
   line-height: 1.8;
   font-size: 16px;
+}
+
+main:focus {
+  outline: none;
+}
+
+section,
+[id] {
+  scroll-margin-top: 110px;
+  scroll-margin-bottom: 120px;
 }
 
 .gradient-text {
@@ -66,6 +80,9 @@ body {
   color: var(--text-primary);
   text-decoration: none;
   transition: text-shadow 0.3s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .logo:hover {
@@ -100,6 +117,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .footer-links a:hover {
@@ -137,6 +156,9 @@ body {
   text-decoration: none;
   transition: all 0.2s ease;
   position: relative;
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
 }
 
 .footer-legal a:hover {
@@ -198,6 +220,7 @@ body {
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   /* Ensure pointer cursor */
+  min-height: 44px;
 }
 
 .cta-button:hover {
@@ -442,6 +465,7 @@ body {
   flex-shrink: 0;
   animation: none;
   opacity: 1;
+  min-height: 44px;
 }
 
 .cookie-button:hover {
@@ -543,7 +567,8 @@ body {
 }
 
 .nav-list a,
-.submenu-toggle {
+.submenu-toggle,
+.submenu-disabled {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -564,11 +589,31 @@ body {
     transform 0.1s ease;
   text-align: left;
   justify-content: flex-start;
+  min-height: 44px;
 }
 
 .nav-list a:hover,
 .submenu-toggle:hover {
   background: rgba(255, 255, 255, 0.09);
+}
+
+.submenu-disabled {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.submenu-disabled svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.nav-list a[aria-current='page'] {
+  color: #ffffff;
+  background: rgba(82, 74, 242, 0.24);
+  border: 1px solid rgba(224, 224, 255, 0.18);
 }
 
 .nav-list a:active,
@@ -783,6 +828,8 @@ body {
   justify-content: center;
   padding: 8px;
   border-radius: 8px;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .nav-footer-links a:hover {
@@ -821,6 +868,8 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .hamburger-menu .line {
@@ -929,10 +978,47 @@ body {
   border: 0;
 }
 
+.visually-hidden:focus,
+.visually-hidden:focus-visible {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2000;
+  width: auto;
+  height: auto;
+  padding: 10px 16px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  color: #ffffff;
+  background: var(--bg-dark);
+  border: 2px solid var(--focus-ring);
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow:
+    0 0 0 4px var(--focus-ring-shadow),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
 /* --- Accessibility: Focus Visible --- */
 :focus-visible {
-  outline: 2px solid var(--accent-2);
-  outline-offset: 2px;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--focus-ring-shadow);
+}
+
+.main-header.header-hidden:focus-within {
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-drawer :focus-visible,
+.dns-modal-overlay :focus-visible,
+.cookie-notice :focus-visible,
+.tts-floating-bubble :focus-visible {
+  position: relative;
+  z-index: 2;
 }
 
 /* --- Accessibility: Reduced Motion --- */

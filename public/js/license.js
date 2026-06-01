@@ -3,6 +3,7 @@
 // Copy Function
 function copyLicense() {
   const licenseText = document.getElementById('licenseText').innerText;
+  const status = document.getElementById('license-action-status');
 
   navigator.clipboard
     .writeText(licenseText)
@@ -10,9 +11,10 @@ function copyLicense() {
       const btn = document.getElementById('copyBtn');
       const originalHTML = btn.innerHTML;
 
-      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+      btn.innerHTML = `<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
       btn.style.color = '#22c55e';
       btn.style.borderColor = '#22c55e';
+      if (status) status.textContent = 'License text copied to clipboard.';
 
       setTimeout(() => {
         btn.innerHTML = originalHTML;
@@ -28,6 +30,7 @@ function copyLicense() {
         btn.innerHTML = 'Copy failed';
         btn.style.color = '#ef4444';
         btn.style.borderColor = '#ef4444';
+        if (status) status.textContent = 'License text could not be copied.';
         setTimeout(() => {
           btn.innerHTML = originalHTML;
           btn.style.color = '';

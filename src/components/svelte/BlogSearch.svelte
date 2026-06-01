@@ -73,6 +73,9 @@
         return 0; // maintain original sorting
       })
   );
+  let resultSummary = $derived(
+    `${filteredPosts.length} ${filteredPosts.length === 1 ? 'post' : 'posts'} found`
+  );
 
   function toggleTag(tag) {
     if (activeTag === tag) {
@@ -83,7 +86,13 @@
   }
 
   function handleKeydown(e) {
-    if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+    const activeElement = document.activeElement;
+    const isEditable =
+      activeElement?.tagName === 'INPUT' ||
+      activeElement?.tagName === 'TEXTAREA' ||
+      activeElement?.isContentEditable;
+
+    if (e.key === '/' && !isEditable) {
       e.preventDefault();
       document.getElementById('blog-search')?.focus();
     }
@@ -102,26 +111,31 @@
     <Search class="search-icon" size={20} strokeWidth={2} aria-hidden="true" />
     <label for="blog-search" class="visually-hidden">Search</label>
     <input
-      type="text"
+      type="search"
       id="blog-search"
       class="search-input"
       placeholder="Search posts by title, content, or topic..."
       autocomplete="off"
+      aria-controls="blog-grid blog-no-results"
       bind:value={searchQuery}
     />
   </div>
 
-  <div id="blog-tag-chips" class="category-chips-wrapper">
+  <div id="blog-tag-chips" class="category-chips-wrapper" role="group" aria-label="Filter posts by topic">
     {#each tags as tag}
       <button 
         class="category-chip" 
         class:active={activeTag === tag}
+        type="button"
+        aria-pressed={activeTag === tag}
         onclick={() => toggleTag(tag)}
       >
         {tag}
       </button>
     {/each}
   </div>
+
+  <p class="visually-hidden" role="status" aria-live="polite">{resultSummary}</p>
 </div>
 
 <div id="blog-grid" class="blog-grid">
@@ -143,7 +157,7 @@
 </div>
 
 {#if filteredPosts.length === 0}
-  <div id="blog-no-results" class="no-results fade-in">
+  <div id="blog-no-results" class="no-results fade-in" role="status">
     No posts found. Try a different search term.
   </div>
 {/if}

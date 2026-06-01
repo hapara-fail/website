@@ -8,6 +8,8 @@
     "fmt": "pnpm run format",
     "generate-version": "node scripts/generate-version.js",
     "build": "pnpm run generate-version && astro build",
+    "test": "pnpm run test:a11y",
+    "test:a11y": "playwright test",
     "dev": "astro dev",
     "preview": "pnpm run build && wrangler dev",
     "deploy": "pnpm run build && wrangler deploy"

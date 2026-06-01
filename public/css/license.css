@@ -268,7 +268,7 @@
   font-size: 1.05rem;
 }
 
-.license-summary-card h1 {
+.license-eyebrow {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-secondary);
@@ -277,7 +277,7 @@
   margin-bottom: 0.5rem;
 }
 
-.license-summary-card h2 {
+.license-summary-card h1 {
   font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 1rem;
@@ -465,9 +465,8 @@
 
 /* Animations */
 .fade-up {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 1;
+  transform: none;
 }
 
 .delay-1 {

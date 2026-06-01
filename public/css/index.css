@@ -353,6 +353,10 @@
   flex-wrap: wrap;
 }
 
+.cta-banner-actions .cta-button {
+  align-self: center;
+}
+
 .cta-button-outline {
   background: transparent !important;
   border: 1px solid var(--border-color);

@@ -40,7 +40,7 @@ const NAV_CONFIG = {
       icon: 'M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z',
       items: [
         {
-          href: '#',
+          disabled: true,
           label: 'Coming Soon',
           icon: ['M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z', 'M12 6v6l4 2'],
         },
@@ -136,17 +136,19 @@ function createToggleIcon() {
 function buildNavMarkup() {
   const navList = document.createElement('ul');
   navList.className = 'nav-list';
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
 
-  NAV_CONFIG.items.forEach((item) => {
+  NAV_CONFIG.items.forEach((item, index) => {
     const li = document.createElement('li');
 
     if (item.type === 'submenu') {
       li.className = 'has-submenu';
+      const submenuId = `site-submenu-${index}`;
 
       const button = document.createElement('button');
       button.className = 'submenu-toggle';
-      button.setAttribute('aria-haspopup', 'true');
       button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-controls', submenuId);
 
       const icon = createSvgIcon(item.icon);
       button.appendChild(icon);
@@ -165,13 +167,32 @@ function buildNavMarkup() {
       // Create submenu
       const submenu = document.createElement('ul');
       submenu.className = 'submenu';
+      submenu.id = submenuId;
       submenu.hidden = true;
 
       item.items.forEach((subitem) => {
         const subli = document.createElement('li');
+        if (subitem.disabled) {
+          const disabledButton = document.createElement('button');
+          disabledButton.className = 'submenu-disabled';
+          disabledButton.type = 'button';
+          disabledButton.disabled = true;
+          disabledButton.appendChild(createSvgIcon(subitem.icon));
+
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = subitem.label;
+          disabledButton.appendChild(labelSpan);
+
+          subli.appendChild(disabledButton);
+          submenu.appendChild(subli);
+          return;
+        }
+
         const a = document.createElement('a');
         a.href = subitem.href;
         a.appendChild(createSvgIcon(subitem.icon));
+        const subPath = new URL(subitem.href, window.location.origin).pathname.replace(/\/$/, '') || '/';
+        if (subPath === currentPath) a.setAttribute('aria-current', 'page');
 
         const labelSpan = document.createElement('span');
         labelSpan.textContent = subitem.label;
@@ -187,6 +208,11 @@ function buildNavMarkup() {
       a.href = item.href;
       if (item.target) a.target = item.target;
       if (item.rel) a.rel = item.rel;
+      const itemUrl = new URL(item.href, window.location.origin);
+      const itemPath = itemUrl.pathname.replace(/\/$/, '') || '/';
+      if (itemUrl.origin === window.location.origin && itemPath === currentPath) {
+        a.setAttribute('aria-current', 'page');
+      }
 
       a.appendChild(createSvgIcon(item.icon));
 
@@ -272,7 +298,7 @@ function buildFooterMarkup() {
     );
 
     footerText.innerHTML = `<div class="version-footer">
-      <div class="version-footer-svg"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"><path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583 2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099 2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039 3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0 2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0 2.242 2.242 0 0 1 4.484 0zm8.221-9.715a2.242 2.242 0 1 1 0-4.485 2.242 2.242 0 0 1 0 4.485z"></path></svg></div>
+      <div class="version-footer-svg"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"><path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583 2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099 2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039 3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0 2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0 2.242 2.242 0 0 1 4.484 0zm8.221-9.715a2.242 2.242 0 1 1 0-4.485 2.242 2.242 0 0 1 0 4.485z"></path></svg></div>
       <a href="https://github.com/hapara-fail/website/commit/${safeCommit}" target="_blank" rel="noopener noreferrer" class="version-footer-link">${safeCommit}</a>
       <span class="version-footer-sep">&bull;</span>
       <span class="version-footer-msg" title="${safeMsg}">${safeMsg}</span>
@@ -333,8 +359,17 @@ function initNav() {
   btn.setAttribute('aria-controls', 'site-drawer');
   if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
 
-  const focusableSelectors = 'a, button, [tabindex]:not([tabindex="-1"])';
+  const focusableSelectors =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
   let lastFocused = null;
+
+  function getFocusable(container) {
+    return Array.from(container.querySelectorAll(focusableSelectors)).filter((el) => {
+      if (el.hidden || el.getAttribute('aria-hidden') === 'true') return false;
+      const rects = el.getClientRects();
+      return rects.length > 0;
+    });
+  }
 
   // Track running WAAPI animations so we can cancel on re-open / re-close
   let _itemAnims = [];
@@ -418,7 +453,7 @@ function initNav() {
     });
 
     document.body.classList.add('body-lock');
-    const first = drawerEl.querySelector(focusableSelectors);
+    const first = getFocusable(drawerEl)[0];
     if (first) first.focus();
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('focusin', trapFocus);
@@ -517,13 +552,32 @@ function initNav() {
   }
 
   function onKeyDown(e) {
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') {
+      close();
+      return;
+    }
+
+    if (e.key !== 'Tab' || !drawerEl.classList.contains('is-open')) return;
+
+    const focusable = getFocusable(drawerEl);
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   }
 
   function trapFocus(e) {
     if (!drawerEl.classList.contains('is-open')) return;
     if (!drawerEl.contains(e.target)) {
-      const first = drawerEl.querySelector(focusableSelectors);
+      const first = getFocusable(drawerEl)[0];
       if (first) first.focus();
     }
   }

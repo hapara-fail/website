@@ -1,5 +1,6 @@
 document.addEventListener('astro:page-load', () => {
   // --- TABS & OS DETECTION SCRIPT ---
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const tabsNav = document.querySelector('.tabs-nav');
   const tabButtons = document.querySelectorAll('.tab-button');
   const tabUnderline = document.querySelector('.tab-underline');
@@ -42,7 +43,7 @@ document.addEventListener('astro:page-load', () => {
     if (newActiveButton && !isInitial) {
       // Scroll into view logic - only when user manually switches tabs
       newActiveButton.scrollIntoView({
-        behavior: 'smooth',
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
         block: 'nearest',
         inline: 'center',
       });
@@ -59,6 +60,11 @@ document.addEventListener('astro:page-load', () => {
       btn.classList.remove('active');
       btn.setAttribute('aria-selected', 'false');
       btn.setAttribute('tabindex', '-1');
+      const panel = document.getElementById(btn.dataset.target);
+      if (panel) {
+        panel.hidden = true;
+        panel.classList.remove('active', 'is-exiting', 'slide-from-right', 'slide-from-left');
+      }
     });
     if (newActiveButton) {
       newActiveButton.classList.add('active');
@@ -67,7 +73,9 @@ document.addEventListener('astro:page-load', () => {
     }
     moveUnderline(newActiveButton);
 
-    if (currentActiveContent && !isInitial) {
+    if (newActiveContent) newActiveContent.hidden = false;
+
+    if (currentActiveContent && !isInitial && !prefersReducedMotion) {
       let currentIndex = -1;
       let newIndex = -1;
 
@@ -192,7 +200,7 @@ document.addEventListener('astro:page-load', () => {
   };
 
   const smoothScrollBy = (container, delta) => {
-    container.scrollBy({ left: delta, behavior: 'smooth' });
+    container.scrollBy({ left: delta, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
   if (leftArrow && rightArrow && tabsNav) {
@@ -230,6 +238,8 @@ document.addEventListener('astro:page-load', () => {
   const viewIpsBtn = document.getElementById('view-ips-btn');
   const modalOverlay = document.getElementById('dns-modal-overlay');
   const modalCloseBtn = document.getElementById('dns-modal-close');
+  const modalDialog = modalOverlay ? modalOverlay.querySelector('.dns-modal') : null;
+  const modalStatus = document.getElementById('dns-modal-status');
   const stepTos = document.getElementById('dns-step-tos');
   const stepInfo = document.getElementById('dns-step-info');
   const tosCheckbox = document.getElementById('tos-agreement-checkbox');
@@ -252,6 +262,20 @@ document.addEventListener('astro:page-load', () => {
   };
 
   let modalLastFocused = null;
+  const focusableSelectors =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  const getModalFocusable = () => {
+    if (!modalDialog) return [];
+    return Array.from(modalDialog.querySelectorAll(focusableSelectors)).filter((el) => {
+      if (el.hidden || el.closest('[hidden]')) return false;
+      return el.getClientRects().length > 0;
+    });
+  };
+
+  const announceModalStatus = (message) => {
+    if (modalStatus) modalStatus.textContent = message;
+  };
 
   const openModal = () => {
     if (!modalOverlay) return;
@@ -270,6 +294,11 @@ document.addEventListener('astro:page-load', () => {
         stepInfo.hidden = false;
         stepInfo.classList.remove('fade-out');
       }
+      if (modalDialog) {
+        modalDialog.setAttribute('aria-labelledby', 'dns-modal-info-title');
+        modalDialog.setAttribute('aria-describedby', 'dns-modal-info-description');
+      }
+      announceModalStatus('DNS addresses are ready to copy.');
     } else {
       // Show ToS
       if (stepInfo) stepInfo.hidden = true;
@@ -283,6 +312,11 @@ document.addEventListener('astro:page-load', () => {
         tosProceedBtn.disabled = true;
         tosProceedBtn.classList.add('cta-button--disabled');
       }
+      if (modalDialog) {
+        modalDialog.setAttribute('aria-labelledby', 'dns-modal-title');
+        modalDialog.setAttribute('aria-describedby', 'dns-modal-description');
+      }
+      announceModalStatus('Review the service agreement before viewing DNS addresses.');
     }
 
     modalOverlay.hidden = false;
@@ -290,13 +324,8 @@ document.addEventListener('astro:page-load', () => {
 
     // Focus the first focusable element in the modal
     requestAnimationFrame(() => {
-      const modal = modalOverlay.querySelector('.dns-modal');
-      if (modal) {
-        const firstFocusable = modal.querySelector(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (firstFocusable) firstFocusable.focus();
-      }
+      const firstFocusable = getModalFocusable()[0];
+      if (firstFocusable) firstFocusable.focus();
     });
 
     // Add keyboard handlers
@@ -318,6 +347,7 @@ document.addEventListener('astro:page-load', () => {
     // Reset state
     statusTag.className = 'dns-status-tag';
     if (statusText) statusText.textContent = 'Checking...';
+    statusTag.setAttribute('aria-label', 'DNS server status: checking');
 
     try {
       const controller = new AbortController();
@@ -349,10 +379,12 @@ document.addEventListener('astro:page-load', () => {
 
       statusTag.classList.add('status-up');
       if (statusText) statusText.textContent = 'Operational';
+      statusTag.setAttribute('aria-label', 'DNS server status: operational');
     } catch (error) {
       console.error('DNS Status Check Failed (' + statusTagId + '):', error);
       statusTag.classList.add('status-down');
       if (statusText) statusText.textContent = 'Service Issue';
+      statusTag.setAttribute('aria-label', 'DNS server status: service issue');
     }
   };
 
@@ -364,16 +396,30 @@ document.addEventListener('astro:page-load', () => {
   const onModalKeyDown = (e) => {
     if (e.key === 'Escape') {
       closeModal();
+      return;
+    }
+
+    if (e.key !== 'Tab') return;
+
+    const focusable = getModalFocusable();
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
     }
   };
 
   const trapModalFocus = (e) => {
-    const modal = modalOverlay ? modalOverlay.querySelector('.dns-modal') : null;
-    if (!modal || modalOverlay.hidden) return;
-    if (!modal.contains(e.target)) {
-      const firstFocusable = modal.querySelector(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
+    if (!modalDialog || modalOverlay.hidden) return;
+    if (!modalDialog.contains(e.target)) {
+      const firstFocusable = getModalFocusable()[0];
       if (firstFocusable) firstFocusable.focus();
     }
   };
@@ -390,6 +436,7 @@ document.addEventListener('astro:page-load', () => {
     // Reset transitions
     if (stepTos) stepTos.classList.remove('fade-out', 'fade-in');
     if (stepInfo) stepInfo.classList.remove('fade-out', 'fade-in');
+    announceModalStatus('');
 
     // Return focus to trigger
     if (modalLastFocused && typeof modalLastFocused.focus === 'function') {
@@ -438,11 +485,18 @@ document.addEventListener('astro:page-load', () => {
           stepTos.hidden = true;
           stepInfo.hidden = false;
           stepInfo.classList.add('fade-in');
+          if (modalDialog) {
+            modalDialog.setAttribute('aria-labelledby', 'dns-modal-info-title');
+            modalDialog.setAttribute('aria-describedby', 'dns-modal-info-description');
+          }
+          announceModalStatus('DNS addresses are ready to copy.');
           checkDnsStatus();
 
           // Small delay to allow fade-in class to apply before removing it/or letting CSS handle opacity
           requestAnimationFrame(() => {
             stepInfo.classList.remove('fade-in'); // This might just pop in if we don't have fade-in defined to start at 0
+            const firstInfoControl = getModalFocusable()[0];
+            if (firstInfoControl) firstInfoControl.focus();
           });
         }, 250); // Match CSS transition duration
       }
@@ -467,15 +521,18 @@ document.addEventListener('astro:page-load', () => {
               btn.classList.add('pulsing');
 
               if (copiedMsg) {
+                copiedMsg.setAttribute('role', 'status');
                 copiedMsg.classList.add('show');
                 setTimeout(() => {
                   copiedMsg.classList.remove('show');
                   btn.classList.remove('pulsing');
                 }, 2000);
               }
+              announceModalStatus('Copied to clipboard.');
             })
             .catch((err) => {
               console.error('Failed to copy text: ', err);
+              announceModalStatus('Copy failed. Select and copy the address manually.');
             });
         }
       }
@@ -489,6 +546,7 @@ document.addEventListener('astro:page-load', () => {
 
   const searchInput = document.getElementById('service-search');
   const serviceList = document.getElementById('service-list');
+  const serviceResultsStatus = document.getElementById('service-results-status');
   const categoryChipsContainer = document.getElementById('category-chips');
 
   /**
@@ -526,6 +584,8 @@ document.addEventListener('astro:page-load', () => {
   const showLoadingSkeleton = () => {
     if (!serviceList) return;
     serviceList.innerHTML = '';
+    serviceList.setAttribute('aria-busy', 'true');
+    if (serviceResultsStatus) serviceResultsStatus.textContent = 'Loading services.';
 
     for (let g = 0; g < 3; g++) {
       const group = document.createElement('div');
@@ -660,6 +720,7 @@ document.addEventListener('astro:page-load', () => {
       chip.className = 'category-chip' + (activeCategoryFilter === group.category ? ' active' : '');
       chip.textContent = group.category;
       chip.type = 'button';
+      chip.setAttribute('aria-pressed', String(activeCategoryFilter === group.category));
       chip.addEventListener('click', () => {
         if (activeCategoryFilter === group.category) {
           activeCategoryFilter = null; // deselect
@@ -678,6 +739,7 @@ document.addEventListener('astro:page-load', () => {
     if (!categoryChipsContainer) return;
     categoryChipsContainer.querySelectorAll('.category-chip').forEach((chip) => {
       chip.classList.toggle('active', chip.textContent === activeCategoryFilter);
+      chip.setAttribute('aria-pressed', String(chip.textContent === activeCategoryFilter));
     });
   };
 
@@ -808,6 +870,8 @@ document.addEventListener('astro:page-load', () => {
         retrySvg.setAttribute('stroke-width', '2');
         retrySvg.setAttribute('stroke-linecap', 'round');
         retrySvg.setAttribute('stroke-linejoin', 'round');
+        retrySvg.setAttribute('aria-hidden', 'true');
+        retrySvg.setAttribute('focusable', 'false');
 
         const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
         path1.setAttribute('points', '23 4 23 10 17 10');
@@ -823,6 +887,8 @@ document.addEventListener('astro:page-load', () => {
 
         noResults.appendChild(retryBtn);
         serviceList.appendChild(noResults);
+        serviceList.setAttribute('aria-busy', 'false');
+        if (serviceResultsStatus) serviceResultsStatus.textContent = 'Unable to load service list.';
       }
     }
   };
@@ -831,6 +897,7 @@ document.addEventListener('astro:page-load', () => {
   const renderServices = (filterText = '') => {
     if (!serviceList) return;
     serviceList.innerHTML = '';
+    serviceList.setAttribute('aria-busy', 'false');
 
     const normalizedFilter = filterText.toLowerCase().trim();
     let hasResults = false;
@@ -916,7 +983,9 @@ document.addEventListener('astro:page-load', () => {
       group.services.forEach((service) => {
         const card = document.createElement('div');
         card.className = 'service-card card-enter';
-        card.style.animationDelay = `${cardAnimationIndex * 15}ms`;
+        if (!prefersReducedMotion) {
+          card.style.animationDelay = `${cardAnimationIndex * 15}ms`;
+        }
         cardAnimationIndex++;
 
         const serviceInfo = document.createElement('div');
@@ -1032,6 +1101,8 @@ document.addEventListener('astro:page-load', () => {
       svgEl.setAttribute('stroke-width', '2.5');
       svgEl.setAttribute('stroke-linecap', 'round');
       svgEl.setAttribute('stroke-linejoin', 'round');
+      svgEl.setAttribute('aria-hidden', 'true');
+      svgEl.setAttribute('focusable', 'false');
 
       const lineVertical = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       lineVertical.setAttribute('x1', '12');
@@ -1052,6 +1123,17 @@ document.addEventListener('astro:page-load', () => {
 
       noResults.appendChild(link);
       serviceList.appendChild(noResults);
+    }
+
+    const resultCount = resultsToRender.reduce((count, group) => count + group.services.length, 0);
+    if (serviceResultsStatus) {
+      if (!normalizedFilter && !activeCategoryFilter) {
+        serviceResultsStatus.textContent = `${resultCount} services loaded.`;
+      } else if (resultCount === 0) {
+        serviceResultsStatus.textContent = `No services found for ${filterText || activeCategoryFilter}.`;
+      } else {
+        serviceResultsStatus.textContent = `${resultCount} matching services found.`;
+      }
     }
   };
 

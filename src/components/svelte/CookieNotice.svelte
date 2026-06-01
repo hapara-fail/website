@@ -47,14 +47,13 @@
   <div
     class="cookie-notice {isHiding ? 'cookie-notice--hiding' : ''}"
     id="cookieNotice"
-    role="dialog"
-    aria-live="polite"
-    aria-label="Cookie notice"
+    role="region"
+    aria-labelledby="cookie-notice-title"
   >
     <div class="cookie-content">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cookie-icon lucide-cookie"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
-      <p>We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
+      <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cookie-icon lucide-cookie"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
+      <p id="cookie-notice-title">We only use functional cookies to enhance your experience. No tracking, no ads. Ever.</p>
     </div>
-    <button class="cookie-button" id="acceptCookie" aria-label="Accept cookies" on:click={acceptCookie}>Okay</button>
+    <button class="cookie-button" id="acceptCookie" on:click={acceptCookie}>Okay</button>
   </div>
 {/if}

@@ -5,16 +5,15 @@ import cloudflare from '@astrojs/cloudflare';
 
 import svelte from '@astrojs/svelte';
 
-import { EventEmitter } from 'node:events';
-
-EventEmitter.defaultMaxListeners = 20;
-
 export default defineConfig({
   site: 'https://www.hapara.fail',
   output: 'static',
   adapter: cloudflare({ imageService: 'passthrough' }),
   outDir: './dist',
   publicDir: './public',
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [mdx(), sitemap(), svelte()],
   redirects: {
     '/bypass': '/services/dns',
@@ -24,6 +23,17 @@ export default defineConfig({
   },
   vite: {
     optimizeDeps: {
+      include: [
+        'astro-seo',
+        'astro/assets/services/noop',
+        'astro/content/runtime',
+        'astro/zod',
+        'astro/virtual-modules/transitions.js',
+        'astro/virtual-modules/transitions-router.js',
+        'astro/virtual-modules/transitions-types.js',
+        'astro/virtual-modules/transitions-events.js',
+        'astro/virtual-modules/transitions-swap-functions.js',
+      ],
       exclude: ['@lucide/astro'],
     },
     ssr: {
@@ -31,7 +41,7 @@ export default defineConfig({
     },
     server: {
       watch: {
-        usePolling: true,
+        usePolling: process.env.VITE_USE_POLLING === 'true',
       },
     },
   },

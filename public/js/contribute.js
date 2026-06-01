@@ -21,6 +21,7 @@ document.addEventListener('astro:page-load', () => {
 
             // Show "Copied!" message
             if (copiedMessage) {
+              copiedMessage.setAttribute('role', 'status');
               copiedMessage.classList.add('show');
               setTimeout(() => {
                 copiedMessage.classList.remove('show');
