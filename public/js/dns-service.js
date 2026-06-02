@@ -156,6 +156,21 @@ document.addEventListener('astro:page-load', () => {
     return null;
   }
 
+  const getPlatformIconMarkup = (osId) => {
+    const iconMap = {
+      chromeos: 'chromeos',
+      windows: 'windows',
+      macos: 'apple',
+      ios: 'apple',
+      android: 'android',
+      linux: 'linux',
+    };
+    const iconName = iconMap[osId];
+    if (!iconName) return '';
+
+    return `<svg class="platform-icon platform-icon--inline" aria-hidden="true" focusable="false"><use href="#platform-icon-${iconName}"></use></svg>`;
+  };
+
   function initializeTabs() {
     const detectedOS = detectOS();
     let targetTabId = 'chromeos';
@@ -171,7 +186,7 @@ document.addEventListener('astro:page-load', () => {
         android: 'Android',
         linux: 'Linux',
       };
-      message = `We've detected you're on <strong>${osMap[detectedOS]}</strong> and have selected the relevant instructions for you.`;
+      message = `We've detected you're on <strong class="detected-platform">${getPlatformIconMarkup(detectedOS)}${osMap[detectedOS]}</strong> and have selected the relevant instructions for you.`;
     }
 
     setActiveTab(targetTabId, true);
@@ -389,7 +404,6 @@ document.addEventListener('astro:page-load', () => {
   };
 
   const checkDnsStatus = () => {
-    checkServerStatus('https://monitor.dns.hapara.fail/', 'dns-status-tag');
     checkServerStatus('https://monitor.dns2.hapara.fail/', 'dns2-status-tag');
   };
 
