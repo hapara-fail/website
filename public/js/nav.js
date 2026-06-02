@@ -191,7 +191,8 @@ function buildNavMarkup() {
         const a = document.createElement('a');
         a.href = subitem.href;
         a.appendChild(createSvgIcon(subitem.icon));
-        const subPath = new URL(subitem.href, window.location.origin).pathname.replace(/\/$/, '') || '/';
+        const subPath =
+          new URL(subitem.href, window.location.origin).pathname.replace(/\/$/, '') || '/';
         if (subPath === currentPath) a.setAttribute('aria-current', 'page');
 
         const labelSpan = document.createElement('span');
