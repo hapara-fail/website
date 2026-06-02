@@ -212,7 +212,7 @@ This command generates the version stamp, runs `astro build` to produce the `dis
 
 Security headers are applied to every response via Astro middleware (`src/middleware.ts`):
 
-- `Content-Security-Policy` — restricts asset origins; allows connections to `monitor.dns.hapara.fail` and `monitor.dns2.hapara.fail` for DNS status checks, and `raw.githubusercontent.com` for content.
+- `Content-Security-Policy` — restricts asset origins; allows connections to `monitor.dns.hapara.fail` and `monitor.dns2.hapara.fail` for DNS status checks, and `cdn.jsdelivr.net` with `raw.githubusercontent.com` fallback for blocklist content.
 - `Strict-Transport-Security` — HSTS with `includeSubDomains; preload` (1 year).
 - `X-Content-Type-Options: nosniff`
 - `X-Frame-Options: SAMEORIGIN`

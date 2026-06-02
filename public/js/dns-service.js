@@ -745,15 +745,34 @@ document.addEventListener('astro:page-load', () => {
 
   // --- Fetch Services ---
   const MAX_BLOCKLIST_SIZE_BYTES = 512 * 1024; // 512 KB
+  const BLOCKLIST_SOURCES = [
+    'https://cdn.jsdelivr.net/gh/hapara-fail/blocklist@main/README.md',
+    'https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/README.md',
+  ];
+
+  const fetchBlocklistResponse = async () => {
+    let lastError = null;
+
+    for (const source of BLOCKLIST_SOURCES) {
+      try {
+        const response = await fetch(source);
+        if (response.ok) {
+          return response;
+        }
+        lastError = new Error(`Failed to fetch blocklist from ${source}: ${response.status}`);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error('Failed to fetch blocklist');
+  };
 
   const fetchServices = async () => {
     showLoadingSkeleton();
 
     try {
-      const response = await fetch(
-        'https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/README.md'
-      );
-      if (!response.ok) throw new Error('Failed to fetch blocklist');
+      const response = await fetchBlocklistResponse();
 
       const contentLength = parseInt(response.headers.get('content-length') || '0', 10);
       if (contentLength > MAX_BLOCKLIST_SIZE_BYTES) {
@@ -853,7 +872,7 @@ document.addEventListener('astro:page-load', () => {
         noResults.className = 'no-results';
 
         const messagePara = document.createElement('p');
-        messagePara.textContent = 'Unable to load service list from GitHub.';
+        messagePara.textContent = 'Unable to load service list.';
         noResults.appendChild(messagePara);
 
         const retryBtn = document.createElement('button');
