@@ -16,13 +16,13 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@cloudflare/workers-types": "^4.20260601.1",
+    "@cloudflare/workers-types": "^4.20260603.1",
     "@playwright/test": "^1.60.0",
     "prettier": "3.8.3",
-    "wrangler": "^4.96.0"
+    "wrangler": "^4.97.0"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.6.0",
+    "@astrojs/cloudflare": "^13.6.1",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
@@ -31,9 +31,9 @@
     "@fontsource/poppins": "^5.2.7",
     "@lucide/astro": "^1.17.0",
     "@lucide/svelte": "^1.17.0",
-    "astro": "^6.4.2",
+    "astro": "^6.4.4",
     "astro-seo": "^1.1.0",
-    "svelte": "^5.56.0",
+    "svelte": "^5.56.1",
     "typescript": "^5.9.3"
   }
 }
