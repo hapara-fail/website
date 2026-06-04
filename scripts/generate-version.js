@@ -1,6 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'node:fs';
+import path from 'node:path';
+import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function sanitizeCommitHash(value) {
   const str = String(value || '');
@@ -31,7 +35,7 @@ try {
 
   commitHash = sanitizeCommitHash(commitHash);
 
-  const outputPath = path.join(__dirname, '../src/site/js/version-data.js');
+  const outputPath = path.join(__dirname, '../public/js/version-data.js');
 
   // Only output the data — nav.js handles rendering
   const jsContent = `// Auto-generated – do not edit (${new Date().toISOString()})

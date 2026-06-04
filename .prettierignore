@@ -14,4 +14,4 @@ package-lock.json
 pnpm-lock.yaml
 
 # Downloads
-src/site/downloads
+public/downloads

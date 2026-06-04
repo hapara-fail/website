@@ -1,0 +1,426 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import a9xImg from '../assets/a9x.webp';
+import newarkImg from '../assets/newark.webp';
+import Eye from '@lucide/astro/icons/eye';
+import FileSearch from '@lucide/astro/icons/file-search';
+import Database from '@lucide/astro/icons/database';
+import Ban from '@lucide/astro/icons/ban';
+import ExternalLink from '@lucide/astro/icons/external-link';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import Code from '@lucide/astro/icons/code';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import History from '@lucide/astro/icons/history';
+import Laptop from '@lucide/astro/icons/laptop';
+import MessageSquareQuote from '@lucide/astro/icons/message-square-quote';
+---
+
+<BaseLayout
+  title="Our Mission | hapara.fail"
+  description="Student-led project exposing classroom surveillance and empowering privacy. Learn our philosophy, research approach, and the team behind hapara.fail."
+  canonicalUrl="https://www.hapara.fail/about"
+  pageStyles={['/css/about.css']}
+  extraScripts={['/js/scroll-reveal.js']}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'Our Mission | hapara.fail',
+    url: 'https://www.hapara.fail/about',
+    description:
+      'Student-led project exposing classroom surveillance and empowering privacy. Learn our philosophy, research approach, and the team behind hapara.fail.',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'hapara.fail',
+      url: 'https://www.hapara.fail/',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'hapara.fail',
+      url: 'https://www.hapara.fail/',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.hapara.fail/images/favicon-96x96.png',
+      },
+    },
+  }}
+>
+  <section class="page-hero">
+    <div class="parallax-bg"></div>
+    <div class="container reveal reveal-blur">
+      <h1 class="gradient-text">Knowledge is the countermeasure.</h1>
+      <p>
+        The modern classroom has become a laboratory for mass surveillance. We are a collective of
+        students, developers, and privacy advocates dedicated to exposing this reality, explaining
+        the technology, and empowering a generation to reclaim their digital autonomy.
+      </p>
+    </div>
+  </section>
+
+  <section
+    id="origin"
+    class="content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">Our Origin</h2>
+        <p>
+          It didn't start as a planned project. It started as a reaction. When the world shut down
+          in 2020, the classroom moved into our homes—and invasive surveillance tools came with it.
+        </p>
+      </div>
+
+      <div class="history-timeline">
+        <div class="timeline-item reveal reveal-left">
+          <div class="timeline-icon"><Laptop size={28} /></div>
+          <div class="timeline-content">
+            <h3>The 2020 COVID Lockdown</h3>
+            <p>
+              As schools transitioned to remote learning during the pandemic, districts scrambled to
+              maintain control. The solution? Mass deployment of monitoring software like GoGuardian
+              and Hapara on school-issued Chromebooks. Suddenly, our personal bedrooms became
+              extensions of the classroom, heavily surveilled 24/7 without our meaningful consent.
+            </p>
+            <div class="quote-card">
+              <MessageSquareQuote class="quote-icon" size={24} />
+              <blockquote>
+                "I remember opening up my district Chromebook at 9 PM on a Saturday to watch
+                YouTube, only to realize the green camera light was flickering. They were logging
+                everything. It felt like a massive violation of the one safe space we had left."
+              </blockquote>
+              <cite>&mdash; a9x, Founder</cite>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-right">
+          <div class="timeline-icon"><History size={28} /></div>
+          <div class="timeline-content">
+            <h3>Pushing Back</h3>
+            <p>
+              We realized that millions of students were being monitored, but very few understood <em
+                >how</em
+              > the technology actually worked. The lack of transparency was intentional. We started tearing
+              apart these extensions, documenting their capabilities, and finding workarounds to reclaim
+              our digital autonomy.
+            </p>
+            <div class="quote-card">
+              <MessageSquareQuote class="quote-icon" size={24} />
+              <blockquote>
+                "They relied on us not knowing how their black-box software functioned. Once we
+                started publishing exactly what they could see and do, the power dynamics shifted.
+                Knowledge really is the ultimate countermeasure."
+              </blockquote>
+              <cite>&mdash; newark, Co-Founder</cite>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-left">
+          <div class="timeline-icon"><Eye size={28} /></div>
+          <div class="timeline-content">
+            <h3>A Community Unites</h3>
+            <p>
+              What started as a few frustrated students quickly grew into a community. People from
+              across different districts started contributing findings, blocklists, and raising
+              awareness about the psychological toll of constant algorithmic monitoring.
+            </p>
+            <div class="quote-card">
+              <MessageSquareQuote class="quote-icon" size={24} />
+              <blockquote>
+                "Finding hapara.fail was a game changer for me. It wasn't just about blocking a
+                tracking script; it was validating to see I wasn't the only one feeling suffocated
+                by this digital panopticon. We were finally organizing."
+              </blockquote>
+              <cite>&mdash; Jacket, Community Member</cite>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="surveillance" class="content-section">
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">The Architecture of Control</h2>
+        <p>
+          Behind the sanitized rhetoric of "student safety" and "classroom management," a billion-dollar surveillance apparatus operates in the shadows. This is not about keeping students focused; it’s about absolute digital control.
+        </p>
+      </div>
+      <div class="bento-box" data-reveal-stagger>
+        <div class="bento-item span-2 reveal reveal-scale">
+          <Eye class="icon" size={40} aria-hidden="true" />
+          <h3>The 24/7 Digital Leash</h3>
+          <p>
+            Administrators wield a god-like view of student activity that extends far beyond the physical classroom walls. By using district-issued accounts as a continuous tether, school software can monitor devices 24/7—even at home and on weekends. This total observation creates a profound "chilling effect," conditioning students to self-censor their thoughts and fear exploring sensitive personal or political topics. Your bedroom shouldn't be a laboratory for surveillance experiments.
+          </p>
+        </div>
+        <div class="bento-item reveal reveal-scale">
+          <FileSearch class="icon" size={40} aria-hidden="true" />
+          <h3>Automated Flagging Systems</h3>
+          <p>
+            Opaque AI scans your private communications for keywords. Incapable of understanding nuance or context, these systems trigger frequent false alarms and unwarranted disciplinary actions.
+          </p>
+        </div>
+        <div class="bento-item reveal reveal-scale">
+          <Database class="icon" size={40} aria-hidden="true" />
+          <h3>The Student Data Goldmine</h3>
+          <p>
+            Every click and search is a data point. These behavioral profiles are unregulated commodities that carry long-term consequences for your future "risk" and eligibility scores.
+          </p>
+        </div>
+        <div class="bento-item span-2 reveal reveal-scale">
+          <Ban class="icon" size={40} aria-hidden="true" />
+          <h3>Blocking Learning, Not Threats</h3>
+          <p>
+            Under the guise of keeping students safe, EdTech giants deploy aggressive web filters that block legitimate educational content and research materials. This digital censorship doesn’t stop threats; it actively hinders curiosity and intellectual growth. By forcing students into a sterile, walled-off internet, schools are failing to prepare them for the messy, open web of the real world. Access to information is the foundation of education, not a luxury to be toggled.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="products"
+    class="content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">Selling the Panopticon</h2>
+        <p>
+          How leading EdTech giants package and sell dystopian surveillance technology as "educational tools."
+        </p>
+      </div>
+      <div class="bento-box" data-reveal-stagger>
+        <div class="bento-item glass-card reveal reveal-scale">
+          <h3 class="product-logo gradient-text" style="font-size: 2rem; margin-bottom: 15px;">GoGuardian</h3>
+          <p class="description">
+            GoGuardian offers "peace of mind" with powerful filtering and management tools, ensuring students stay "focused and protected."
+          </p>
+          <p class="jarring-text">
+            This "protection" extends to students' homes,
+            <span>monitoring their activity 24/7</span> on school accounts, completely obliterating the line between school and private life.
+          </p>
+          <div class="source-link" style="margin-top: auto; padding-top: 20px;">
+            <a href="https://www.eff.org/issues/student-privacy" target="_blank" rel="noopener noreferrer">
+              Source: Electronic Frontier Foundation <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+        <div class="bento-item glass-card reveal reveal-scale">
+          <h3 class="product-logo gradient-text" style="font-size: 2rem; margin-bottom: 15px;">Gaggle</h3>
+          <p class="description">
+            Using advanced AI, Gaggle proactively assists schools in preventing bullying and self-harm by scanning student communications.
+          </p>
+          <p class="jarring-text">
+            Their AI has been consistently found to
+            <span>flag searches for LGBTQ+ resources</span> as concerning, potentially outing vulnerable students to unsupportive staff.
+          </p>
+          <div class="source-link" style="margin-top: auto; padding-top: 20px;">
+            <a href="https://www.eff.org/deeplinks/2023/06/student-monitoring-tools-should-not-flag-lgbtq-keywords" target="_blank" rel="noopener noreferrer">
+              Source: Electronic Frontier Foundation <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+        <div class="bento-item glass-card reveal reveal-scale">
+          <h3 class="product-logo gradient-text" style="font-size: 2rem; margin-bottom: 15px;">Hapara</h3>
+          <p class="description">
+            Hapara's Highlights feature makes "visible learning" a reality by letting teachers view screens in real-time.
+          </p>
+          <p class="jarring-text">
+            This teaches an entire generation that
+            <span>every keystroke is subject to silent review</span>, normalizing a culture of ceaseless surveillance.
+          </p>
+          <div class="source-link" style="margin-top: auto; padding-top: 20px;">
+            <a href="https://review.law.stanford.edu/wp-content/uploads/sites/3/2024/10/Citron-76-Stan.-L.-Rev.-1439.pdf" target="_blank" rel="noopener noreferrer">
+              Source: Stanford Law Review <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mission" class="content-section">
+    <div class="container" style="max-width: 800px; text-align: left">
+      <div class="section-header reveal reveal-up" style="text-align: left; max-width: none">
+        <h2 class="gradient-text">Our Philosophy</h2>
+      </div>
+      <div class="philosophy-wrapper">
+        <div class="philosophy-item reveal reveal-left" data-reveal-delay="100">
+          <div class="number">01</div>
+          <div class="text">
+            <h3>Empowerment Through Understanding</h3>
+            <p>
+              Surveillance systems derive their power from being treated as confusing "black boxes." Our primary mission is to break that box wide open. Understanding exactly how your data is collected is the first, most crucial step toward meaningful resistance and digital self-defense.
+            </p>
+          </div>
+        </div>
+        <div class="philosophy-item reveal reveal-left" data-reveal-delay="200">
+          <div class="number">02</div>
+          <div class="text">
+            <h3>Privacy is the Foundation of Education</h3>
+            <p>
+              A mind under constant surveillance cannot be truly free to explore. Genuine learning requires the psychological safety to make mistakes and question authority—things that are impossible in a digital panopticon. We reject the normalization of constant monitoring. Privacy is not a privilege; it is a prerequisite for growth.
+            </p>
+          </div>
+        </div>
+        <div class="philosophy-item reveal reveal-left" data-reveal-delay="300">
+          <div class="number">03</div>
+          <div class="text">
+            <h3>Building a Movement</h3>
+            <p>
+              This is a call to action. Our transparent approach means all our tools are open-source and our research is public. Whether contributing code, uncovering new trackers, or simply sharing our resources, your involvement strengthens our collective pushback against EdTech overreach.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="pledge"
+    class="content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container" style="max-width: 800px">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">Our Pledge</h2>
+        <p>
+          To earn your trust, we hold ourselves to the highest standards. We are committed to the
+          following principles in everything we do:
+        </p>
+      </div>
+      <ul class="pledge-list" data-reveal-stagger>
+        <li class="reveal reveal-left">
+          <ShieldCheck size={28} stroke-width={1.5} aria-hidden="true" />
+          <div>
+            <span>No Tracking. Ever.</span> This website and our services will never use analytics, tracking
+            cookies, or log your personal information. Your privacy is the mission, not a product to be
+            sold.
+          </div>
+        </li>
+        <li class="reveal reveal-left">
+          <Code size={28} stroke-width={1.5} aria-hidden="true" />
+          <div>
+            <span>Always Open Source.</span> All of our tools, research, and code are publicly available
+            on GitHub. We believe in transparency and the power of the community to build stronger, more
+            trustworthy solutions.
+          </div>
+        </li>
+        <li class="reveal reveal-left">
+          <Sparkles size={28} stroke-width={1.5} aria-hidden="true" />
+          <div>
+            <span>Community-Driven Intelligence.</span> Our blocklists and tools are continuously improved
+            by submissions and feedback from students like you. We are a living project that adapts to
+            the ever-changing landscape of edtech surveillance.
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="team" class="content-section">
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">The Team</h2>
+        <p>Meet the core contributors driving the mission forward.</p>
+      </div>
+      <div class="team-grid" data-reveal-stagger>
+        <div class="team-member reveal reveal-scale">
+          <Image
+            src={a9xImg}
+            alt="Profile picture of a9x"
+            class="team-pfp"
+            width={160}
+            height={160}
+          />
+          <h3>a9x</h3>
+          <p class="role">Founder</p>
+          <p>
+            With a deep background in network infrastructure and a passion for digital rights, a9x
+            started hapara.fail to challenge the unchecked surveillance he saw as a student. He
+            leads the technical analysis and tool development.
+          </p>
+          <div class="team-contact-links">
+            <a href="mailto:a9x@hapara.fail" aria-label="Email a9x"
+              ><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                <path
+                  d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+                ></path></svg
+              ></a
+            >
+            <a
+              href="https://discord.com/users/693893365380546571"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discord profile for a9x"
+              ><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
+                ></path></svg
+              ></a
+            >
+            <a
+              href="https://github.com/nota9x"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile for a9x"
+              ><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                ></path></svg
+              ></a
+            >
+            <a href="https://a9x.pro/" target="_blank" rel="noopener noreferrer" aria-label="Website links for a9x"
+              ><svg
+                aria-hidden="true"
+                focusable="false"
+                xmlns="http://www.w3.org/2000/svg"
+                shape-rendering="geometricPrecision"
+                text-rendering="geometricPrecision"
+                image-rendering="optimizeQuality"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                viewBox="0 0 512 511.999"
+              >
+                <path
+                  d="M476.335 35.664v.001c47.554 47.552 47.552 125.365.002 172.918l-101.729 101.73c-60.027 60.025-162.073 42.413-194.762-32.45 35.888-31.191 53.387-21.102 87.58-6.638 20.128 8.512 43.74 3.955 60.08-12.387l99.375-99.371c21.49-21.493 21.492-56.662 0-78.155-21.489-21.488-56.677-21.472-78.151 0l-71.278 71.28c-23.583-11.337-50.118-14.697-75.453-10.07a121.476 121.476 0 0118.767-24.207l82.651-82.65c47.554-47.551 125.365-47.555 172.918-.001zM35.664 476.334l.001.001c47.554 47.552 125.365 47.552 172.917 0l85.682-85.682a121.496 121.496 0 0019.325-25.157c-27.876 6.951-57.764 4.015-83.932-8.805l-70.192 70.19c-21.472 21.471-56.658 21.492-78.149 0-21.492-21.491-21.493-56.658 0-78.149l99.375-99.376c20.363-20.363 61.002-26.435 91.717 1.688 29.729-3.133 41.275-8.812 59.742-26.493-39.398-69.476-137.607-80.013-194.757-22.863L35.664 303.417c-47.552 47.553-47.552 125.364 0 172.917z"
+                  fill="currentColor"></path></svg
+              ></a
+            >
+          </div>
+        </div>
+
+        <div class="team-member reveal reveal-scale">
+          <Image
+            src={newarkImg}
+            alt="Profile picture of newark"
+            class="team-pfp"
+            width={160}
+            height={160}
+          />
+          <h3>newark</h3>
+          <p class="role">Co-Founder</p>
+          <p>
+            newark focuses on community outreach, design, and strategic direction. He believes that
+            technology should serve education, not control it, and works to make hapara.fail's
+            resources accessible and understandable to everyone.
+          </p>
+          <div class="team-contact-links">
+            <a href="mailto:newark@hapara.fail" aria-label="Email newark"
+              ><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                <path
+                  d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+                ></path></svg
+              ></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,109 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { SEO } from 'astro-seo';
+import { getImage } from 'astro:assets';
+import defaultOgImage from '../assets/og-twitter.png';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/800.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  robots?: string;
+  ogType?: string;
+  pageStyles?: string[];
+  jsonLd?: Record<string, unknown>;
+  articleMeta?: {
+    author: string;
+    publishedTime: string;
+    modifiedTime: string;
+  };
+}
+
+const {
+  title,
+  description,
+  canonicalUrl,
+  robots = 'index, follow',
+  ogType = 'website',
+  pageStyles = [],
+  jsonLd,
+  articleMeta,
+} = Astro.props;
+
+const optimizedOgImage = await getImage({ src: defaultOgImage, format: 'webp', width: 1200 });
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://www.hapara.fail';
+const ogImageUrl = `${siteUrl}${optimizedOgImage.src}`;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <ClientRouter fallback="swap" />
+  <SEO
+    title={title}
+    description={description}
+    canonical={canonicalUrl}
+    noindex={robots.includes('noindex')}
+    nofollow={robots.includes('nofollow')}
+    openGraph={{
+      basic: {
+        title: title,
+        type: ogType,
+        image: ogImageUrl,
+        url: canonicalUrl,
+      },
+      optional: {
+        locale: 'en_US',
+        siteName: 'hapara.fail',
+        description: description,
+      },
+      image: {
+        alt: 'hapara.fail wordmark on dark background.',
+      },
+      ...(articleMeta ? {
+        article: {
+          authors: [articleMeta.author],
+          publishedTime: articleMeta.publishedTime,
+          modifiedTime: articleMeta.modifiedTime,
+        },
+      } : {}),
+    }}
+    twitter={{
+      card: 'summary_large_image',
+      title: title,
+      description: description,
+      image: ogImageUrl,
+      imageAlt: 'hapara.fail wordmark on dark background.',
+    }}
+  />
+  <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="shortcut icon" href="/images/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="hapara.fail" />
+  <link rel="manifest" href="/images/site.webmanifest" />
+  <link rel="alternate" type="application/rss+xml" title="hapara.fail — The Takedown" href="/rss.xml" />
+  <link rel="stylesheet" href="/css/universal.css" />
+  {pageStyles.map((href) => (
+    <link rel="stylesheet" href={href} />
+  ))}
+  <link rel="stylesheet" href="/css/animations.css" />
+  <noscript>
+    <style>
+      .reveal {
+        opacity: 1;
+        transform: none;
+        filter: none;
+      }
+    </style>
+  </noscript>
+  {jsonLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  )}
+</head>

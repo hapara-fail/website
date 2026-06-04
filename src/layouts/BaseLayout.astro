@@ -1,0 +1,59 @@
+---
+import Head from '../components/Head.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Scripts from '../components/Scripts.astro';
+import CookieNotice from '../components/svelte/CookieNotice.svelte';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  robots?: string;
+  ogType?: string;
+  pageStyles?: string[];
+  extraScripts?: string[];
+  jsonLd?: Record<string, unknown>;
+  articleMeta?: {
+    author: string;
+    publishedTime: string;
+    modifiedTime: string;
+  };
+}
+
+const {
+  title,
+  description,
+  canonicalUrl,
+  robots,
+  ogType,
+  pageStyles,
+  extraScripts,
+  jsonLd,
+  articleMeta,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <Head
+    title={title}
+    description={description}
+    canonicalUrl={canonicalUrl}
+    robots={robots}
+    ogType={ogType}
+    pageStyles={pageStyles}
+    jsonLd={jsonLd}
+    articleMeta={articleMeta}
+  />
+  <body>
+    <Header />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <slot name="body" />
+    <Scripts extraScripts={extraScripts} />
+    <CookieNotice client:load />
+  </body>
+</html>

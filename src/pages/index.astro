@@ -1,0 +1,301 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import LockOpen from '@lucide/astro/icons/lock-open';
+import Ban from '@lucide/astro/icons/ban';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Server from '@lucide/astro/icons/server';
+import Code from '@lucide/astro/icons/code';
+import EyeOff from '@lucide/astro/icons/eye-off';
+import Users from '@lucide/astro/icons/users';
+import Lock from '@lucide/astro/icons/lock';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+---
+
+<BaseLayout
+  title="hapara.fail"
+  description="Expose and counter edtech surveillance. Tools, research, and a custom DNS to block Hapara, GoGuardian, and more. Protect student privacy and reclaim autonomy."
+  canonicalUrl="https://www.hapara.fail/"
+  pageStyles={["/css/index.css"]}
+  extraScripts={["/js/index.js", "/js/scroll-reveal.js"]}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "hapara.fail",
+    "url": "https://www.hapara.fail/",
+    "logo": "https://www.hapara.fail/images/favicon-96x96.png",
+    "sameAs": ["https://github.com/hapara-fail", "https://discord.gg/KA66dHUF4P"],
+    "description": "Expose and counter edtech surveillance. Tools, research, and a custom DNS to block Hapara, GoGuardian, and more. Protect student privacy and reclaim autonomy."
+  }}
+>
+  <!-- ═══════════════════ HERO (UNCHANGED) ═══════════════════ -->
+  <section class="hero content-section">
+    <div class="parallax-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title gradient-text">Edtech is watching.</h1>
+      <p>
+        Companies like Hapara, GoGuardian, and Gaggle have built a billion-dollar industry on
+        student surveillance. We're here to expose it and help you fight back.
+      </p>
+    </div>
+    <div class="scroll-indicator">
+      <ChevronDown size={24} aria-hidden="true" />
+    </div>
+  </section>
+
+  <!-- ═══════════════════ DNS FEATURE CARDS ═══════════════════ -->
+  <section
+    id="features"
+    class="content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">One Setting. Total Protection.</h2>
+        <p>
+          Our free DNS service is purpose-built to neutralize school surveillance software.
+          Change one network setting and take back control of your device.
+        </p>
+      </div>
+      <div class="feature-cards" data-reveal-stagger>
+        <div class="feature-card reveal reveal-scale">
+          <div class="feature-card-icon">
+            <ShieldCheck size={26} aria-hidden="true" />
+          </div>
+          <h3>Block Spyware</h3>
+          <p>
+            Blocks the servers that Hapara, GoGuardian, Securly, and other surveillance tools need to function. No connection means no monitoring.
+          </p>
+        </div>
+        <div class="feature-card reveal reveal-scale">
+          <div class="feature-card-icon">
+            <LockOpen size={26} aria-hidden="true" />
+          </div>
+          <h3>Bypass Filters</h3>
+          <p>
+            Routes your DNS requests through our servers instead of your school's, sidestepping category-based web filters and unlocking access.
+          </p>
+        </div>
+        <div class="feature-card reveal reveal-scale">
+          <div class="feature-card-icon">
+            <Ban size={26} aria-hidden="true" />
+          </div>
+          <h3>Block Ads & Trackers</h3>
+          <p>
+            Includes the HaGeZi blocklist to automatically block ads, trackers, and malicious domains for a cleaner, faster browsing experience.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ HOW IT WORKS ═══════════════════ -->
+  <section id="how-it-works" class="content-section">
+    <div class="container">
+      <div class="section-header reveal reveal-up">
+        <h2 class="gradient-text">How It Works</h2>
+        <p>Set up in under two minutes. No software to install, no accounts to create.</p>
+      </div>
+      <div class="how-steps" data-reveal-stagger style="align-items: center;">
+        <div class="how-step reveal reveal-scale">
+          <div class="how-step-number">1</div>
+          <div class="how-step-content">
+            <h3>Change Your DNS</h3>
+            <p>
+              Open your device's network settings and replace the default DNS with our server addresses. We have step-by-step guides for every platform.
+            </p>
+          </div>
+        </div>
+        <div class="how-step-connector reveal reveal-scale" aria-hidden="true">
+          <ArrowRight size={24} />
+        </div>
+        <div class="how-step reveal reveal-scale">
+          <div class="how-step-number">2</div>
+          <div class="how-step-content">
+            <h3>We Intercept the Spyware</h3>
+            <p>
+              When surveillance software tries to "phone home," our DNS blocks those requests. The software can't receive instructions or send your data.
+            </p>
+          </div>
+        </div>
+        <div class="how-step-connector reveal reveal-scale" aria-hidden="true">
+          <ArrowRight size={24} />
+        </div>
+        <div class="how-step reveal reveal-scale">
+          <div class="how-step-number">3</div>
+          <div class="how-step-content">
+            <h3>Browse Freely</h3>
+            <p>
+              With surveillance neutralized and web filters bypassed, you get a private, unrestricted browsing experience — the way it should be.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ STAT CALLOUT ═══════════════════ -->
+  <section
+    class="stats-section content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container reveal reveal-blur">
+      <div class="stat-number">Zero</div>
+      <p class="stat-label">
+        peer-reviewed studies prove that constant surveillance makes students safer. It's a system built on
+        corporate profit, not student well-being — despite being used in over 80% of schools.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CTA BANNER ═══════════════════ -->
+  <section id="get-started" class="cta-banner-section content-section">
+    <div class="container">
+      <div class="cta-banner reveal reveal-blur">
+        <div class="cta-banner-bg"></div>
+        <div class="cta-banner-content">
+          <h2>Ready to take back your privacy?</h2>
+          <p>
+            Our DNS is 100% free, open source, and takes less than two minutes to set up.
+            Available on ChromeOS, Windows, macOS, iOS, Android, and Linux.
+          </p>
+          <div class="cta-banner-actions">
+            <a href="/services/dns" class="cta-button" id="cta-setup-dns">
+              <Server size={20} aria-hidden="true" />
+              Set Up DNS Now
+            </a>
+            <a href="/about" class="cta-button cta-button-outline" id="cta-learn-more">
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TRUST INDICATORS ═══════════════════ -->
+  <section
+    class="content-section"
+    style="background-color: var(--bg-offset); border-top: 1px solid var(--border-color)"
+  >
+    <div class="container">
+      <div class="trust-grid" data-reveal-stagger>
+        <div class="trust-item reveal reveal-up">
+          <div class="trust-icon">
+            <Code size={24} aria-hidden="true" />
+          </div>
+          <h3>Open Source</h3>
+          <p>Every line of code is public. Audit it, fork it, self-host it — total transparency.</p>
+        </div>
+        <div class="trust-item reveal reveal-up">
+          <div class="trust-icon">
+            <EyeOff size={24} aria-hidden="true" />
+          </div>
+          <h3>No Tracking</h3>
+          <p>We don't track your identity, sell your data, or serve ads. We believe privacy is a right.</p>
+        </div>
+        <div class="trust-item reveal reveal-up">
+          <div class="trust-icon">
+            <Users size={24} aria-hidden="true" />
+          </div>
+          <h3>Student-Led</h3>
+          <p>Built by students, for students. We're a community, not a corporation.</p>
+        </div>
+        <div class="trust-item reveal reveal-up">
+          <div class="trust-icon">
+            <Lock size={24} aria-hidden="true" />
+          </div>
+          <h3>Encrypted DNS</h3>
+          <p>Supports DNS-over-HTTPS, DNS-over-TLS, and DNS-over-QUIC for maximum security.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FAQ ═══════════════════ -->
+  <section id="faq" class="content-section">
+    <div class="faq-list reveal reveal-up">
+      <div class="section-header">
+        <h2 class="gradient-text">Frequently Asked Questions</h2>
+      </div>
+      <details class="faq-item">
+        <summary>How does the DNS actually stop school spyware?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              Spyware like Hapara and GoGuardian relies on "phoning home" to their servers to
+              report your screen activity. Our DNS service identifies these connection requests
+              and blocks them. If the spyware can't connect to its command server, it can't send
+              your data or receive instructions to monitor your screen.
+            </p>
+          </div>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>What devices and platforms does this work on?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              Our DNS works on virtually any device that lets you change network settings:
+              ChromeOS (including managed Chromebooks via chrome://network), Windows, macOS,
+              iOS, iPadOS, Android, and Linux. Visit our
+              <a href="/services/dns" aria-label="Visit our DNS Service page">DNS Service page</a>
+              for step-by-step instructions tailored to each platform.
+            </p>
+          </div>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Will I get in trouble for using this?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              Our DNS acts as a network setting change rather than a hack installed on your device.
+              While we provide the tools to protect your privacy, you should always be aware of
+              your school's Acceptable Use Policy. We believe privacy is a human right, but how you
+              exercise that right is your decision.
+            </p>
+          </div>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Does this also unblock websites and games?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              Yes. By routing your DNS requests through our servers, you bypass many of the
+              category-based web filters schools use to block content. This often unlocks access
+              to games, streaming services, and other websites that have been arbitrarily
+              restricted.
+            </p>
+          </div>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Is this really free? Do you sell my data?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              The DNS service is 100% free and open source — you can even
+              <a href="https://docs.hapara.fail/self-hosting/dns" aria-label="self-host it yourself">self-host it yourself</a>. We
+              are a student-led initiative, not a data broker. We do not serve you ads, track
+              your identity, or sell your data. For full details on how we protect your
+              information, please read our <a href="/privacy" aria-label="Privacy Policy">Privacy Policy</a>.
+            </p>
+          </div>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Can my school see that I'm using a different DNS?</summary>
+        <div class="faq-content-wrapper">
+          <div class="faq-content">
+            <p>
+              <strong>Yes, they can.</strong> While a custom DNS bypasses their software blocks, it doesn't make you invisible on the network. If your school monitors traffic, they can see that your device is connecting to our DNS servers instead of theirs. 
+              Using encrypted DNS (DoH/DoT/DoQ) hides the <em>content</em> of your queries, so they can't see what websites you're looking up—but they still know you're using our service. Furthermore, a custom DNS is not a VPN. Even with encrypted DNS, network administrators might still figure out which websites you visit by looking at the IP addresses you connect to or by inspecting unencrypted SNI data.
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+</BaseLayout>
