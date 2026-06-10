@@ -13,31 +13,29 @@ updates:
     assignees:
       - "nota9x"
 
-    labels:
-      - "dependencies"
-      - "npm"
-
     open-pull-requests-limit: 3
 
     cooldown:
       default-days: 1
 
     groups:
-      astro:
-        applies-to: version-updates
-        patterns:
-          - "astro"
-          - "@astrojs/*"
-        update-types:
-          - "minor"
-          - "patch"
-
       cloudflare:
         applies-to: version-updates
         patterns:
           - "@astrojs/cloudflare"
           - "@cloudflare/*"
           - "wrangler"
+        update-types:
+          - "minor"
+          - "patch"
+
+      astro:
+        applies-to: version-updates
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+        exclude-patterns:
+          - "@astrojs/cloudflare"
         update-types:
           - "minor"
           - "patch"
