@@ -45,7 +45,7 @@ This iteration of hapara.fail delivers a fast, modern, and privacy-respecting pl
 - **Icons:** [Lucide](https://lucide.dev/) via `@lucide/astro` and `@lucide/svelte`.
 - **Fonts:** [Poppins](https://fonts.google.com/specimen/Poppins) and [Fira Code](https://fonts.google.com/specimen/Fira+Code) via `@fontsource` (self-hosted, no external requests).
 - **Code Formatter:** [Prettier](https://prettier.io/)
-- **SEO:** [`astro-seo`](https://github.com/jonasmerlin/astro-seo)
+- **SEO:** Local metadata tags in `src/components/Head.astro`
 
 ---
 

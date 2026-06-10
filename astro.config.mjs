@@ -24,7 +24,6 @@ export default defineConfig({
   vite: {
     optimizeDeps: {
       include: [
-        'astro-seo',
         'astro/assets/services/noop',
         'astro/content/runtime',
         'astro/zod',
