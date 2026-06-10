@@ -1,8 +1,105 @@
 version: 2
+
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: "npm"
+    directory: "/"
+
     schedule:
-      interval: 'weekly'
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+
     assignees:
-      - 'nota9x'
+      - "nota9x"
+
+    labels:
+      - "dependencies"
+      - "npm"
+
+    open-pull-requests-limit: 3
+
+    cooldown:
+      default-days: 1
+
+    groups:
+      astro:
+        applies-to: version-updates
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      cloudflare:
+        applies-to: version-updates
+        patterns:
+          - "@astrojs/cloudflare"
+          - "@cloudflare/*"
+          - "wrangler"
+        update-types:
+          - "minor"
+          - "patch"
+
+      svelte:
+        applies-to: version-updates
+        patterns:
+          - "svelte"
+          - "@astrojs/svelte"
+          - "eslint-plugin-svelte"
+          - "prettier-plugin-svelte"
+        update-types:
+          - "minor"
+          - "patch"
+
+      linting:
+        applies-to: version-updates
+        dependency-type: "development"
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "eslint-*"
+          - "globals"
+        update-types:
+          - "minor"
+          - "patch"
+
+      formatting:
+        applies-to: version-updates
+        dependency-type: "development"
+        patterns:
+          - "prettier"
+          - "prettier-*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      testing:
+        applies-to: version-updates
+        dependency-type: "development"
+        patterns:
+          - "@playwright/*"
+          - "@axe-core/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      icons-and-fonts:
+        applies-to: version-updates
+        patterns:
+          - "@lucide/*"
+          - "@fontsource/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      remaining-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
