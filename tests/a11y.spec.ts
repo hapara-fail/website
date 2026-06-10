@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page, type Route } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const routes = [
@@ -14,20 +14,20 @@ const routes = [
   '/404',
 ];
 
-async function preparePage(page) {
+async function preparePage(page: Page) {
   await page.addInitScript(() => {
     document.cookie = 'cookieConsent=true; path=/; max-age=31536000; SameSite=Lax';
   });
 
-  await page.route('https://monitor.dns.hapara.fail/', async (route) => {
+  await page.route('https://monitor.dns.hapara.fail/', async (route: Route) => {
     await route.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' });
   });
-  await page.route('https://monitor.dns2.hapara.fail/', async (route) => {
+  await page.route('https://monitor.dns2.hapara.fail/', async (route: Route) => {
     await route.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' });
   });
 }
 
-async function checkA11y(page) {
+async function checkA11y(page: Page) {
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22a', 'wcag22aa'])
     .analyze();

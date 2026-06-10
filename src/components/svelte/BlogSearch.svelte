@@ -5,7 +5,7 @@
 
   let searchQuery = $state('');
   let activeTag = $state(null);
-  
+
   function escapeRegex(str) {
     if (!str) return '';
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -121,10 +121,15 @@
     />
   </div>
 
-  <div id="blog-tag-chips" class="category-chips-wrapper" role="group" aria-label="Filter posts by topic">
-    {#each tags as tag}
-      <button 
-        class="category-chip" 
+  <div
+    id="blog-tag-chips"
+    class="category-chips-wrapper"
+    role="group"
+    aria-label="Filter posts by topic"
+  >
+    {#each tags as tag (tag)}
+      <button
+        class="category-chip"
         class:active={activeTag === tag}
         type="button"
         aria-pressed={activeTag === tag}
@@ -140,9 +145,9 @@
 
 <div id="blog-grid" class="blog-grid">
   {#each filteredPosts as post, i (post.id)}
-    <a 
-      href={`/blog/${post.id}`} 
-      class="blog-card fade-in" 
+    <a
+      href={`/blog/${post.id}`}
+      class="blog-card fade-in"
       data-post-id={post.id}
       style="animation-delay: {i * 30}ms;"
     >

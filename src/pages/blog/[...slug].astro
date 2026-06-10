@@ -33,38 +33,38 @@ const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;
   description={description}
   canonicalUrl={canonicalUrl}
   ogType="article"
-  pageStyles={["/css/article.css"]}
+  pageStyles={['/css/article.css']}
   articleMeta={{
     author,
     publishedTime: publishedISO,
     modifiedTime: modifiedISO,
   }}
   jsonLd={{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "author": {
-      "@type": "Person",
-      "name": author,
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: description,
+    author: {
+      '@type': 'Person',
+      name: author,
     },
-    "datePublished": publishedISO,
-    "dateModified": modifiedISO,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl,
+    datePublished: publishedISO,
+    dateModified: modifiedISO,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
     },
-    "publisher": {
-      "@type": "Organization",
-      "name": "hapara.fail",
-      "url": "https://www.hapara.fail/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.hapara.fail/images/favicon-96x96.png",
+    publisher: {
+      '@type': 'Organization',
+      name: 'hapara.fail',
+      url: 'https://www.hapara.fail/',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.hapara.fail/images/favicon-96x96.png',
       },
     },
-    "url": canonicalUrl,
-    "image": "https://www.hapara.fail/images/og-twitter.png",
+    url: canonicalUrl,
+    image: 'https://www.hapara.fail/images/og-twitter.png',
   }}
 >
   <section class="article-hero">
@@ -72,7 +72,10 @@ const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;
     <div class="container">
       <div class="article-tag" transition:name={`tag-${post.id}`}>{tag}</div>
       <h1 class="gradient-text" transition:name={`title-${post.id}`}>{title}</h1>
-      <div class="article-meta" style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <div
+        class="article-meta"
+        style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;"
+      >
         <div>By <span>{author}</span> &bull; Published on {publishedFormatted}</div>
         <TextToSpeech client:only="svelte" />
       </div>
@@ -83,8 +86,6 @@ const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;
     <Content />
 
     <a href="/blog" class="back-link">Back to Blog</a>
-    {credits && (
-      <div class="credits">{credits}</div>
-    )}
+    {credits && <div class="credits">{credits}</div>}
   </article>
 </BaseLayout>

@@ -108,8 +108,8 @@
   function isExcludedElement(el) {
     return Boolean(
       el.closest(
-        '.back-link, .credits, .tts-component, script, style, [hidden], [aria-hidden="true"]',
-      ),
+        '.back-link, .credits, .tts-component, script, style, [hidden], [aria-hidden="true"]'
+      )
     );
   }
 
@@ -137,7 +137,7 @@
           return NodeFilter.FILTER_ACCEPT;
         },
       },
-      false,
+      false
     );
 
     const textNodes = [];
@@ -206,7 +206,10 @@
       ? 0.45
       : 0.12;
 
-    return speakingSeconds + (sentencePauses + phrasePauses + commaPauses + structuralPause) / playbackRate;
+    return (
+      speakingSeconds +
+      (sentencePauses + phrasePauses + commaPauses + structuralPause) / playbackRate
+    );
   }
 
   function estimateSecondsFromWord(wordIndex) {
@@ -319,22 +322,27 @@
 
       const estimatedSegmentDuration = estimateSegmentSeconds(fallbackSegment) * 1000;
       const elapsed = now - fallbackStartedAt;
-      if (elapsed > estimatedSegmentDuration + 700 && currentWordIndex >= fallbackSegment.startWordIndex) {
+      if (
+        elapsed > estimatedSegmentDuration + 700 &&
+        currentWordIndex >= fallbackSegment.startWordIndex
+      ) {
         return;
       }
 
-      const anchorWordIndex = lastBoundaryEventAt ? fallbackAnchorWordIndex : fallbackStartWordIndex;
+      const anchorWordIndex = lastBoundaryEventAt
+        ? fallbackAnchorWordIndex
+        : fallbackStartWordIndex;
       const anchorStartedAt = lastBoundaryEventAt || fallbackStartedAt;
       const wordsPerMs = (FALLBACK_WORDS_PER_MINUTE * playbackRate) / 60000;
       let estimatedLocalIndex = clamp(
         anchorWordIndex + Math.floor((now - anchorStartedAt) * wordsPerMs),
         anchorWordIndex,
-        fallbackSegment.wordCount - 1,
+        fallbackSegment.wordCount - 1
       );
       if (lastBoundaryEventAt) {
         estimatedLocalIndex = Math.min(
           estimatedLocalIndex,
-          fallbackAnchorWordIndex + FALLBACK_BOUNDARY_AHEAD_LIMIT,
+          fallbackAnchorWordIndex + FALLBACK_BOUNDARY_AHEAD_LIMIT
         );
       }
       const estimatedGlobalIndex = fallbackSegment.startWordIndex + estimatedLocalIndex;
@@ -553,7 +561,11 @@
     const caret = getCaretFromPoint(event.clientX, event.clientY);
     if (caret) {
       const localIndex = targetSegment.words.findIndex((word) => {
-        return word.node === caret.node && caret.offset >= word.startOffset && caret.offset <= word.endOffset;
+        return (
+          word.node === caret.node &&
+          caret.offset >= word.startOffset &&
+          caret.offset <= word.endOffset
+        );
       });
 
       if (localIndex >= 0) return targetSegment.startWordIndex + localIndex;
@@ -565,9 +577,13 @@
     targetSegment.words.forEach((word, index) => {
       for (const rect of word.range.getClientRects()) {
         const horizontalDistance =
-          event.clientX < rect.left ? rect.left - event.clientX : Math.max(0, event.clientX - rect.right);
+          event.clientX < rect.left
+            ? rect.left - event.clientX
+            : Math.max(0, event.clientX - rect.right);
         const verticalDistance =
-          event.clientY < rect.top ? rect.top - event.clientY : Math.max(0, event.clientY - rect.bottom);
+          event.clientY < rect.top
+            ? rect.top - event.clientY
+            : Math.max(0, event.clientY - rect.bottom);
         const distance = horizontalDistance + verticalDistance;
 
         if (distance < closestDistance) {
@@ -577,7 +593,9 @@
       }
     });
 
-    return closestIndex >= 0 ? targetSegment.startWordIndex + closestIndex : targetSegment.startWordIndex;
+    return closestIndex >= 0
+      ? targetSegment.startWordIndex + closestIndex
+      : targetSegment.startWordIndex;
   }
 
   function handleGlobalClick(event) {
@@ -608,7 +626,7 @@
         highlightWords,
         clickToRead,
         persistPreferences,
-      }),
+      })
     );
   }
 
@@ -784,7 +802,11 @@
                 <h3 id="tts-settings-title">Read aloud</h3>
                 <p id="tts-settings-description">{remainingTimeLabel} left</p>
               </div>
-              <button class="close-btn" onclick={closeSettings} aria-label="Close read aloud settings">
+              <button
+                class="close-btn"
+                onclick={closeSettings}
+                aria-label="Close read aloud settings"
+              >
                 <X size={16} aria-hidden="true" />
               </button>
             </div>
@@ -793,7 +815,7 @@
               <div class="setting-group">
                 <label for="voice-select">Voice</label>
                 <select id="voice-select" onchange={handleVoiceChange} class="voice-select">
-                  {#each availableVoices as voice}
+                  {#each availableVoices as voice (voice.voiceURI)}
                     <option value={voice.voiceURI} selected={voice.voiceURI === selectedVoiceURI}>
                       {voice.name}
                     </option>
@@ -885,7 +907,8 @@
                   <input
                     type="checkbox"
                     checked={persistPreferences}
-                    onchange={(event) => handleToggleChange('persistPreferences', event.target.checked)}
+                    onchange={(event) =>
+                      handleToggleChange('persistPreferences', event.target.checked)}
                   />
                 </label>
               </div>
@@ -894,7 +917,11 @@
         {/if}
 
         <div class="tts-controls">
-          <button class="control-btn play-pause" onclick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
+          <button
+            class="control-btn play-pause"
+            onclick={togglePlay}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+          >
             {#if isPlaying}
               <Pause size={18} fill="currentColor" aria-hidden="true" />
             {:else}
@@ -902,7 +929,11 @@
             {/if}
           </button>
 
-          <button class="control-btn" onclick={() => skipWords(-SKIP_WORDS)} aria-label="Skip back 30 words">
+          <button
+            class="control-btn"
+            onclick={() => skipWords(-SKIP_WORDS)}
+            aria-label="Skip back 30 words"
+          >
             <SkipBack size={17} aria-hidden="true" />
           </button>
 
@@ -926,7 +957,11 @@
             </div>
           </div>
 
-          <button class="control-btn" onclick={() => skipWords(SKIP_WORDS)} aria-label="Skip forward 30 words">
+          <button
+            class="control-btn"
+            onclick={() => skipWords(SKIP_WORDS)}
+            aria-label="Skip forward 30 words"
+          >
             <SkipForward size={17} aria-hidden="true" />
           </button>
 
@@ -1191,9 +1226,7 @@
     width: min(380px, calc(100vw - 28px));
     max-height: min(72vh, 560px);
     overflow-y: auto;
-    background:
-      linear-gradient(180deg, rgba(23, 20, 47, 0.98), rgba(9, 8, 24, 0.99)),
-      #0a091a;
+    background: linear-gradient(180deg, rgba(23, 20, 47, 0.98), rgba(9, 8, 24, 0.99)), #0a091a;
     border: 1px solid rgba(168, 85, 247, 0.26);
     border-radius: 18px;
     padding: 14px;

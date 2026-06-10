@@ -8,6 +8,4 @@ const { extraScripts = [] } = Astro.props;
 
 <script src="/js/version-data.js" defer is:inline></script>
 <script src="/js/nav.js" defer is:inline></script>
-{extraScripts.map((src) => (
-  <script src={src} is:inline></script>
-))}
+{extraScripts.map((src) => <script src={src} is:inline />)}

@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "fmt": "pnpm run format",
     "generate-version": "node scripts/generate-version.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "pnpm run generate-version && astro build",
     "test": "pnpm run test:a11y",
     "test:a11y": "playwright test",
@@ -17,8 +20,19 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@cloudflare/workers-types": "^4.20260610.1",
+    "@eslint/js": "^9.39.4",
     "@playwright/test": "^1.60.0",
+    "@typescript-eslint/parser": "^8.61.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-svelte": "^3.19.0",
+    "globals": "^17.6.0",
     "prettier": "3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-svelte": "^4.1.0",
+    "typescript-eslint": "^8.61.0",
     "wrangler": "^4.98.0"
   },
   "dependencies": {

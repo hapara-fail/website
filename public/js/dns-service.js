@@ -709,6 +709,7 @@ document.addEventListener('astro:page-load', () => {
 
   const MAX_URL_PARAM_LENGTH = 200;
   const sanitizeUrlParam = (s) =>
+    // eslint-disable-next-line no-control-regex
     typeof s === 'string' ? s.slice(0, MAX_URL_PARAM_LENGTH).replace(/[\x00-\x1F]/g, '') : '';
 
   const readUrlParams = () => {
@@ -843,7 +844,7 @@ document.addEventListener('astro:page-load', () => {
           currentCategory = trimmed.replace('#### ', '').trim();
           currentServices = [];
         } else if ((trimmed.startsWith('* ') || trimmed.startsWith('- ')) && currentCategory) {
-          const serviceName = trimmed.replace(/^[\*\-]\s+/, '').trim();
+          const serviceName = trimmed.replace(/^[*-]\s+/, '').trim();
           currentServices.push(serviceName);
           if (currentCategory === patchedHeader) {
             patchedNames.add(serviceName);
@@ -863,6 +864,7 @@ document.addEventListener('astro:page-load', () => {
           }
           // Categories and services should be non-empty strings without control characters
           const safeText = (s) =>
+            // eslint-disable-next-line no-control-regex
             typeof s === 'string' && s.trim().length > 0 && !/[\x00-\x08\x0E-\x1F]/.test(s);
           if (!safeText(entry.category)) {
             return false;
