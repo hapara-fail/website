@@ -36,16 +36,8 @@ importers:
         specifier: ^1.17.0
         version: 1.17.0(svelte@5.56.1)
       astro:
-<<<<<<< HEAD
-        specifier: ^6.4.4
-        version: 6.4.4(@types/node@24.12.4)(rollup@4.61.0)(yaml@2.9.0)
-=======
         specifier: ^6.4.5
         version: 6.4.5(@types/node@24.12.4)(rollup@4.61.1)(yaml@2.9.0)
-      astro-seo:
-        specifier: ^1.1.0
-        version: 1.1.0(prettier@3.8.3)(typescript@6.0.3)
->>>>>>> fb56b61a44d54f8f95a4b35b63559e2b13ad9928
       svelte:
         specifier: ^5.56.1
         version: 5.56.1
@@ -1111,16 +1103,8 @@ packages:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
 
-<<<<<<< HEAD
-  astro@6.4.4:
-    resolution: {integrity: sha512-hVe8tq3lqt/Dr0UyB//yUmQSlHMTU8scTiF/vQddQVahLE4TTaSdH5H0nb7OvRcwo0UmlAO8DWYar4jNaS7H+A==}
-=======
-  astro-seo@1.1.0:
-    resolution: {integrity: sha512-G6LDNDyga30o+52v58jU7C35n3cORUzk7RSuY+xf/ZRbW6JiNplyaOO1VoYVKO+xzYNaBcxqNln2RFRR/wgJNQ==}
-
   astro@6.4.5:
     resolution: {integrity: sha512-0R7WLD1+WD/mTPcZxyKtcF0CztQi9ahFRtGM7oChJhxjNbr4lSBenxi+mk91k5bPTaUEoZ6edg1fDo2qP8bCwg==}
->>>>>>> fb56b61a44d54f8f95a4b35b63559e2b13ad9928
     engines: {node: '>=22.12.0', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -3377,19 +3361,7 @@ snapshots:
 
   astring@1.9.0: {}
 
-<<<<<<< HEAD
-  astro@6.4.4(@types/node@24.12.4)(rollup@4.61.0)(yaml@2.9.0):
-=======
-  astro-seo@1.1.0(prettier@3.8.3)(typescript@6.0.3):
-    dependencies:
-      '@astrojs/check': 0.9.9(prettier@3.8.3)(typescript@6.0.3)
-    transitivePeerDependencies:
-      - prettier
-      - prettier-plugin-astro
-      - typescript
-
   astro@6.4.5(@types/node@24.12.4)(rollup@4.61.1)(yaml@2.9.0):
->>>>>>> fb56b61a44d54f8f95a4b35b63559e2b13ad9928
     dependencies:
       '@astrojs/compiler': 4.0.0
       '@astrojs/internal-helpers': 0.10.0
