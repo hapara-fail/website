@@ -17,9 +17,6 @@ updates:
 
     cooldown:
       default-days: 1
-      semver-major-days: 7
-      semver-minor-days: 1
-      semver-patch-days: 1
 
     groups:
       astro:
