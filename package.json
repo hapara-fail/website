@@ -31,7 +31,7 @@
     "@fontsource/poppins": "^5.2.7",
     "@lucide/astro": "^1.17.0",
     "@lucide/svelte": "^1.17.0",
-    "astro": "^6.4.4",
+    "astro": "^6.4.5",
     "astro-seo": "^1.1.0",
     "svelte": "^5.56.1",
     "typescript": "^6.0.3"
