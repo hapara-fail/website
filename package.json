@@ -16,10 +16,10 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@cloudflare/workers-types": "^4.20260604.1",
+    "@cloudflare/workers-types": "^4.20260610.1",
     "@playwright/test": "^1.60.0",
     "prettier": "3.8.3",
-    "wrangler": "^4.97.0"
+    "wrangler": "^4.98.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.6.1",
@@ -31,7 +31,7 @@
     "@fontsource/poppins": "^5.2.7",
     "@lucide/astro": "^1.17.0",
     "@lucide/svelte": "^1.17.0",
-    "astro": "^6.4.4",
+    "astro": "^6.4.5",
     "svelte": "^5.56.1",
     "typescript": "^6.0.3"
   }
