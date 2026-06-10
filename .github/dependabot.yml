@@ -17,25 +17,25 @@ updates:
 
     cooldown:
       default-days: 1
+      semver-major-days: 7
+      semver-minor-days: 1
+      semver-patch-days: 1
 
     groups:
-      cloudflare:
-        applies-to: version-updates
-        patterns:
-          - "@astrojs/cloudflare"
-          - "@cloudflare/*"
-          - "wrangler"
-        update-types:
-          - "minor"
-          - "patch"
-
       astro:
         applies-to: version-updates
         patterns:
           - "astro"
           - "@astrojs/*"
-        exclude-patterns:
-          - "@astrojs/cloudflare"
+        update-types:
+          - "minor"
+          - "patch"
+
+      cloudflare:
+        applies-to: version-updates
+        patterns:
+          - "@cloudflare/*"
+          - "wrangler"
         update-types:
           - "minor"
           - "patch"
@@ -44,7 +44,6 @@ updates:
         applies-to: version-updates
         patterns:
           - "svelte"
-          - "@astrojs/svelte"
           - "eslint-plugin-svelte"
           - "prettier-plugin-svelte"
         update-types:
@@ -61,6 +60,8 @@ updates:
           - "@typescript-eslint/*"
           - "eslint-*"
           - "globals"
+        exclude-patterns:
+          - "eslint-plugin-svelte"
         update-types:
           - "minor"
           - "patch"
@@ -71,6 +72,8 @@ updates:
         patterns:
           - "prettier"
           - "prettier-*"
+        exclude-patterns:
+          - "prettier-plugin-svelte"
         update-types:
           - "minor"
           - "patch"
@@ -98,6 +101,24 @@ updates:
         applies-to: version-updates
         patterns:
           - "*"
+        exclude-patterns:
+          - "astro"
+          - "@astrojs/*"
+          - "@cloudflare/*"
+          - "wrangler"
+          - "svelte"
+          - "eslint"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "eslint-*"
+          - "globals"
+          - "prettier"
+          - "prettier-*"
+          - "@playwright/*"
+          - "@axe-core/*"
+          - "@lucide/*"
+          - "@fontsource/*"
         update-types:
           - "minor"
           - "patch"
