@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@cloudflare/workers-types": "^4.20260610.1",
+    "@cloudflare/workers-types": "^4.20260612.1",
     "@eslint/js": "^9.39.4",
     "@playwright/test": "^1.60.0",
     "@typescript-eslint/parser": "^8.61.0",
@@ -33,20 +33,20 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^4.1.0",
     "typescript-eslint": "^8.61.0",
-    "wrangler": "^4.98.0"
+    "wrangler": "^4.100.0"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.6.1",
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/mdx": "^6.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/svelte": "^8.1.2",
     "@fontsource/fira-code": "^5.2.7",
     "@fontsource/poppins": "^5.2.7",
-    "@lucide/astro": "^1.17.0",
-    "@lucide/svelte": "^1.17.0",
-    "astro": "^6.4.5",
-    "svelte": "^5.56.1",
+    "@lucide/astro": "^1.18.0",
+    "@lucide/svelte": "^1.18.0",
+    "astro": "^6.4.6",
+    "svelte": "^5.56.3",
     "typescript": "^6.0.3"
   }
 }

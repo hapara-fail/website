@@ -3,10 +3,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
-minimumReleaseAgeExclude:
-  - '@cloudflare/workers-types@4.20260531.1'
-  - '@astrojs/mdx@6.0.3'
-  - '@cloudflare/workers-types@4.20260610.1'
-  - astro@6.4.5
 onlyBuiltDependencies:
   - workerd

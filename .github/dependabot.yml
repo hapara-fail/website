@@ -1,17 +1,17 @@
 version: 2
 
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
 
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/New_York"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/New_York'
 
     assignees:
-      - "nota9x"
+      - 'nota9x'
 
     open-pull-requests-limit: 3
 
@@ -22,100 +22,100 @@ updates:
       astro:
         applies-to: version-updates
         patterns:
-          - "astro"
-          - "@astrojs/*"
+          - 'astro'
+          - '@astrojs/*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       cloudflare:
         applies-to: version-updates
         patterns:
-          - "@cloudflare/*"
-          - "wrangler"
+          - '@cloudflare/*'
+          - 'wrangler'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       svelte:
         applies-to: version-updates
         patterns:
-          - "svelte"
-          - "eslint-plugin-svelte"
-          - "prettier-plugin-svelte"
+          - 'svelte'
+          - 'eslint-plugin-svelte'
+          - 'prettier-plugin-svelte'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       linting:
         applies-to: version-updates
-        dependency-type: "development"
+        dependency-type: 'development'
         patterns:
-          - "eslint"
-          - "@eslint/*"
-          - "typescript-eslint"
-          - "@typescript-eslint/*"
-          - "eslint-*"
-          - "globals"
+          - 'eslint'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - '@typescript-eslint/*'
+          - 'eslint-*'
+          - 'globals'
         exclude-patterns:
-          - "eslint-plugin-svelte"
+          - 'eslint-plugin-svelte'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       formatting:
         applies-to: version-updates
-        dependency-type: "development"
+        dependency-type: 'development'
         patterns:
-          - "prettier"
-          - "prettier-*"
+          - 'prettier'
+          - 'prettier-*'
         exclude-patterns:
-          - "prettier-plugin-svelte"
+          - 'prettier-plugin-svelte'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       testing:
         applies-to: version-updates
-        dependency-type: "development"
+        dependency-type: 'development'
         patterns:
-          - "@playwright/*"
-          - "@axe-core/*"
+          - '@playwright/*'
+          - '@axe-core/*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       icons-and-fonts:
         applies-to: version-updates
         patterns:
-          - "@lucide/*"
-          - "@fontsource/*"
+          - '@lucide/*'
+          - '@fontsource/*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
       remaining-minor-patch:
         applies-to: version-updates
         patterns:
-          - "*"
+          - '*'
         exclude-patterns:
-          - "astro"
-          - "@astrojs/*"
-          - "@cloudflare/*"
-          - "wrangler"
-          - "svelte"
-          - "eslint"
-          - "@eslint/*"
-          - "typescript-eslint"
-          - "@typescript-eslint/*"
-          - "eslint-*"
-          - "globals"
-          - "prettier"
-          - "prettier-*"
-          - "@playwright/*"
-          - "@axe-core/*"
-          - "@lucide/*"
-          - "@fontsource/*"
+          - 'astro'
+          - '@astrojs/*'
+          - '@cloudflare/*'
+          - 'wrangler'
+          - 'svelte'
+          - 'eslint'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - '@typescript-eslint/*'
+          - 'eslint-*'
+          - 'globals'
+          - 'prettier'
+          - 'prettier-*'
+          - '@playwright/*'
+          - '@axe-core/*'
+          - '@lucide/*'
+          - '@fontsource/*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
