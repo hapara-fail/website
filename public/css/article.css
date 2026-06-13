@@ -83,6 +83,75 @@
   font-style: italic;
   color: var(--text-primary);
 }
+.article-body .email-callout {
+  margin: 2rem 0 2.5rem;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #facc15;
+  border-radius: 8px;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.article-body .email-callout summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.article-body .email-callout summary::-webkit-details-marker {
+  display: none;
+}
+.article-body .email-callout summary::after {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #f8df6a;
+  border: 1px solid rgba(250, 204, 21, 0.22);
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+.article-body .email-callout[open] summary {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.article-body .email-callout[open] summary::after {
+  content: '-';
+}
+.article-body .email-callout > :not(summary) {
+  margin-left: 1.4rem;
+  margin-right: 1.4rem;
+}
+.article-body .email-callout > :nth-child(2) {
+  margin-top: 1.25rem;
+}
+.article-body .email-callout > :last-child {
+  margin-bottom: 1.25rem;
+}
+.article-body .email-callout p,
+.article-body .email-callout li {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.article-body .email-callout p:last-child {
+  margin-bottom: 0;
+}
+.article-body .email-callout ul {
+  margin-top: -0.4rem;
+}
+.article-body .email-callout strong {
+  color: #f8df6a;
+}
 .article-body pre {
   background-color: var(--bg-dark);
   border: 1px solid var(--border-color);

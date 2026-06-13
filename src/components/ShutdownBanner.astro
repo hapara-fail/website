@@ -1,0 +1,32 @@
+---
+import TriangleAlert from '@lucide/astro/icons/triangle-alert';
+import X from '@lucide/astro/icons/x';
+
+const postHref = '/blog/public-dns-resolver-shutdown-notice';
+const bannerText =
+  'The hapara.fail public DNS resolver will be retired on July 31, 2026 due to funding issues.';
+---
+
+<script is:inline>
+  (() => {
+    try {
+      const dismissed = window.localStorage.getItem('haparaFailShutdownNoticeDismissed') === 'true';
+      document.documentElement.classList.toggle('shutdown-banner-dismissed', dismissed);
+      document.documentElement.classList.toggle('shutdown-banner-visible', !dismissed);
+    } catch {
+      document.documentElement.classList.add('shutdown-banner-visible');
+    }
+  })();
+</script>
+
+<aside class="shutdown-banner" data-shutdown-banner aria-label="Service shutdown notice" hidden>
+  <a class="shutdown-banner__link" href={postHref}>
+    <div class="shutdown-banner__inner">
+      <TriangleAlert class="shutdown-banner__icon" size={22} aria-hidden="true" />
+      <span>{bannerText}</span>
+    </div>
+  </a>
+  <button class="shutdown-banner__close" type="button" aria-label="Dismiss shutdown notice">
+    <X size={18} aria-hidden="true" />
+  </button>
+</aside>

@@ -23,6 +23,7 @@ const publishedFormatted = publishedDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
+  timeZone: 'UTC',
 });
 
 const canonicalUrl = `https://www.hapara.fail/blog/${post.id}`;

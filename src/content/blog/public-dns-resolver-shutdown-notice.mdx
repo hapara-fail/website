@@ -1,0 +1,116 @@
+---
+title: 'Public DNS Resolver Shutdown Notice'
+description: 'The hapara.fail public DNS resolver is scheduled to retire on July 31, 2026 unless the funding situation changes.'
+author: 'a9x'
+publishedDate: 2026-06-13
+modifiedDate: 2026-06-13
+tag: 'Announcement'
+excerpt: 'The hapara.fail public DNS resolver will be retired on July 31, 2026 unless something changes. Here is what happened, why it matters, and what comes next.'
+---
+
+The hapara.fail public DNS resolver will be retired on **July 31, 2026** unless something changes before then.
+
+This is not a decision we are making lightly. The resolver has taken real infrastructure, monitoring, maintenance, and support to keep running. We know people have depended on it, and we do not want to leave anyone surprised by a service disappearing with no warning.
+
+## Background
+
+The public resolver originally ran on Google Cloud Platform's free tier because that was the only realistic way to keep costs low while making the service available publicly. That setup did not hold up well enough. We ran into significant reliability issues, including network downtime and a false abuse suspension.
+
+After that, we moved the resolver infrastructure to DigitalOcean. We were able to use DigitalOcean through the GitHub Student Developer Pack, which made it possible to offer a much better-quality service without taking on large ongoing costs. For a while, that worked well. The resolver was faster, more reliable, and much easier to maintain than the old setup.
+
+## The first DigitalOcean email
+
+On Monday, June 8, 2026, we received an email from DigitalOcean about a program update. The message said DigitalOcean credits would no longer apply to certain excluded products, mainly GPU, AI, Paperspace, Cloudways, and third-party provider services.
+
+<details class="email-callout" aria-label="DigitalOcean program update email from June 8, 2026">
+<summary>Read the DigitalOcean program update email from June 8, 2026</summary>
+
+Hi there,
+
+Thank you for using DigitalOcean as part of the GitHub Student Developer Pack!
+
+We're writing to let you know about an upcoming update to how program credits can be used (referred to below as &ldquo;Program Update&rdquo;), effective June 9, 2026 at 00:00 UTC.
+
+**What's changing**
+
+We're clarifying the scope of eligible DigitalOcean products and services for which credits can be applied. With this change, credits will no longer apply to use of AI models hosted by third-party providers. However, we know AI is central to what many of you are building, so here's the good news: program credits can still be used across the full range of DigitalOcean's own infrastructure for supporting your AI workloads.
+
+As of the Program Update, credits will no longer apply to the following:
+
+- GPU Droplets
+- Kubernetes on GPUs
+- Bare Metal GPUs
+- Dedicated Inference
+- Serverless Inference: Third-party AI models hosted outside of DigitalOcean Infrastructure (including commercial/frontier models, including but not limited to Anthropic and OpenAI)
+- Paperspace Machines
+- Cloudways services
+- Any other charges passed through to third-party providers outside of DigitalOcean's infrastructure
+
+You may continue to use all our DigitalOcean services and products even after the Program Update, but use of any services excluded from our Qualifying Program Services list after the Program Update will be charged at the applicable published rates available at [https://www.digitalocean.com/pricing](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiSDwZ20yzQwRDFa-jiHv7Qh6G338MNV6CGWDPvhdMNAqksgqycdqkbLMIIBcjjFsN3ND4aGY=).
+
+**Why we're making this change**
+
+Program credits are designed to help users build and scale on DigitalOcean's infrastructure. As AI adoption grows, we're clarifying where credits apply so the Program can continue providing meaningful, predictable support to users building on DigitalOcean.
+
+We truly value your participation and want to make sure you have everything you need to keep building. If you have questions about which services qualify, or want guidance on migrating workloads to hosted models where you can continue to use your Program credits, our team is here to help.
+
+Reach out anytime [https://www.digitalocean.com/company/contact/support](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiSDwZ2_3weNKlYn00tYM6CVekK7DvbjWbt5VY3ELP2KUwNnpN8x-upX-2OusEetSWiCVuxnI=) or visit [https://docs.digitalocean.com/support/accounts/](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiSDwZ2xmouYi5JBd2p_VuPLnd1THQ7ns0R37V572mHGsqbi43q9kK_ceuY2ILe1IV_UG2QFI=).
+
+Here's to building great things together.
+
+The DigitalOcean Team
+
+</details>
+
+At first, this seemed fine. hapara.fail DNS does not use GPU droplets, hosted AI models, Paperspace, Cloudways, or any of the other excluded products listed in that update. The message made it sound like ordinary DigitalOcean infrastructure would remain eligible for credits.
+
+## The second DigitalOcean email
+
+Four days later, on Friday, June 12, 2026, we received another email. This one said DigitalOcean is winding down participation in the GitHub Student Developer Pack and that all credits provided through the pack will expire on July 31, 2026.
+
+<details class="email-callout" aria-label="DigitalOcean GitHub Student Developer Pack wind-down email from June 12, 2026">
+<summary>Read the DigitalOcean credit expiration email from June 12, 2026</summary>
+
+Hi there,
+
+We're writing to let you know that DigitalOcean is winding down participation in the GitHub Student Developer Pack, and all credits provided through the pack will expire on July 31, 2026.
+
+We wanted you to hear this update from us, in addition to notifications from GitHub, so you have time to plan.
+
+What this means for you:
+
+- Your credits remain active and usable on eligible DigitalOcean services through July 31, 2026. More information about DigitalOcean promotional credit and discount terms are available [here](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiW7G_IkEaWOqrd9tpKLZCAxEzaTbWrUbYLzGTEDMe_daboi-N2UDmQRj7wmGbHJrWcIC6jMU=).
+- After July 31, any unused credit balance expires and can not be carried over or transferred.
+- After July 31, your account continues on standard billing. If you keep projects with paid resources running, the usage will be billed to your payment method on file.
+
+What you may want to do before July 31:
+
+- Check your balance and usage. [Log in](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiW7G_IjloRiQTajrQiYmqg8ebKKQHvqrOohMk7i5M6KV7XvZ3LaQsDkBLasdPYJIUYq1vIb4=) to review the credits you have and what resources are currently running on your account.
+- Decide what to keep. If you want to continue with DigitalOcean, no action is needed beyond maintaining a valid payment method on file. If you decide otherwise, shut down any paid resources (projects) you don't plan to keep before July 31 to prevent being billed for them thereafter. For convenience, see instructions [here](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiW7G_IqwmYnL0z30rkcxKWMm9YpU2bcrVL8cmAoBB4Nmn0sHxunoLVQxSVXaFaZzIvBcPiBQ=) on shutting down a project. Back up anything you need first, as deleting a project will remove its data.
+- Ask us anything. If you're unsure what's running or what it would cost on a standard plan, [reach out](https://waves.digitalocean.com/MTEzLURUTi0yNjYAAAGiW7G_Im1UYXgHkIFKO5sHeAEOUFMEtPaMGOW-wHmMLwkB7tdAZkg5TCMPNKUDkrb0FQYKs5U=) and we'll walk through it with you.
+
+Thank you for building with DigitalOcean. We've been glad to be part of your projects, and we hope you'll keep building with us.
+
+The DigitalOcean Team
+
+</details>
+
+## Our reaction
+
+The timing and handling of this situation were frustrating, disruptive, and difficult to view as reasonable.
+
+Four days earlier, the update made it sound like normal infrastructure usage would continue to be covered. Then, only days later, we were told the entire credit program was ending and that credits would expire on July 31, 2026. From our perspective, a more reasonable approach would have been to restrict new signups while allowing existing users to keep the credits they had already planned around.
+
+That abrupt change matters operationally. A public DNS resolver is not something you can move, fund, or retire casually. It has users, DNS records, uptime expectations, monitoring, documentation, and support load. Having the funding model change on this timeline makes it much harder to continue offering the resolver as a public service.
+
+## Why the resolver is being retired
+
+The public DNS resolver receives almost no donation funding. Continuing to run it after the credits expire would mean more out-of-pocket spending, and I do not want to keep personally funding and maintaining a service that takes real effort to support, especially since I do not personally use the resolver.
+
+That is the core issue. The resolver is useful, but usefulness does not make the server bill disappear. Keeping it online takes money, maintenance, monitoring, and time. Without a sustainable way to cover those costs, retiring the public resolver is the responsible path.
+
+## What comes next
+
+Thank you to everyone who used, shared, tested, reported issues with, or supported the hapara.fail public DNS resolver. The service existed because people cared enough to try it and keep pushing it forward.
+
+More details and migration options will be provided soon. Stay tuned.
