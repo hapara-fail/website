@@ -14,6 +14,9 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  security: {
+    checkOrigin: false,
+  },
   integrations: [mdx(), sitemap(), svelte()],
   redirects: {
     '/bypass': '/services/dns',
