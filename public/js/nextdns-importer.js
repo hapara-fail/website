@@ -509,6 +509,8 @@ document.addEventListener('astro:page-load', () => {
 
     let animationId;
     let frames = 0;
+    const fadeStartY = canvas.height * 0.78;
+    const fadeEndY = canvas.height + 120;
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -516,21 +518,25 @@ document.addEventListener('astro:page-load', () => {
 
       particles.forEach((p) => {
         p.tiltAngle += p.tiltAngleInc;
+        p.dy += 0.018;
         p.y += p.dy;
         p.x += Math.sin(p.tiltAngle) * 2;
 
-        if (p.y < canvas.height + 20) active = true;
+        const alpha = p.y <= fadeStartY ? 1 : Math.max(0, 1 - (p.y - fadeStartY) / (fadeEndY - fadeStartY));
+        if (alpha > 0) active = true;
 
         ctx.beginPath();
         ctx.lineWidth = p.r;
         ctx.strokeStyle = p.color;
+        ctx.globalAlpha = alpha;
         ctx.moveTo(p.x + p.tilt + p.r, p.y);
         ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
         ctx.stroke();
       });
+      ctx.globalAlpha = 1;
 
       frames++;
-      if (active && frames < 300) {
+      if (active && frames < 420) {
         animationId = requestAnimationFrame(draw);
       } else {
         canvas.remove();

@@ -21,7 +21,7 @@
 .page-hero h1 {
   font-size: clamp(3rem, 9vw, 5rem);
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.25;
   margin-bottom: 1rem;
 }
 
@@ -958,7 +958,7 @@
   margin-right: auto;
   margin-left: auto;
   font-size: clamp(2.75rem, 6.5vw, 4.2rem);
-  line-height: 1.08;
+  line-height: 1.2;
 }
 
 .dns-migration-hero .container > p:not(.dns-kicker) {
@@ -1742,9 +1742,28 @@
 /* --- Importer Specific Modal Styles --- */
 .modal-actions-row {
   display: flex;
-  gap: 12px;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-top: 15px;
+}
+
+.modal-actions-row .cta-button {
+  width: auto;
+}
+
+.modal-actions-row .next-step-btn {
+  margin-top: 0;
+}
+
+@media (max-width: 520px) {
+  .modal-actions-row {
+    justify-content: stretch;
+  }
+
+  .modal-actions-row .cta-button {
+    width: 100%;
+  }
 }
 
 .import-loading-view,
@@ -1863,6 +1882,10 @@
 
 .api-key-help-text {
   margin-bottom: 25px;
+}
+
+.next-step-btn {
+  margin-top: 8px;
 }
 
 /* Progress styles */

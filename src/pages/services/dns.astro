@@ -31,7 +31,6 @@ import Check from '@lucide/astro/icons/check';
   <section class="page-hero dns-migration-hero">
     <div class="parallax-bg"></div>
     <div class="container reveal reveal-blur">
-      <p class="dns-kicker">DNS Migration Guide</p>
       <h1 class="gradient-text">Keep the blocklist. Start with managed DNS.</h1>
       <p>
         The public DNS resolver retires on July 31, 2026. The easiest replacement is NextDNS or
@@ -61,7 +60,7 @@ import Check from '@lucide/astro/icons/check';
           path is a managed DNS provider; self-hosting remains available for advanced users.
         </p>
         <p>
-          Need the full context? Read the
+          Need the full context? Read the{' '}
           <a href="/blog/public-dns-resolver-shutdown-notice">public resolver shutdown notice</a>.
         </p>
       </div>
@@ -156,9 +155,6 @@ import Check from '@lucide/astro/icons/check';
 
       <div class="provider-placeholder-grid" data-reveal-stagger>
         <article class="provider-placeholder-card nextdns-importer-card reveal reveal-scale">
-          <span class="provider-placeholder-card__status provider-placeholder-card__status--ready"
-            >Importer ready</span
-          >
           <h3>NextDNS</h3>
           <p>
             Add every domain from the maintained hapara.fail blocklist to a NextDNS profile's
@@ -172,7 +168,6 @@ import Check from '@lucide/astro/icons/check';
         </article>
 
         <article class="provider-placeholder-card reveal reveal-scale">
-          <span class="provider-placeholder-card__status">Importer coming later</span>
           <h3>Control D</h3>
           <p>
             Future goal: provide a Control D-ready import path that keeps the user experience close
@@ -203,7 +198,6 @@ import Check from '@lucide/astro/icons/check';
 
       <div class="dns-guide-grid">
         <div class="dns-guide-panel dns-guide-panel--primary">
-          <p class="dns-kicker">Advanced path</p>
           <h3>Run your own resolver</h3>
           <p>
             Use your own infrastructure, subscribe it to the hapara.fail blocklist, and point your
@@ -216,7 +210,6 @@ import Check from '@lucide/astro/icons/check';
         </div>
 
         <div class="dns-guide-panel">
-          <p class="dns-kicker">Setup flow</p>
           <ol class="dns-checklist">
             <li>
               <strong>Choose a host.</strong>
@@ -256,7 +249,6 @@ import Check from '@lucide/astro/icons/check';
 
       <div class="source-card-grid" data-reveal-stagger>
         <article class="source-card reveal reveal-scale">
-          <p class="dns-kicker">CDN feed</p>
           <h3>jsDelivr</h3>
           <p>Good for clients that prefer a fast CDN-backed URL.</p>
           <code>https://cdn.jsdelivr.net/gh/hapara-fail/blocklist@main/blocklist.txt</code>
@@ -271,7 +263,6 @@ import Check from '@lucide/astro/icons/check';
         </article>
 
         <article class="source-card reveal reveal-scale">
-          <p class="dns-kicker">Source feed</p>
           <h3>GitHub raw</h3>
           <p>Best for automation that wants the canonical repository source.</p>
           <code
