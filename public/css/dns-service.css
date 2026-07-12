@@ -1842,9 +1842,12 @@
   position: relative;
   display: flex;
   align-items: center;
+  isolation: isolate;
 }
 
 .api-key-input-wrapper input {
+  position: relative;
+  z-index: 1;
   width: 100%;
   padding-right: 40px; /* space for icon */
   transition:
@@ -1865,19 +1868,44 @@
 .api-key-validation-icon {
   position: absolute;
   right: 12px;
-  font-weight: bold;
-  font-size: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--text-secondary);
+  opacity: 0;
   pointer-events: none;
 }
 
-.api-key-validation-icon.is-invalid::after {
-  content: '✕';
+.api-key-validation-icon__icon {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.api-key-validation-icon.is-valid,
+.api-key-validation-icon.is-invalid {
+  opacity: 1;
+}
+
+.api-key-validation-icon.is-valid {
+  color: #4ade80;
+}
+
+.api-key-validation-icon.is-invalid {
   color: #ef4444;
 }
 
-.api-key-validation-icon.is-valid::after {
-  content: '✓';
-  color: #4ade80;
+.api-key-validation-icon.is-valid .api-key-validation-icon__icon--valid,
+.api-key-validation-icon.is-invalid .api-key-validation-icon__icon--invalid {
+  display: block;
 }
 
 .api-key-help-text {

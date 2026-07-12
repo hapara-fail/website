@@ -56,30 +56,64 @@ document.addEventListener('astro:page-load', () => {
     'Routing around the bad stuff...',
   ];
 
-  const validateApiKey = () => {
-    const val = apiKeyInput.value.trim();
-    const icon = apiKeyInput.nextElementSibling;
-    if (val.length === 0) {
-      apiKeyInput.classList.remove('is-valid', 'is-invalid');
-      icon.classList.remove('is-valid', 'is-invalid');
-    } else if (val.length === 40) {
-      apiKeyInput.classList.remove('is-invalid');
-      apiKeyInput.classList.add('is-valid');
-      icon.classList.remove('is-invalid');
+  const setValidationState = (input, icon, state) => {
+    if (!input || !icon) return;
+
+    input.classList.remove('is-valid', 'is-invalid');
+    icon.classList.remove('is-valid', 'is-invalid');
+
+    if (state === 'valid') {
+      input.classList.add('is-valid');
       icon.classList.add('is-valid');
-    } else {
-      apiKeyInput.classList.remove('is-valid');
-      apiKeyInput.classList.add('is-invalid');
-      icon.classList.remove('is-valid');
+    } else if (state === 'invalid') {
+      input.classList.add('is-invalid');
       icon.classList.add('is-invalid');
     }
   };
+
+  const validateApiKey = () => {
+    const val = apiKeyInput.value.trim();
+    const icon = apiKeyInput.nextElementSibling;
+
+    if (val.length === 0) {
+      setValidationState(apiKeyInput, icon, 'neutral');
+      return false;
+    }
+
+    const isValid = val.length === 40;
+    setValidationState(apiKeyInput, icon, isValid ? 'valid' : 'invalid');
+    return isValid;
+  };
+  const parseProfileId = (input) => {
+    const trimmed = input.trim();
+    if (/^[a-zA-Z0-9]{6}$/.test(trimmed)) return trimmed;
+
+    const match = trimmed.match(/^(?:https?:\/\/)?(?:my\.nextdns\.io\/)?([a-zA-Z0-9]{6})(?:[/?#].*)?$/i);
+    return match ? match[1] : null;
+  };
+
+  const validateProfileId = () => {
+    const icon = profileIdInput.nextElementSibling;
+    const parsedId = parseProfileId(profileIdInput.value);
+
+    if (!profileIdInput.value.trim()) {
+      setValidationState(profileIdInput, icon, 'neutral');
+      return false;
+    }
+
+    const isValid = Boolean(parsedId);
+    setValidationState(profileIdInput, icon, isValid ? 'valid' : 'invalid');
+    return isValid;
+  };
+
   apiKeyInput?.addEventListener('input', validateApiKey);
+  profileIdInput?.addEventListener('input', validateProfileId);
 
   const resetModalState = () => {
     apiKeyInput.value = '';
     profileIdInput.value = '';
     validateApiKey();
+    validateProfileId();
     goToStep(step1);
     stopLoadingMessages();
     progressContainer?.setAttribute('hidden', '');
@@ -128,21 +162,18 @@ document.addEventListener('astro:page-load', () => {
 
   btn2?.addEventListener('click', () => {
     const rawId = profileIdInput.value.trim();
-    if (!rawId) {
+    const parsedProfileId = parseProfileId(rawId);
+    if (!parsedProfileId) {
+      validateProfileId();
       profileIdInput.focus();
       return;
     }
     step2.classList.add('fade-out');
     setTimeout(() => {
       goToStep(step3);
-      startImport(apiKeyInput.value.trim(), parseProfileId(rawId));
+      startImport(apiKeyInput.value.trim(), parsedProfileId);
     }, 250);
   });
-
-  const parseProfileId = (input) => {
-    const match = input.match(/(?:my\.nextdns\.io\/)?([a-zA-Z0-9]{6})(?:\/|$)/i);
-    return match ? match[1] : input;
-  };
 
   const startLoadingMessages = () => {
     let msgIndex = 0;

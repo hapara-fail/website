@@ -6,6 +6,7 @@ import FileSearch from '@lucide/astro/icons/file-search';
 import ExternalLink from '@lucide/astro/icons/external-link';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Check from '@lucide/astro/icons/check';
+import X from '@lucide/astro/icons/x';
 ---
 
 <BaseLayout
@@ -324,7 +325,10 @@ import Check from '@lucide/astro/icons/check';
               placeholder="Paste your API key"
               required
             />
-            <span class="api-key-validation-icon" aria-hidden="true"></span>
+            <span class="api-key-validation-icon" aria-hidden="true">
+              <Check class="api-key-validation-icon__icon api-key-validation-icon__icon--valid" size={18} stroke-width={2.4} />
+              <X class="api-key-validation-icon__icon api-key-validation-icon__icon--invalid" size={18} stroke-width={2.4} />
+            </span>
           </div>
           <p class="api-key-help-text">
             Find it at the bottom of your <a
@@ -347,14 +351,28 @@ import Check from '@lucide/astro/icons/check';
         </p>
         <div class="nextdns-importer__field">
           <label for="modal-nextdns-profile-id">Setup URL or Profile ID</label>
-          <input
-            id="modal-nextdns-profile-id"
-            type="text"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="e.g. https://my.nextdns.io/2c589b/security or 2c589b"
-            required
-          />
+          <div class="api-key-input-wrapper">
+            <input
+              id="modal-nextdns-profile-id"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="e.g. https://my.nextdns.io/2c589b/security or 2c589b"
+              required
+            />
+            <span class="api-key-validation-icon" aria-hidden="true">
+              <Check
+                class="api-key-validation-icon__icon api-key-validation-icon__icon--valid"
+                size={18}
+                stroke-width={2.4}
+              />
+              <X
+                class="api-key-validation-icon__icon api-key-validation-icon__icon--invalid"
+                size={18}
+                stroke-width={2.4}
+              />
+            </span>
+          </div>
           <p>Found anywhere in the URL bar when you are configuring your profile.</p>
         </div>
         <div class="modal-actions-row">
