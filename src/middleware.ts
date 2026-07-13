@@ -40,9 +40,15 @@ function setSecurityHeaders(headers: Headers): void {
  */
 export const onRequest = defineMiddleware(async (_context, next) => {
   const method = _context.request.method.toUpperCase();
+  const url = new URL(_context.request.url);
+  const isNextDnsProxyRequest = url.pathname === '/api/nextdns';
 
   // Only allow safe methods for a static site
-  if (method !== 'GET' && method !== 'HEAD') {
+  if (
+    method !== 'GET' &&
+    method !== 'HEAD' &&
+    !(isNextDnsProxyRequest && (method === 'POST' || method === 'OPTIONS'))
+  ) {
     const headers = new Headers({
       Allow: 'GET, HEAD',
       'Content-Type': 'text/plain; charset=utf-8',
