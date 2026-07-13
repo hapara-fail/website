@@ -42,18 +42,28 @@ document.addEventListener('astro:page-load', () => {
     'https://raw.githubusercontent.com/hapara-fail/blocklist/refs/heads/main/blocklist.txt',
   ];
   const IMPORT_CONCURRENCY = 1;
+  const IMPORT_REQUEST_DELAY_MS = 1000;
+  const IMPORT_ESTIMATE_FLOOR_MS = 1100;
   let globalPauseUntil = 0;
   let funnyMessageInterval = null;
   let isRateLimited = false;
 
   const FUNNY_MESSAGES = [
-    'Bribing the DNS servers...',
-    'Consulting the blocklist oracle...',
-    'Convincing your router to behave...',
-    'Adding extra strength to the denylist...',
-    'Ensuring maximum ad-blocking capability...',
-    'Polishing the allowlist rules...',
-    'Routing around the bad stuff...',
+    'Sending digital hall monitors to detention...',
+    'Shoving tracking pixels into a locker...',
+    'Telling the trackers the dog ate their network packets...',
+    "Revoking the principal's screen-sharing privileges...",
+    'Expelling surveillance domains from your network...',
+    'Putting a blindfold on proctoring software...',
+    'Writing "I will not track students" 100 times on the chalkboard...',
+    'Confiscating the digital hall passes...',
+    'Replacing the surveillance feed with a picture of a firewall...',
+    'Giving the tracking cookies a wedgie...',
+    'Locking the surveillance cameras in a supply closet...',
+    'Sending the trackers to detention for a week...',
+    'Replacing the proctoring software with a game of Minesweeper...',
+    'Putting the surveillance domains in time-out...',
+    'Telling the trackers to go sit in the corner...',
   ];
 
   const setValidationState = (input, icon, state) => {
@@ -88,7 +98,9 @@ document.addEventListener('astro:page-load', () => {
     const trimmed = input.trim();
     if (/^[a-zA-Z0-9]{6}$/.test(trimmed)) return trimmed;
 
-    const match = trimmed.match(/^(?:https?:\/\/)?(?:my\.nextdns\.io\/)?([a-zA-Z0-9]{6})(?:[/?#].*)?$/i);
+    const match = trimmed.match(
+      /^(?:https?:\/\/)?(?:my\.nextdns\.io\/)?([a-zA-Z0-9]{6})(?:[/?#].*)?$/i
+    );
     return match ? match[1] : null;
   };
 
@@ -205,7 +217,7 @@ document.addEventListener('astro:page-load', () => {
     }
 
     const elapsed = Date.now() - startTime;
-    const avgTimePerItem = elapsed / completed;
+    const avgTimePerItem = Math.max(elapsed / completed, IMPORT_ESTIMATE_FLOOR_MS);
     const remainingItems = total - completed;
     const estimatedRemainingMs = avgTimePerItem * remainingItems;
 
@@ -426,7 +438,7 @@ document.addEventListener('astro:page-load', () => {
           results.push({ item, error });
         }
         updateProgress(currentIndex, items.length);
-        await delay(500);
+        await delay(IMPORT_REQUEST_DELAY_MS);
       }
     };
     await Promise.all(
@@ -538,7 +550,6 @@ document.addEventListener('astro:page-load', () => {
       });
     }
 
-    let animationId;
     let frames = 0;
     const fadeStartY = canvas.height * 0.78;
     const fadeEndY = canvas.height + 120;
@@ -553,7 +564,8 @@ document.addEventListener('astro:page-load', () => {
         p.y += p.dy;
         p.x += Math.sin(p.tiltAngle) * 2;
 
-        const alpha = p.y <= fadeStartY ? 1 : Math.max(0, 1 - (p.y - fadeStartY) / (fadeEndY - fadeStartY));
+        const alpha =
+          p.y <= fadeStartY ? 1 : Math.max(0, 1 - (p.y - fadeStartY) / (fadeEndY - fadeStartY));
         if (alpha > 0) active = true;
 
         ctx.beginPath();
@@ -568,7 +580,7 @@ document.addEventListener('astro:page-load', () => {
 
       frames++;
       if (active && frames < 420) {
-        animationId = requestAnimationFrame(draw);
+        requestAnimationFrame(draw);
       } else {
         canvas.remove();
       }
