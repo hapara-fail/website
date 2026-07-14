@@ -352,42 +352,33 @@ import X from '@lucide/astro/icons/x';
         </button>
       </div>
 
-      <!-- Step 2: Profile ID -->
+      <!-- Step 2: Profile selection -->
       <div class="dns-step fade-in" id="nextdns-step-2" hidden>
         <p class="dns-modal-text">
-          Next, paste any NextDNS dashboard URL containing the ID, or just the ID itself.
+          Next, we will load the profiles attached to this API key and let you choose one.
         </p>
         <div class="nextdns-importer__field">
-          <label for="modal-nextdns-profile-id">Setup URL or Profile ID</label>
-          <div class="api-key-input-wrapper">
-            <input
-              id="modal-nextdns-profile-id"
-              type="text"
-              autocomplete="off"
-              spellcheck="false"
-              placeholder="e.g. https://my.nextdns.io/2c589b/security or 2c589b"
-              required
-            />
-            <span class="api-key-validation-icon" aria-hidden="true">
-              <Check
-                class="api-key-validation-icon__icon api-key-validation-icon__icon--valid"
-                size={18}
-                stroke-width={2.4}
-              />
-              <X
-                class="api-key-validation-icon__icon api-key-validation-icon__icon--invalid"
-                size={18}
-                stroke-width={2.4}
-              />
-            </span>
+          <label for="modal-nextdns-profile-select">Profile</label>
+          <div class="nextdns-profile-loading" id="nextdns-profiles-loading">
+            <div class="loading-spinner"></div>
+            <p class="dns-modal-text">Loading profiles...</p>
           </div>
-          <p>Found anywhere in the URL bar when you are configuring your profile.</p>
+          <select id="modal-nextdns-profile-select" disabled>
+            <option value="">Loading profiles...</option>
+          </select>
+          <p id="nextdns-profile-hint">Choose the profile you want to update.</p>
+          <p class="nextdns-importer__status is-error" id="nextdns-profiles-error" hidden></p>
+          <div class="nextdns-profile-error-actions" id="nextdns-profile-error-actions" hidden>
+            <button class="retry-btn" id="nextdns-retry-profiles">
+              Retry profile lookup
+            </button>
+          </div>
         </div>
         <div class="modal-actions-row">
           <button class="cta-button cta-button--secondary back-step-btn" id="nextdns-back-1"
             >Back</button
           >
-          <button class="cta-button next-step-btn" id="nextdns-btn-2">
+          <button class="cta-button next-step-btn" id="nextdns-btn-2" disabled>
             Start Import
             <ArrowRight size={18} aria-hidden="true" />
           </button>
