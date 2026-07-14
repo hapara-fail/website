@@ -24,7 +24,11 @@ document.addEventListener('astro:page-load', () => {
   const step4 = document.getElementById('nextdns-step-4');
 
   const apiKeyInput = document.getElementById('modal-nextdns-api-key');
-  const profileIdInput = document.getElementById('modal-nextdns-profile-id');
+  const profileSelect = document.getElementById('modal-nextdns-profile-select');
+  const profileLoading = document.getElementById('nextdns-profiles-loading');
+  const profileHint = document.getElementById('nextdns-profile-hint');
+  const profileError = document.getElementById('nextdns-profiles-error');
+  const profileErrorActions = document.getElementById('nextdns-profile-error-actions');
   const loadingMessage = document.getElementById('nextdns-loading-message');
 
   const progressContainer = document.getElementById('nextdns-progress-container');
@@ -35,6 +39,7 @@ document.addEventListener('astro:page-load', () => {
   const back1 = document.getElementById('nextdns-back-1');
   const btn2 = document.getElementById('nextdns-btn-2');
   const btnCloseSuccess = document.getElementById('nextdns-btn-close-success');
+  const retryProfilesBtn = document.getElementById('nextdns-retry-profiles');
 
   const NEXTDNS_PROXY_PATH = '/api/nextdns';
   const BLOCKLIST_SOURCES = [
@@ -44,9 +49,12 @@ document.addEventListener('astro:page-load', () => {
   const IMPORT_CONCURRENCY = 1;
   const IMPORT_REQUEST_DELAY_MS = 1000;
   const IMPORT_ESTIMATE_FLOOR_MS = 1100;
+  const CREATE_NEW_PROFILE_VALUE = '__create_new_profile__';
   let globalPauseUntil = 0;
   let funnyMessageInterval = null;
   let isRateLimited = false;
+  let selectedProfileId = '';
+  let profileLookupToken = 0;
 
   const FUNNY_MESSAGES = [
     'Sending digital hall monitors to detention...',
@@ -94,38 +102,159 @@ document.addEventListener('astro:page-load', () => {
     setValidationState(apiKeyInput, icon, isValid ? 'valid' : 'invalid');
     return isValid;
   };
-  const parseProfileId = (input) => {
-    const trimmed = input.trim();
-    if (/^[a-zA-Z0-9]{6}$/.test(trimmed)) return trimmed;
-
-    const match = trimmed.match(
-      /^(?:https?:\/\/)?(?:my\.nextdns\.io\/)?([a-zA-Z0-9]{6})(?:[/?#].*)?$/i
-    );
-    return match ? match[1] : null;
-  };
-
-  const validateProfileId = () => {
-    const icon = profileIdInput.nextElementSibling;
-    const parsedId = parseProfileId(profileIdInput.value);
-
-    if (!profileIdInput.value.trim()) {
-      setValidationState(profileIdInput, icon, 'neutral');
-      return false;
-    }
-
-    const isValid = Boolean(parsedId);
-    setValidationState(profileIdInput, icon, isValid ? 'valid' : 'invalid');
-    return isValid;
-  };
 
   apiKeyInput?.addEventListener('input', validateApiKey);
-  profileIdInput?.addEventListener('input', validateProfileId);
+
+  const setProfileError = (message) => {
+    if (!profileError) return;
+    profileError.textContent = message;
+    profileError.hidden = !message;
+  };
+
+  const setProfileErrorActionsVisible = (visible) => {
+    if (profileErrorActions) profileErrorActions.hidden = !visible;
+  };
+
+  const setProfileLoading = (isLoading) => {
+    if (profileLoading) profileLoading.hidden = !isLoading;
+  };
+
+  const setProfileHint = (message) => {
+    if (profileHint) profileHint.textContent = message;
+  };
+
+  const updateImportButtonState = () => {
+    if (btn2) btn2.disabled = !selectedProfileId;
+  };
+
+  const renderProfileOptions = (profiles) => {
+    if (!profileSelect) return;
+
+    profileSelect.innerHTML = '';
+
+    const createOption = document.createElement('option');
+    createOption.value = CREATE_NEW_PROFILE_VALUE;
+    createOption.textContent = 'Create new profile';
+    createOption.selected = true;
+    profileSelect.appendChild(createOption);
+
+    profiles.forEach((profile) => {
+      if (!profile || typeof profile.id !== 'string') return;
+
+      const option = document.createElement('option');
+      const profileId = profile.id.trim();
+      const profileName = typeof profile.name === 'string' && profile.name.trim()
+        ? profile.name.trim()
+        : 'Unnamed profile';
+
+      option.value = profileId;
+      option.textContent = `${profileName} (${profileId})`;
+      profileSelect.appendChild(option);
+    });
+
+    profileSelect.disabled = false;
+  };
+
+  const resetProfileSelection = () => {
+    profileLookupToken += 1;
+    selectedProfileId = '';
+
+    if (profileSelect) {
+      profileSelect.innerHTML = '<option value="">Loading profiles...</option>';
+      profileSelect.disabled = true;
+    }
+
+    setProfileError('');
+    setProfileErrorActionsVisible(false);
+    setProfileHint('Choose the profile you want to update.');
+    setProfileLoading(true);
+    updateImportButtonState();
+  };
+
+  const loadProfiles = async (apiKey) => {
+    const requestToken = profileLookupToken;
+    setProfileLoading(true);
+    setProfileError('');
+    setProfileErrorActionsVisible(false);
+    setProfileHint('Loading profiles...');
+
+    try {
+      const payload = await nextDnsRequest(apiKey, '/profiles');
+      if (requestToken !== profileLookupToken) return;
+
+      const profiles = Array.isArray(payload.data)
+        ? payload.data.filter(
+            (profile) =>
+              profile && typeof profile.id === 'string' && profile.id.trim().length > 0
+          )
+        : [];
+
+      if (profiles.length === 0) {
+        if (profileSelect) {
+          profileSelect.innerHTML = '';
+          const emptyOption = document.createElement('option');
+          emptyOption.value = CREATE_NEW_PROFILE_VALUE;
+          emptyOption.textContent = 'Create new profile';
+          emptyOption.selected = true;
+          profileSelect.appendChild(emptyOption);
+          profileSelect.disabled = true;
+        }
+        selectedProfileId = CREATE_NEW_PROFILE_VALUE;
+        setProfileHint('No existing profiles found. Create a new profile to continue.');
+        updateImportButtonState();
+        return;
+      }
+
+      renderProfileOptions(profiles);
+      selectedProfileId = CREATE_NEW_PROFILE_VALUE;
+      setProfileHint('Selected Create new profile. A new profile named hapara.fail will be created for this import.');
+      updateImportButtonState();
+    } catch (error) {
+      if (requestToken !== profileLookupToken) return;
+
+      if (profileSelect) {
+        profileSelect.innerHTML = '';
+        const failedOption = document.createElement('option');
+        failedOption.value = '';
+        failedOption.textContent = 'Unable to load profiles';
+        failedOption.selected = true;
+        profileSelect.appendChild(failedOption);
+        profileSelect.disabled = true;
+      }
+
+      selectedProfileId = '';
+      setProfileHint('Check the API key and try again.');
+      setProfileError(
+        error && error.message
+          ? error.message
+          : 'We could not load profiles for this API key. Please try again.'
+      );
+      setProfileErrorActionsVisible(true);
+      updateImportButtonState();
+    } finally {
+      if (requestToken === profileLookupToken) {
+        setProfileLoading(false);
+      }
+    }
+  };
+
+  profileSelect?.addEventListener('change', () => {
+    selectedProfileId = profileSelect.value.trim();
+    setProfileError('');
+    setProfileHint(
+      selectedProfileId === CREATE_NEW_PROFILE_VALUE
+        ? 'Selected Create new profile. A new profile named hapara.fail will be created for this import.'
+        : selectedProfileId
+          ? `Selected ${profileSelect.selectedOptions[0]?.textContent || 'profile'}.`
+          : 'Choose the profile you want to update.'
+    );
+    updateImportButtonState();
+  });
 
   const resetModalState = () => {
     apiKeyInput.value = '';
-    profileIdInput.value = '';
     validateApiKey();
-    validateProfileId();
+    resetProfileSelection();
     goToStep(step1);
     stopLoadingMessages();
     progressContainer?.setAttribute('hidden', '');
@@ -165,25 +294,33 @@ document.addEventListener('astro:page-load', () => {
     }
     step1.classList.add('fade-out');
     setTimeout(() => goToStep(step2), 250);
+    setTimeout(() => {
+      resetProfileSelection();
+      loadProfiles(apiKeyInput.value.trim());
+    }, 260);
   });
 
   back1?.addEventListener('click', () => {
+    profileLookupToken += 1;
     step2.classList.add('fade-out');
     setTimeout(() => goToStep(step1), 250);
   });
 
+  retryProfilesBtn?.addEventListener('click', () => {
+    resetProfileSelection();
+    loadProfiles(apiKeyInput.value.trim());
+  });
+
   btn2?.addEventListener('click', () => {
-    const rawId = profileIdInput.value.trim();
-    const parsedProfileId = parseProfileId(rawId);
-    if (!parsedProfileId) {
-      validateProfileId();
-      profileIdInput.focus();
+    const profileId = selectedProfileId || profileSelect?.value.trim() || '';
+    if (!profileId) {
+      updateImportButtonState();
       return;
     }
     step2.classList.add('fade-out');
     setTimeout(() => {
       goToStep(step3);
-      startImport(apiKeyInput.value.trim(), parsedProfileId);
+      startImport(apiKeyInput.value.trim(), profileId);
     }, 250);
   });
 
@@ -198,6 +335,23 @@ document.addEventListener('astro:page-load', () => {
         msgIndex++;
       }
     }, 3000);
+  };
+
+  const createNextDnsProfile = async (apiKey) => {
+    const payload = await nextDnsRequest(apiKey, '/profiles', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'hapara.fail' }),
+    });
+
+    const createdProfileId = payload && payload.data && typeof payload.data.id === 'string'
+      ? payload.data.id.trim()
+      : '';
+
+    if (!createdProfileId) {
+      throw new Error('NextDNS did not return a new profile ID.');
+    }
+
+    return createdProfileId;
   };
 
   const stopLoadingMessages = () => {
@@ -457,10 +611,16 @@ document.addEventListener('astro:page-load', () => {
       .filter(Boolean);
   };
 
-  const startImport = async (apiKey, profileId) => {
+  const startImport = async (apiKey, profileIdOrSelection) => {
     startLoadingMessages();
     startTime = Date.now();
     try {
+      let profileId = profileIdOrSelection;
+      if (profileIdOrSelection === CREATE_NEW_PROFILE_VALUE) {
+        if (loadingMessage) loadingMessage.textContent = 'Creating a new profile...';
+        profileId = await createNextDnsProfile(apiKey);
+      }
+
       const rules = await fetchBlocklist();
 
       if (!isRateLimited && loadingMessage) {
