@@ -935,7 +935,7 @@ document.addEventListener('astro:page-load', () => {
     serviceList.setAttribute('aria-busy', 'false');
 
     const normalizedFilter = filterText.toLowerCase().trim();
-    let hasResults = false;
+    let hasResults;
     let cardAnimationIndex = 0;
     let isFuzzy = false;
 

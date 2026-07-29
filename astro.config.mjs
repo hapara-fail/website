@@ -1,8 +1,7 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, sessionDrivers } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
-
 import svelte from '@astrojs/svelte';
 
 export default defineConfig({
@@ -15,6 +14,11 @@ export default defineConfig({
     enabled: false,
   },
   integrations: [mdx(), sitemap(), svelte()],
+  session: {
+    driver: sessionDrivers.cloudflareKVBinding({
+      binding: 'SESSION',
+    }),
+  },
   redirects: {
     '/bypass': '/services/dns',
     '/dns': '/services/dns',

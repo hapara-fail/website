@@ -143,9 +143,10 @@ document.addEventListener('astro:page-load', () => {
 
       const option = document.createElement('option');
       const profileId = profile.id.trim();
-      const profileName = typeof profile.name === 'string' && profile.name.trim()
-        ? profile.name.trim()
-        : 'Unnamed profile';
+      const profileName =
+        typeof profile.name === 'string' && profile.name.trim()
+          ? profile.name.trim()
+          : 'Unnamed profile';
 
       option.value = profileId;
       option.textContent = `${profileName} (${profileId})`;
@@ -184,8 +185,7 @@ document.addEventListener('astro:page-load', () => {
 
       const profiles = Array.isArray(payload.data)
         ? payload.data.filter(
-            (profile) =>
-              profile && typeof profile.id === 'string' && profile.id.trim().length > 0
+            (profile) => profile && typeof profile.id === 'string' && profile.id.trim().length > 0
           )
         : [];
 
@@ -207,7 +207,9 @@ document.addEventListener('astro:page-load', () => {
 
       renderProfileOptions(profiles);
       selectedProfileId = CREATE_NEW_PROFILE_VALUE;
-      setProfileHint('Selected Create new profile. A new profile named hapara.fail will be created for this import.');
+      setProfileHint(
+        'Selected Create new profile. A new profile named hapara.fail will be created for this import.'
+      );
       updateImportButtonState();
     } catch (error) {
       if (requestToken !== profileLookupToken) return;
@@ -343,9 +345,8 @@ document.addEventListener('astro:page-load', () => {
       body: JSON.stringify({ name: 'hapara.fail' }),
     });
 
-    const createdProfileId = payload && payload.data && typeof payload.data.id === 'string'
-      ? payload.data.id.trim()
-      : '';
+    const createdProfileId =
+      payload && payload.data && typeof payload.data.id === 'string' ? payload.data.id.trim() : '';
 
     if (!createdProfileId) {
       throw new Error('NextDNS did not return a new profile ID.');
