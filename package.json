@@ -43,8 +43,8 @@
     "@astrojs/svelte": "^9.0.1",
     "@fontsource/fira-code": "^5.3.0",
     "@fontsource/poppins": "^5.3.0",
-    "@lucide/astro": "^1.27.0",
-    "@lucide/svelte": "^1.27.0",
+    "@lucide/astro": "^1.28.0",
+    "@lucide/svelte": "^1.28.0",
     "astro": "^7.1.6",
     "svelte": "^5.56.8",
     "typescript": "^6.0.3"
