@@ -19,34 +19,34 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
-    "@cloudflare/workers-types": "^5.20260730.1",
+    "@cloudflare/workers-types": "^5.20260811.1",
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.62.0",
-    "@typescript-eslint/parser": "^8.65.0",
-    "eslint": "^10.8.0",
+    "@playwright/test": "^1.62.1",
+    "@typescript-eslint/parser": "^8.67.0",
+    "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^3.0.1",
+    "eslint-plugin-astro": "^3.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-svelte": "^3.22.0",
-    "globals": "^17.8.0",
+    "globals": "^17.9.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^4.1.1",
-    "typescript-eslint": "^8.65.0",
-    "wrangler": "^4.115.0"
+    "typescript-eslint": "^8.67.0",
+    "wrangler": "^4.120.1"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.1.7",
+    "@astrojs/cloudflare": "^14.2.0",
     "@astrojs/mdx": "^7.0.5",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/svelte": "^9.0.1",
     "@fontsource/fira-code": "^5.3.0",
     "@fontsource/poppins": "^5.3.0",
-    "@lucide/astro": "^1.27.0",
-    "@lucide/svelte": "^1.27.0",
-    "astro": "^7.1.6",
+    "@lucide/astro": "^1.31.0",
+    "@lucide/svelte": "^1.31.0",
+    "astro": "^7.2.0",
     "svelte": "^5.56.8",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
