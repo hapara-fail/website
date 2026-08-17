@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
-    "@cloudflare/workers-types": "^5.20260811.1",
+    "@cloudflare/workers-types": "^5.20260816.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@typescript-eslint/parser": "^8.67.0",
@@ -33,7 +33,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^4.1.1",
     "typescript-eslint": "^8.67.0",
-    "wrangler": "^4.120.1"
+    "wrangler": "^4.123.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.0",
