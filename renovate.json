@@ -1,0 +1,101 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "enabledManagers": ["npm", "github-actions"],
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "assignees": ["nota9x"],
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "description": "Wait one day before proposing npm-manager dependency updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["/.*/"],
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "description": "Group Astro and Astro integration updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["astro", "/^@astrojs\\//"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Astro dependencies"
+    },
+    {
+      "description": "Group Cloudflare runtime updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["wrangler", "/^@cloudflare\\//"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Cloudflare dependencies"
+    },
+    {
+      "description": "Group Svelte and Svelte tooling updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["svelte", "eslint-plugin-svelte", "prettier-plugin-svelte"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Svelte dependencies"
+    },
+    {
+      "description": "Group linting dependency updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": [
+        "eslint",
+        "/^@eslint\\//",
+        "typescript-eslint",
+        "/^@typescript-eslint\\//",
+        "/^eslint-/",
+        "globals"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Linting dependencies"
+    },
+    {
+      "description": "Group formatting dependency updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["prettier", "/^prettier-/"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Formatting dependencies"
+    },
+    {
+      "description": "Group test dependency updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["/^@playwright\\//", "/^@axe-core\\//"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Testing dependencies"
+    },
+    {
+      "description": "Group icon and font updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["/^@lucide\\//", "/^@fontsource\\//"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Icons and fonts"
+    },
+    {
+      "description": "Automerge stable non-major npm-manager updates after CI passes",
+      "matchManagers": ["npm"],
+      "matchCurrentVersion": "!/^0/",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Require review for unstable 0.x dependency updates",
+      "matchManagers": ["npm"],
+      "matchCurrentVersion": "/^0\\./",
+      "automerge": false
+    },
+    {
+      "description": "Automerge GitHub Actions digest pins and refreshes after CI passes",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "automerge": true
+    }
+  ]
+}
