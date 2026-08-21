@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
   "enabledManagers": ["npm", "github-actions"],
-  "dependencyDashboard": true,
+  "dependencyDashboard": false,
   "labels": ["dependencies"],
   "assignees": ["nota9x"],
   "platformAutomerge": true,
