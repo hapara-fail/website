@@ -31,10 +31,10 @@ importers:
         version: 5.3.0
       '@lucide/astro':
         specifier: ^1.31.0
-        version: 1.31.0(astro@7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2))
+        version: 1.33.0(astro@7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2))
       '@lucide/svelte':
         specifier: ^1.31.0
-        version: 1.31.0(svelte@5.56.9(@typescript-eslint/types@8.67.0))
+        version: 1.33.0(svelte@5.56.9(@typescript-eslint/types@8.67.0))
       astro:
         specifier: ^7.2.0
         version: 7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)
@@ -1112,13 +1112,13 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@lucide/astro@1.31.0':
-    resolution: {integrity: sha512-36wUVbnUFk/IVuUzObbPZtjuW4rcK3BdrxpCQQwvI9LXKhXti/m3DVOu9VTJrxxOUkR6vlFwiNyHrIj9F4u8cg==}
+  '@lucide/astro@1.33.0':
+    resolution: {integrity: sha512-vhqvQKoPIW3vsOoCb+ZUDgWCP2zfiwhwRqwrnIkNxvtrm4pbaaO0qUlfPK+RvIdn9AlUmyouXFM+9w9AuUbrFA==}
     peerDependencies:
       astro: ^4 || ^5 || ^6 || ^7
 
-  '@lucide/svelte@1.31.0':
-    resolution: {integrity: sha512-pgPuLEJdF0UpsajG9eSw0YvqXVuDxB+/x58BRiC4xE/KEHiopOqT1id3KCUvRN/PUmQkN1F26sslcs/1jutlBQ==}
+  '@lucide/svelte@1.33.0':
+    resolution: {integrity: sha512-b+osTYG2V4dge5Lr7tnaTaahhy/4vH7Xb8zcqVjmctjwgkpXS0NNOJPkGzHHZoxtw/OO+2YAU28omeMfYCaawg==}
     peerDependencies:
       svelte: ^5
 
@@ -4344,11 +4344,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lucide/astro@1.31.0(astro@7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2))':
+  '@lucide/astro@1.33.0(astro@7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2))':
     dependencies:
       astro: 7.2.0(@astrojs/markdown-remark@7.2.2(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)
 
-  '@lucide/svelte@1.31.0(svelte@5.56.9(@typescript-eslint/types@8.67.0))':
+  '@lucide/svelte@1.33.0(svelte@5.56.9(@typescript-eslint/types@8.67.0))':
     dependencies:
       svelte: 5.56.9(@typescript-eslint/types@8.67.0)
 
