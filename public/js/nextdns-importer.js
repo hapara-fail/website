@@ -30,6 +30,8 @@ document.addEventListener('astro:page-load', () => {
   const profileError = document.getElementById('nextdns-profiles-error');
   const profileErrorActions = document.getElementById('nextdns-profile-error-actions');
   const loadingMessage = document.getElementById('nextdns-loading-message');
+  const importSpinner = document.getElementById('nextdns-import-spinner');
+  const importErrorActions = document.getElementById('nextdns-import-error-actions');
 
   const progressContainer = document.getElementById('nextdns-progress-container');
   const progressBar = document.getElementById('nextdns-import-progress');
@@ -40,6 +42,8 @@ document.addEventListener('astro:page-load', () => {
   const btn2 = document.getElementById('nextdns-btn-2');
   const btnCloseSuccess = document.getElementById('nextdns-btn-close-success');
   const retryProfilesBtn = document.getElementById('nextdns-retry-profiles');
+  const retryImportBtn = document.getElementById('nextdns-retry-import');
+  const importBackBtn = document.getElementById('nextdns-import-back');
 
   const NEXTDNS_PROXY_PATH = '/api/nextdns';
   const BLOCKLIST_SOURCES = [
@@ -55,6 +59,9 @@ document.addEventListener('astro:page-load', () => {
   let isRateLimited = false;
   let selectedProfileId = '';
   let profileLookupToken = 0;
+  let sessionController = null;
+  let isImporting = false;
+  let lastImportSelection = '';
 
   const FUNNY_MESSAGES = [
     'Sending digital hall monitors to detention...',
@@ -95,11 +102,13 @@ document.addEventListener('astro:page-load', () => {
 
     if (val.length === 0) {
       setValidationState(apiKeyInput, icon, 'neutral');
+      if (btn1) btn1.disabled = true;
       return false;
     }
 
     const isValid = val.length === 40;
     setValidationState(apiKeyInput, icon, isValid ? 'valid' : 'invalid');
+    if (btn1) btn1.disabled = !isValid;
     return isValid;
   };
 
@@ -174,13 +183,15 @@ document.addEventListener('astro:page-load', () => {
 
   const loadProfiles = async (apiKey) => {
     const requestToken = profileLookupToken;
+    const signal = sessionController?.signal;
+    if (!signal) return;
     setProfileLoading(true);
     setProfileError('');
     setProfileErrorActionsVisible(false);
     setProfileHint('Loading profiles...');
 
     try {
-      const payload = await nextDnsRequest(apiKey, '/profiles');
+      const payload = await nextDnsRequest(apiKey, '/profiles', { signal });
       if (requestToken !== profileLookupToken) return;
 
       const profiles = Array.isArray(payload.data)
@@ -213,6 +224,7 @@ document.addEventListener('astro:page-load', () => {
       updateImportButtonState();
     } catch (error) {
       if (requestToken !== profileLookupToken) return;
+      if (isAbortError(error)) return;
 
       if (profileSelect) {
         profileSelect.innerHTML = '';
@@ -260,21 +272,50 @@ document.addEventListener('astro:page-load', () => {
     goToStep(step1);
     stopLoadingMessages();
     progressContainer?.setAttribute('hidden', '');
+    importErrorActions?.setAttribute('hidden', '');
+    importSpinner?.removeAttribute('hidden');
+    isImporting = false;
+    lastImportSelection = '';
   };
 
   const openNextDnsModal = () => {
+    sessionController?.abort();
+    sessionController = new AbortController();
     resetModalState();
     overlay?.removeAttribute('hidden');
+    apiKeyInput?.focus();
   };
 
-  const closeNextDnsModal = () => {
-    overlay?.setAttribute('hidden', '');
+  const cancelCurrentSession = () => {
+    profileLookupToken += 1;
+    sessionController?.abort();
+    sessionController = null;
+    isImporting = false;
     stopLoadingMessages();
   };
 
+  const closeNextDnsModal = ({ confirmCancellation = true } = {}) => {
+    if (
+      confirmCancellation &&
+      !window.confirm(
+        isImporting
+          ? 'Cancel the NextDNS import? Requests already completed cannot be undone.'
+          : 'Cancel the NextDNS importer? Your progress will be lost.'
+      )
+    ) {
+      return false;
+    }
+
+    cancelCurrentSession();
+    overlay?.setAttribute('hidden', '');
+    return true;
+  };
+
   openNextDnsModalBtn?.addEventListener('click', openNextDnsModal);
-  closeBtn?.addEventListener('click', closeNextDnsModal);
-  btnCloseSuccess?.addEventListener('click', closeNextDnsModal);
+  closeBtn?.addEventListener('click', () => closeNextDnsModal());
+  btnCloseSuccess?.addEventListener('click', () =>
+    closeNextDnsModal({ confirmCancellation: false })
+  );
 
   const goToStep = (targetStep) => {
     [step1, step2, step3, step4].forEach((step) => {
@@ -294,9 +335,13 @@ document.addEventListener('astro:page-load', () => {
       apiKeyInput.focus();
       return;
     }
+    const controller = sessionController;
     step1.classList.add('fade-out');
-    setTimeout(() => goToStep(step2), 250);
     setTimeout(() => {
+      if (controller === sessionController && !controller?.signal.aborted) goToStep(step2);
+    }, 250);
+    setTimeout(() => {
+      if (controller !== sessionController || controller?.signal.aborted) return;
       resetProfileSelection();
       loadProfiles(apiKeyInput.value.trim());
     }, 260);
@@ -319,8 +364,11 @@ document.addEventListener('astro:page-load', () => {
       updateImportButtonState();
       return;
     }
+    const controller = sessionController;
     step2.classList.add('fade-out');
+    btn2.disabled = true;
     setTimeout(() => {
+      if (controller !== sessionController || controller?.signal.aborted) return;
       goToStep(step3);
       startImport(apiKeyInput.value.trim(), profileId);
     }, 250);
@@ -330,6 +378,8 @@ document.addEventListener('astro:page-load', () => {
     let msgIndex = 0;
     isRateLimited = false;
     loadingMessage.textContent = 'Fetching the blocklist...';
+    loadingMessage.classList.remove('nextdns-importer__status', 'is-error');
+    loadingMessage.removeAttribute('role');
 
     funnyMessageInterval = setInterval(() => {
       if (!isRateLimited) {
@@ -339,10 +389,11 @@ document.addEventListener('astro:page-load', () => {
     }, 3000);
   };
 
-  const createNextDnsProfile = async (apiKey) => {
+  const createNextDnsProfile = async (apiKey, signal) => {
     const payload = await nextDnsRequest(apiKey, '/profiles', {
       method: 'POST',
-      body: JSON.stringify({ name: 'hapara.fail' }),
+      body: { name: 'hapara.fail' },
+      signal,
     });
 
     const createdProfileId =
@@ -405,23 +456,50 @@ document.addEventListener('astro:page-load', () => {
     }
   };
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  class NextDnsRequestError extends Error {
+    constructor(message, status = 0) {
+      super(message);
+      this.name = 'NextDnsRequestError';
+      this.status = status;
+    }
+  }
 
-  const checkGlobalPause = async () => {
+  const isAbortError = (error) => error?.name === 'AbortError';
+
+  const delay = (ms, signal) =>
+    new Promise((resolve, reject) => {
+      if (signal?.aborted) {
+        reject(signal.reason || new DOMException('Cancelled', 'AbortError'));
+        return;
+      }
+
+      const timeoutId = setTimeout(() => {
+        signal?.removeEventListener('abort', onAbort);
+        resolve();
+      }, ms);
+      const onAbort = () => {
+        clearTimeout(timeoutId);
+        reject(signal.reason || new DOMException('Cancelled', 'AbortError'));
+      };
+      signal?.addEventListener('abort', onAbort, { once: true });
+    });
+
+  const checkGlobalPause = async (signal) => {
     while (Date.now() < globalPauseUntil) {
-      await delay(globalPauseUntil - Date.now() + 100);
+      await delay(globalPauseUntil - Date.now() + 100, signal);
     }
   };
 
   const nextDnsRequest = async (apiKey, path, options = {}, retries = 5) => {
-    await checkGlobalPause();
+    const { signal, method = 'GET', body, headers: optionHeaders } = options;
+    await checkGlobalPause(signal);
 
-    const headers = new Headers(options.headers || {});
+    const headers = new Headers(optionHeaders || {});
     headers.set('Accept', 'application/json');
     headers.set('Content-Type', 'application/json');
 
-    const proxyPayload = { apiKey, path, method: options.method || 'GET' };
-    if (options.body) proxyPayload.body = JSON.parse(options.body);
+    const proxyPayload = { apiKey, path, method };
+    if (body !== undefined) proxyPayload.body = body;
 
     let response;
     try {
@@ -429,13 +507,17 @@ document.addEventListener('astro:page-load', () => {
         method: 'POST',
         headers,
         body: JSON.stringify(proxyPayload),
+        signal,
       });
-    } catch {
+    } catch (error) {
+      if (isAbortError(error)) throw error;
       if (retries > 0) {
-        await delay(2000);
+        await delay(2000, signal);
         return nextDnsRequest(apiKey, path, options, retries - 1);
       }
-      throw new Error('Could not reach the local NextDNS proxy.');
+      throw new NextDnsRequestError(
+        'Could not reach the NextDNS service. Check your connection and try again.'
+      );
     }
 
     if (response.status === 429 && retries > 0) {
@@ -445,8 +527,9 @@ document.addEventListener('astro:page-load', () => {
           "Rate limited. Don't worry, the tool is still working as intended.";
 
       const retryAfter = response.headers.get('Retry-After');
-      const waitTime = retryAfter
-        ? parseInt(retryAfter, 10) * 1000
+      const retryAfterSeconds = Number.parseInt(retryAfter || '', 10);
+      const waitTime = Number.isFinite(retryAfterSeconds)
+        ? Math.max(retryAfterSeconds * 1000, 1000)
         : 30000 * Math.pow(1.5, 5 - retries) + Math.random() * 1000;
       const newPauseUntil = Date.now() + waitTime;
       if (newPauseUntil > globalPauseUntil) globalPauseUntil = newPauseUntil;
@@ -457,17 +540,20 @@ document.addEventListener('astro:page-load', () => {
         }
       }, waitTime);
 
-      await delay(waitTime);
+      await delay(waitTime, signal);
       return nextDnsRequest(apiKey, path, options, retries - 1);
     }
 
     const payload = await readJsonSafely(response);
     if (!response.ok || payload.errors) {
       if (response.status >= 500 && retries > 0) {
-        await delay(2000);
+        await delay(2000, signal);
         return nextDnsRequest(apiKey, path, options, retries - 1);
       }
-      throw new Error(formatApiErrors(payload, `NextDNS API returned HTTP ${response.status}`));
+      throw new NextDnsRequestError(
+        formatApiErrors(payload, `NextDNS API returned HTTP ${response.status}`),
+        response.status
+      );
     }
     return payload;
   };
@@ -535,13 +621,14 @@ document.addEventListener('astro:page-load', () => {
     return { allowDomains: [...allowDomains].sort(), denyDomains: [...denyDomains].sort() };
   };
 
-  const fetchBlocklist = async () => {
+  const fetchBlocklist = async (signal) => {
     let lastError;
     for (const source of BLOCKLIST_SOURCES) {
       try {
         const response = await fetch(source, {
           cache: 'no-store',
           headers: { Accept: 'text/plain' },
+          signal,
         });
         if (!response.ok) {
           lastError = new Error(`Blocklist fetch failed: HTTP ${response.status}`);
@@ -555,13 +642,14 @@ document.addEventListener('astro:page-load', () => {
         }
         return rules;
       } catch (error) {
+        if (isAbortError(error)) throw error;
         lastError = error;
       }
     }
     throw lastError || new Error('Unable to fetch the hapara.fail blocklist');
   };
 
-  const fetchExistingList = async (apiKey, profileId, listName) => {
+  const fetchExistingList = async (apiKey, profileId, listName, signal) => {
     const entries = new Map();
     let cursor = '';
     do {
@@ -569,7 +657,8 @@ document.addEventListener('astro:page-load', () => {
       if (cursor) query.set('cursor', cursor);
       const payload = await nextDnsRequest(
         apiKey,
-        `/profiles/${encodeURIComponent(profileId)}/${listName}${query.toString() ? `?${query.toString()}` : ''}`
+        `/profiles/${encodeURIComponent(profileId)}/${listName}${query.toString() ? `?${query.toString()}` : ''}`,
+        { signal }
       );
       const data = Array.isArray(payload.data) ? payload.data : [];
       data.forEach((entry) => {
@@ -580,25 +669,31 @@ document.addEventListener('astro:page-load', () => {
     return entries;
   };
 
-  const runLimited = async (items, worker) => {
+  const runLimited = async (items, worker, signal) => {
     let currentIndex = 0;
     const results = [];
     const runWorker = async () => {
       while (currentIndex < items.length) {
+        signal?.throwIfAborted();
         const item = items[currentIndex];
         currentIndex += 1;
         try {
           results.push(await worker(item));
         } catch (error) {
-          results.push({ item, error });
+          if (isAbortError(error)) throw error;
+          throw new Error(
+            `Could not update ${item.domain || 'a domain'}: ${error?.message || 'Unknown NextDNS error'}. You can safely retry; completed updates will be skipped.`,
+            { cause: error }
+          );
         }
         updateProgress(currentIndex, items.length);
-        await delay(IMPORT_REQUEST_DELAY_MS);
+        if (currentIndex < items.length) await delay(IMPORT_REQUEST_DELAY_MS, signal);
       }
     };
     await Promise.all(
       Array.from({ length: Math.min(IMPORT_CONCURRENCY, items.length) }, () => runWorker())
     );
+
     return results;
   };
 
@@ -613,24 +708,45 @@ document.addEventListener('astro:page-load', () => {
   };
 
   const startImport = async (apiKey, profileIdOrSelection) => {
+    if (isImporting) return;
+
+    const signal = sessionController?.signal;
+    if (!signal || signal.aborted) return;
+
+    isImporting = true;
+    lastImportSelection = profileIdOrSelection;
+    importErrorActions?.setAttribute('hidden', '');
+    importSpinner?.removeAttribute('hidden');
+    progressContainer?.setAttribute('hidden', '');
     startLoadingMessages();
     startTime = Date.now();
     try {
       let profileId = profileIdOrSelection;
       if (profileIdOrSelection === CREATE_NEW_PROFILE_VALUE) {
         if (loadingMessage) loadingMessage.textContent = 'Creating a new profile...';
-        profileId = await createNextDnsProfile(apiKey);
+        profileId = await createNextDnsProfile(apiKey, signal);
+        // Reuse the new profile if a later step fails and the user retries.
+        selectedProfileId = profileId;
+        lastImportSelection = profileId;
+        if (profileSelect) {
+          const option = document.createElement('option');
+          option.value = profileId;
+          option.textContent = `hapara.fail (${profileId})`;
+          profileSelect.appendChild(option);
+          profileSelect.value = profileId;
+          profileSelect.disabled = false;
+        }
       }
 
-      const rules = await fetchBlocklist();
+      const rules = await fetchBlocklist(signal);
 
       if (!isRateLimited && loadingMessage) {
         loadingMessage.textContent = 'Checking existing denylist and allowlist...';
       }
 
       const [existingDenylist, existingAllowlist] = await Promise.all([
-        fetchExistingList(apiKey, profileId, 'denylist'),
-        fetchExistingList(apiKey, profileId, 'allowlist'),
+        fetchExistingList(apiKey, profileId, 'denylist', signal),
+        fetchExistingList(apiKey, profileId, 'allowlist', signal),
       ]);
       const operations = [
         ...buildOperations(rules.denyDomains, existingDenylist, 'denylist'),
@@ -639,52 +755,96 @@ document.addEventListener('astro:page-load', () => {
 
       if (operations.length > 0) {
         updateProgress(0, operations.length);
-        await runLimited(operations, async (op) => {
-          if (op.action === 'add') {
+        await runLimited(
+          operations,
+          async (op) => {
+            if (op.action === 'add') {
+              await nextDnsRequest(
+                apiKey,
+                `/profiles/${encodeURIComponent(profileId)}/${op.listName}`,
+                {
+                  method: 'POST',
+                  body: { id: op.domain, active: true },
+                  signal,
+                }
+              );
+              return { ...op, status: 'added' };
+            }
+            try {
+              await nextDnsRequest(
+                apiKey,
+                `/profiles/${encodeURIComponent(profileId)}/${op.listName}/${encodeURIComponent(op.domain)}`,
+                { method: 'DELETE', signal }
+              );
+            } catch (e) {
+              // A missing inactive entry is already in the desired pre-add state.
+              if (!(e instanceof NextDnsRequestError) || e.status !== 404) throw e;
+            }
             await nextDnsRequest(
               apiKey,
               `/profiles/${encodeURIComponent(profileId)}/${op.listName}`,
               {
                 method: 'POST',
-                body: JSON.stringify({ id: op.domain, active: true }),
+                body: { id: op.domain, active: true },
+                signal,
               }
             );
-            return { ...op, status: 'added' };
-          }
-          try {
-            await nextDnsRequest(
-              apiKey,
-              `/profiles/${encodeURIComponent(profileId)}/${op.listName}/${encodeURIComponent(op.domain)}`,
-              { method: 'DELETE' }
-            );
-          } catch (e) {
-            if (e.message && e.message.includes('429')) throw e;
-          }
-          await nextDnsRequest(
-            apiKey,
-            `/profiles/${encodeURIComponent(profileId)}/${op.listName}`,
-            {
-              method: 'POST',
-              body: JSON.stringify({ id: op.domain, active: true }),
-            }
-          );
-          return { ...op, status: 'activated' };
-        });
+            return { ...op, status: 'activated' };
+          },
+          signal
+        );
       }
 
       stopLoadingMessages();
+      isImporting = false;
+      if (document.getElementById('nextdns-success-message')) {
+        document.getElementById('nextdns-success-message').textContent =
+          operations.length === 0
+            ? 'This NextDNS profile is already up to date.'
+            : `Updated ${operations.length} domain${operations.length === 1 ? '' : 's'} in your NextDNS profile.`;
+      }
       step3.classList.add('fade-out');
       setTimeout(() => {
+        if (signal.aborted) return;
         goToStep(step4);
         fireConfetti();
       }, 250);
     } catch (error) {
       stopLoadingMessages();
-      alert(`Import Error: ${error.message}`);
-      step3.classList.add('fade-out');
-      setTimeout(() => goToStep(step1), 250);
+      isImporting = false;
+      if (isAbortError(error)) return;
+
+      importSpinner?.setAttribute('hidden', '');
+      progressContainer?.setAttribute('hidden', '');
+      importErrorActions?.removeAttribute('hidden');
+      if (loadingMessage) {
+        loadingMessage.classList.add('nextdns-importer__status', 'is-error');
+        loadingMessage.setAttribute('role', 'alert');
+        loadingMessage.textContent = `Import paused: ${error?.message || 'Something went wrong. Please try again.'}`;
+      }
     }
   };
+
+  retryImportBtn?.addEventListener('click', () => {
+    if (!lastImportSelection) return;
+    startImport(apiKeyInput.value.trim(), lastImportSelection);
+  });
+
+  importBackBtn?.addEventListener('click', () => {
+    importErrorActions?.setAttribute('hidden', '');
+    importSpinner?.removeAttribute('hidden');
+    goToStep(step2);
+    selectedProfileId = lastImportSelection;
+    if (profileSelect) profileSelect.value = lastImportSelection;
+    updateImportButtonState();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && overlay?.isConnected && !overlay.hasAttribute('hidden')) {
+      event.preventDefault();
+      closeNextDnsModal();
+    }
+  });
 
   const fireConfetti = () => {
     const canvas = document.createElement('canvas');

@@ -304,8 +304,11 @@ import X from '@lucide/astro/icons/x';
   <!-- Modals -->
   <div class="dns-modal-overlay" id="nextdns-modal-overlay" hidden>
     <div class="dns-modal" role="dialog" aria-modal="true" aria-labelledby="nextdns-modal-title">
-      <button class="dns-modal-close" id="close-nextdns-modal" aria-label="Close modal"
-        >&times;</button
+      <button
+        class="dns-modal-close"
+        id="close-nextdns-modal"
+        aria-label="Cancel NextDNS importer"
+        title="Cancel importer">&times;</button
       >
       <h2 class="dns-modal-title" id="nextdns-modal-title">NextDNS Importer</h2>
 
@@ -346,7 +349,7 @@ import X from '@lucide/astro/icons/x';
             >. You may have to click "Generate API Key" first.
           </p>
         </div>
-        <button class="cta-button next-step-btn" id="nextdns-btn-1">
+        <button class="cta-button next-step-btn" id="nextdns-btn-1" disabled>
           Continue
           <ArrowRight size={18} aria-hidden="true" />
         </button>
@@ -367,7 +370,13 @@ import X from '@lucide/astro/icons/x';
             <option value="">Loading profiles...</option>
           </select>
           <p id="nextdns-profile-hint">Choose the profile you want to update.</p>
-          <p class="nextdns-importer__status is-error" id="nextdns-profiles-error" hidden></p>
+          <p
+            class="nextdns-importer__status is-error"
+            id="nextdns-profiles-error"
+            role="alert"
+            hidden
+          >
+          </p>
           <div class="nextdns-profile-error-actions" id="nextdns-profile-error-actions" hidden>
             <button class="retry-btn" id="nextdns-retry-profiles"> Retry profile lookup </button>
           </div>
@@ -386,9 +395,11 @@ import X from '@lucide/astro/icons/x';
       <!-- Step 3: Loading -->
       <div class="dns-step fade-in" id="nextdns-step-3" hidden>
         <div class="import-loading-view">
-          <div class="loading-spinner"></div>
+          <div class="loading-spinner" id="nextdns-import-spinner"></div>
           <h3 class="gradient-text">Working our magic...</h3>
-          <p class="dns-modal-text" id="nextdns-loading-message">Fetching the blocklist...</p>
+          <p class="dns-modal-text" id="nextdns-loading-message" aria-live="polite">
+            Fetching the blocklist...
+          </p>
           <div class="import-progress-container" id="nextdns-progress-container" hidden>
             <progress
               class="nextdns-importer__progress"
@@ -396,6 +407,10 @@ import X from '@lucide/astro/icons/x';
               value="0"
               max="100"></progress>
             <p class="eta-message" id="nextdns-eta-message">Calculating time remaining...</p>
+          </div>
+          <div class="nextdns-profile-error-actions" id="nextdns-import-error-actions" hidden>
+            <button class="retry-btn" id="nextdns-retry-import">Retry import</button>
+            <button class="retry-btn" id="nextdns-import-back">Back to profiles</button>
           </div>
         </div>
       </div>

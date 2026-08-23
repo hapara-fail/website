@@ -105,6 +105,30 @@ test.describe('WCAG 2.2 AA checks', () => {
     await expect(page.getByRole('tab', { name: /windows/i })).toBeFocused();
   });
 
+  test('NextDNS importer close button confirms cancellation', async ({ page }) => {
+    await preparePage(page);
+    await page.goto('/services/dns');
+
+    await page.getByRole('button', { name: /open nextdns importer/i }).click();
+    const importer = page.getByRole('dialog', { name: /nextdns importer/i });
+    await expect(importer).toBeVisible();
+
+    const cancelButton = page.getByRole('button', { name: /cancel nextdns importer/i });
+    let confirmationMessage = '';
+    page.once('dialog', async (dialog) => {
+      expect(dialog.type()).toBe('confirm');
+      confirmationMessage = dialog.message();
+      await dialog.dismiss();
+    });
+    await cancelButton.click();
+    expect(confirmationMessage).toMatch(/cancel the nextdns importer/i);
+    await expect(importer).toBeVisible();
+
+    page.once('dialog', async (dialog) => dialog.accept());
+    await cancelButton.click();
+    await expect(importer).toBeHidden();
+  });
+
   test('blog search and topic chips expose state', async ({ page }) => {
     await preparePage(page);
     await page.goto('/blog');

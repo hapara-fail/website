@@ -24,7 +24,7 @@ function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
   });
 }
 
-function isAllowedNextDnsPath(path: string): boolean {
+function isAllowedNextDnsRequest(path: string, method: string): boolean {
   if (!path.startsWith('/profiles')) return false;
   if (path.includes('://') || path.includes('..') || path.includes('//')) return false;
 
@@ -32,13 +32,16 @@ function isAllowedNextDnsPath(path: string): boolean {
   if (url.origin !== NEXTDNS_API_BASE) return false;
 
   const parts = url.pathname.split('/').filter(Boolean);
-  if (parts.length === 1 && parts[0] === 'profiles') return true;
+  if (parts.length === 1 && parts[0] === 'profiles') {
+    return method === 'GET' || method === 'POST';
+  }
   if (parts.length < 3 || parts[0] !== 'profiles') return false;
 
   const listName = parts[2];
   if (!ALLOWED_LISTS.has(listName)) return false;
 
-  return parts.length === 3 || parts.length === 4;
+  if (parts.length === 3) return method === 'GET' || method === 'POST';
+  return parts.length === 4 && (method === 'DELETE' || method === 'PATCH');
 }
 
 export const OPTIONS: APIRoute = () => {
@@ -68,14 +71,17 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonResponse({ errors: [{ detail: 'Missing NextDNS API key.' }] }, { status: 400 });
   }
 
-  if (!path || !isAllowedNextDnsPath(path)) {
-    return jsonResponse({ errors: [{ detail: 'Unsupported NextDNS API path.' }] }, { status: 400 });
-  }
-
   if (!ALLOWED_METHODS.has(method)) {
     return jsonResponse(
       { errors: [{ detail: 'Unsupported NextDNS API method.' }] },
       { status: 405, headers: { Allow: 'POST' } }
+    );
+  }
+
+  if (!path || !isAllowedNextDnsRequest(path, method)) {
+    return jsonResponse(
+      { errors: [{ detail: 'Unsupported NextDNS API path or method.' }] },
+      { status: 400 }
     );
   }
 
@@ -96,6 +102,7 @@ export const POST: APIRoute = async ({ request }) => {
       method,
       headers,
       body,
+      signal: request.signal,
     });
   } catch {
     return jsonResponse(
