@@ -189,10 +189,10 @@ importers:
         version: 5.3.0
       '@lucide/astro':
         specifier: ^1.34.0
-        version: 1.48.0(astro@7.3.5(@types/node@24.19.0))
+        version: 1.49.0(astro@7.3.5(@types/node@24.19.0))
       '@lucide/svelte':
         specifier: ^1.34.0
-        version: 1.48.0(svelte@5.57.1(@typescript-eslint/types@8.70.1))
+        version: 1.49.0(svelte@5.57.1(@typescript-eslint/types@8.70.1))
       astro:
         specifier: ^7.2.6
         version: 7.3.5(@types/node@24.19.0)
@@ -1336,13 +1336,13 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lucide/astro@1.48.0':
-    resolution: {integrity: sha512-BL+7lLGjjSTfdYEBd9pAB0ixhJ7M84OVzxHoY3oG3M92kX/q1UG2+znp+pqH3waxpIHF1l8Hd1QZxytqv5WH8A==}
+  '@lucide/astro@1.49.0':
+    resolution: {integrity: sha512-hBLw14Mou0Or1KmAIiC3W3XW9HVNIFIAY6j++uVe3QLTPzByJ4RwhCvatdUyCJrgNObY6lv/Skm2XMqRsS4c+A==}
     peerDependencies:
       astro: ^4 || ^5 || ^6 || ^7
 
-  '@lucide/svelte@1.48.0':
-    resolution: {integrity: sha512-bLimVDjehxu3fpu9XEUpqEkBk2sJAHAT2sVcLHhlM70EdNsXuj9ZnYENWv5xgw3+05h4i5TirAxTiTgnZZf8gw==}
+  '@lucide/svelte@1.49.0':
+    resolution: {integrity: sha512-RFH6Vx7dj6hshcBa1qJ0nKAWwkh385jJbDwF1WVg7yflC89310BsA55SEmJnaSRfr03dAyZMMLUC1EMGBu0Z0Q==}
     peerDependencies:
       svelte: ^5
 
@@ -4166,11 +4166,11 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lucide/astro@1.48.0(astro@7.3.5(@types/node@24.19.0))':
+  '@lucide/astro@1.49.0(astro@7.3.5(@types/node@24.19.0))':
     dependencies:
       astro: 7.3.5(@types/node@24.19.0)
 
-  '@lucide/svelte@1.48.0(svelte@5.57.1(@typescript-eslint/types@8.70.1))':
+  '@lucide/svelte@1.49.0(svelte@5.57.1(@typescript-eslint/types@8.70.1))':
     dependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.70.1)
 
