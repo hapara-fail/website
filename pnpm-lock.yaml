@@ -198,7 +198,7 @@ importers:
         version: 7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
       simple-icons:
         specifier: ^16.28.0
-        version: 16.34.0
+        version: 16.35.0
       svelte:
         specifier: ^5.56.10
         version: 5.57.2(@typescript-eslint/types@8.71.1)
@@ -2598,8 +2598,8 @@ packages:
     resolution: {integrity: sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ==}
     engines: {node: '>= 0.4'}
 
-  simple-icons@16.34.0:
-    resolution: {integrity: sha512-UTxKn0PVspk84B2hHF3Dqiqht1yDjJmDc/t4cO7PyCQxCMk6OjEu95pnpGjhLaGeQ4qBrGASbefTIe/+czrX7g==}
+  simple-icons@16.35.0:
+    resolution: {integrity: sha512-TCfl/2+GTrx0nCo4pEWGvxhOb8c6NsqOU1OpwjtF4lwJAthB8IYVD0fuIMjLMg6JFuG1YBO0t1iETQqJLqkoJA==}
     engines: {node: '>=0.12.18'}
 
   sisteransi@1.0.5:
@@ -5483,7 +5483,7 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  simple-icons@16.34.0: {}
+  simple-icons@16.35.0: {}
 
   sisteransi@1.0.5: {}
 
