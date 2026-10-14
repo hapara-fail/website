@@ -189,10 +189,10 @@ importers:
         version: 5.3.0
       '@lucide/astro':
         specifier: ^1.34.0
-        version: 1.55.0(astro@7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
+        version: 1.56.0(astro@7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
       '@lucide/svelte':
         specifier: ^1.34.0
-        version: 1.55.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))
+        version: 1.56.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))
       astro:
         specifier: ^7.2.6
         version: 7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
@@ -1022,13 +1022,13 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lucide/astro@1.55.0':
-    resolution: {integrity: sha512-PjTTgicKDheri7BQaO5lGO47TPwQZBE6xSs5LnwXHcXvXn+6PF1SJU/7RqPbgaXTkTq7aGwyx5YBFGiWE8HbbQ==}
+  '@lucide/astro@1.56.0':
+    resolution: {integrity: sha512-BLLnB+qj1SG60WyvkcGxSfBo0Nq2ZMjJI+39KVhgZJlQKQ4+1XOArJonl4Ktx/D2N6OcbJXNnFLsCbunf1AtXQ==}
     peerDependencies:
       astro: ^4 || ^5 || ^6 || ^7
 
-  '@lucide/svelte@1.55.0':
-    resolution: {integrity: sha512-CTxJ3qbkDK2oCW1VJYKhqAUfOongRJqc9YWmJZn8E06QpCU7i5yAnUny4h/zMNy/iYpMtGiJDRSb6AVIornuXg==}
+  '@lucide/svelte@1.56.0':
+    resolution: {integrity: sha512-YzbcmneHmPog3wAdXSl7oORgJhFc6klu8rRLMmm5uXwPQ8B0740c7dcNd3oJ72nCPvlbCW1XEmsWa4I0SDIogw==}
     peerDependencies:
       svelte: ^5
 
@@ -3658,11 +3658,11 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lucide/astro@1.55.0(astro@7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
+  '@lucide/astro@1.56.0(astro@7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
     dependencies:
       astro: 7.3.8(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
 
-  '@lucide/svelte@1.55.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))':
+  '@lucide/svelte@1.56.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))':
     dependencies:
       svelte: 5.57.2(@typescript-eslint/types@8.71.1)
 
