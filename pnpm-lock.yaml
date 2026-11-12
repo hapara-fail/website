@@ -168,10 +168,10 @@ importers:
     dependencies:
       '@astrojs/cloudflare':
         specifier: ^14.2.4
-        version: 14.4.7(@types/node@24.19.2)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(workerd@1.20261110.1)(wrangler@4.160.0(@cloudflare/workers-types@5.20261110.1)(@types/node@24.19.2))(yaml@2.9.1)
+        version: 14.4.7(@types/node@24.19.2)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(workerd@1.20261110.1)(wrangler@4.160.0(@cloudflare/workers-types@5.20261110.1)(@types/node@24.19.2))(yaml@2.9.1)
       '@astrojs/mdx':
         specifier: ^8.0.0
-        version: 8.1.4(@astrojs/markdown-satteri@0.4.8)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
+        version: 8.1.5(@astrojs/markdown-satteri@0.4.9)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
       '@astrojs/rss':
         specifier: ^4.0.19
         version: 4.0.19
@@ -180,7 +180,7 @@ importers:
         version: 3.7.4
       '@astrojs/svelte':
         specifier: ^9.0.1
-        version: 9.1.4(@types/node@24.19.2)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(svelte@5.57.3(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(yaml@2.9.1)
+        version: 9.1.5(@types/node@24.19.2)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(svelte@5.57.3(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(yaml@2.9.1)
       '@fontsource/fira-code':
         specifier: ^5.3.0
         version: 5.3.0
@@ -189,13 +189,13 @@ importers:
         version: 5.3.0
       '@lucide/astro':
         specifier: ^1.34.0
-        version: 1.65.0(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
+        version: 1.65.0(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
       '@lucide/svelte':
         specifier: ^1.34.0
         version: 1.65.0(svelte@5.57.3(@typescript-eslint/types@8.72.0))
       astro:
         specifier: ^7.2.6
-        version: 7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+        version: 7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
       simple-icons:
         specifier: ^16.28.0
         version: 16.37.0
@@ -337,11 +337,11 @@ packages:
   '@astrojs/internal-helpers@0.13.2':
     resolution: {integrity: sha512-SWiNS+OMrhwWYzJENTekHUyUCMKB+tdU6D4v1ZNIU1ZHh2mScQ8WIs0J6AJ8KPXkIrs9+EZU7Rm2CstfThyVnw==}
 
-  '@astrojs/markdown-satteri@0.4.8':
-    resolution: {integrity: sha512-IKAfvJGJ/RhXzvRkZ89kXp5woRTlRm0LVqhu8HOZAW3FAdWyZY9fYKcoVc472CJAsq8JjJjQzRkW6uaUkyufSw==}
+  '@astrojs/markdown-satteri@0.4.9':
+    resolution: {integrity: sha512-ixhXGrlvYNdVvSLU3L+ju+tGoMbRdH1iXee593xReVAcDhXJ7yvuNIV8M0KzCQAeiZo1VIleaaI9lH4RzCKYWA==}
 
-  '@astrojs/mdx@8.1.4':
-    resolution: {integrity: sha512-Fv+XoiDpYtQR0Sy4Zrgry2NLUiH0TbnuEYC9YmE/g8uUzohjomxgdVqRSewJs4mCLIt28+RyxZmyqG8H5BPaxg==}
+  '@astrojs/mdx@8.1.5':
+    resolution: {integrity: sha512-Cgt3GQOLamHGh3EGiIS/3PS9gS5PkdN7Sah552++3bKQmG3ama16c4J1AZkGROWnRPBXKd1hR1ok014nsNqKHA==}
     engines: {node: '>=22.23.4'}
     peerDependencies:
       '@astrojs/markdown-remark': ^7.3.0
@@ -358,19 +358,19 @@ packages:
   '@astrojs/rss@4.0.19':
     resolution: {integrity: sha512-e+z5wYeYtffQdHQO8c2tkSd2JEBdAuRXJV4ZEU5IxkYeE6e39woDd7nw1PH1Kk2tEYNCYuKdylnnbhGmt61awA==}
 
-  '@astrojs/runtime@0.1.0':
-    resolution: {integrity: sha512-Ips60LS4g0jEwOq7qOZqBhVl/6/nUDsk83bFbPBDYwtSfIiknaN48aSD+ycnwhBpUvbxQMQHv1ZotrCJFsJzPw==}
+  '@astrojs/runtime@0.1.1':
+    resolution: {integrity: sha512-2Tr9IJ4aQBPDFzlSLq139eWS9OZnuhL0yU2al8cCpnTE/RszygSyGIP8piBmEio1zDUaItb/+YxxsrmldUCBmg==}
 
   '@astrojs/sitemap@3.7.4':
     resolution: {integrity: sha512-LbKNC24bdUWcQf/pThB6qLlSqHojxGjZDURIzFocY8rlWnAn2t74nnhnK6S5x0NHriHoAduLEpVjRykmeGiVvA==}
 
-  '@astrojs/svelte-renderer@0.1.0':
-    resolution: {integrity: sha512-A9VIdjRVSTDPOl/fsJf6+Nc8P8WSAuU6IyRKje6FlMPKx6sezoyE8IZ5/BIt167eje/yGF//pM1+HrIVoYTv5w==}
+  '@astrojs/svelte-renderer@0.1.1':
+    resolution: {integrity: sha512-8jGP/l0/Ql9UYM37lf5fm/9Ir+bz/PDQDpteuQup+6+oBHOBhhY3jrbjLENl4e+Emac5rUocL1PFinhZCrFdXA==}
     peerDependencies:
       svelte: ^5.43.6
 
-  '@astrojs/svelte@9.1.4':
-    resolution: {integrity: sha512-tjK5loWRNXt/lIE/DKbXbG3QS5GhiaWzicQK5HJynPqMjUDVS70paR1UZMC2BM53PbbhTKkcirZPFSbvNW39ag==}
+  '@astrojs/svelte@9.1.5':
+    resolution: {integrity: sha512-mRyI7RNOjmfsLKFp4f1SoUD7Z718tzLSsgriCCYcXmeXrQAmVcSro+3EdRO8b7Ixj57pDKyrOsNBWaMB+lKp+g==}
     engines: {node: '>=22.23.4'}
     peerDependencies:
       astro: ^7.0.0
@@ -384,8 +384,8 @@ packages:
   '@astrojs/underscore-redirects@1.0.4':
     resolution: {integrity: sha512-sD3bn7i2yC+ocxlhCTshdg3gUM471Nag3wgyHilA+kpmufokvmUu1p5Mw5GT5Xp8SPC1Nlq0BJAgV/lslnWvRw==}
 
-  '@astrojs/vite-plugin-astro@0.1.1':
-    resolution: {integrity: sha512-JiRu3n9jWRFwSuarVKFYFQEqxAuy+k5Hqyr0IMmafjpd75tiPyQ4W9MTSrnjsqNs0SYcS6vGNXZ5CTwrXNSglQ==}
+  '@astrojs/vite-plugin-astro@0.1.2':
+    resolution: {integrity: sha512-tDlT8Gp6fX3Km7yGeZSG1xaPfVhcXgmYHp/lKcXf3Rc3fZF4NTeWMwtXVbJy40lvrD7iDxpXN7vAHH2tQSZGWg==}
     peerDependencies:
       vite: ^8.3.3
 
@@ -1369,8 +1369,8 @@ packages:
     resolution: {integrity: sha512-WavQUarfgwSbpCq4xsdcIBdX5KArfI2d6DD8EIloJIMthnB1508iNpx4C77EhUyMd03LpEt8HAPzwF/cG0V39g==}
     engines: {node: ^22.22.3 || ^24.16.0 || >=26.3.0}
 
-  astro@7.4.10:
-    resolution: {integrity: sha512-NQfkQCCGZz3pzUy04tN3iRehKZq0S+FcjnrBwLTmVNZC6+BUAzMYxmdzLpf6Dovb6zVjMQJeMziKI4hjX3BQlw==}
+  astro@7.4.11:
+    resolution: {integrity: sha512-c8gibLFCnzuXCXqsvTiMXbjCnuIjxGhWw6TO5n11cXzNrw36P3ZgBzsOoRUR4raG1r6cKWeE5oXQu4F3GCBofg==}
     engines: {node: '>=22.23.4', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     peerDependencies:
@@ -3037,12 +3037,12 @@ packages:
 
 snapshots:
 
-  '@astrojs/cloudflare@14.4.7(@types/node@24.19.2)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(workerd@1.20261110.1)(wrangler@4.160.0(@cloudflare/workers-types@5.20261110.1)(@types/node@24.19.2))(yaml@2.9.1)':
+  '@astrojs/cloudflare@14.4.7(@types/node@24.19.2)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(workerd@1.20261110.1)(wrangler@4.160.0(@cloudflare/workers-types@5.20261110.1)(@types/node@24.19.2))(yaml@2.9.1)':
     dependencies:
       '@astrojs/internal-helpers': 0.13.2
       '@astrojs/underscore-redirects': 1.0.4
       '@cloudflare/vite-plugin': 1.67.0(@types/node@24.19.2)(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(workerd@1.20261110.1)(wrangler@4.160.0(@cloudflare/workers-types@5.20261110.1)(@types/node@24.19.2))
-      astro: 7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
       piccolore: 0.1.3
       prismjs: 1.30.0
       vite: 8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
@@ -3126,18 +3126,18 @@ snapshots:
       unified: 11.0.5
       yaml: 2.9.1
 
-  '@astrojs/markdown-satteri@0.4.8':
+  '@astrojs/markdown-satteri@0.4.9':
     dependencies:
       '@astrojs/internal-helpers': 0.13.2
       '@astrojs/prism': 4.1.2
       github-slugger: 2.0.0
       satteri: 0.11.7
 
-  '@astrojs/mdx@8.1.4(@astrojs/markdown-satteri@0.4.8)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
+  '@astrojs/mdx@8.1.5(@astrojs/markdown-satteri@0.4.9)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
     dependencies:
       '@astrojs/internal-helpers': 0.13.2
-      '@astrojs/markdown-satteri': 0.4.8
-      astro: 7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+      '@astrojs/markdown-satteri': 0.4.9
+      astro: 7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
       es-module-lexer: 3.0.4
 
   '@astrojs/prism@4.1.2':
@@ -3150,7 +3150,7 @@ snapshots:
       piccolore: 0.1.3
       zod: 4.6.7
 
-  '@astrojs/runtime@0.1.0':
+  '@astrojs/runtime@0.1.1':
     dependencies:
       '@oslojs/encoding': 1.1.0
       clsx: 2.1.1
@@ -3160,20 +3160,20 @@ snapshots:
       sitemap: 9.0.1
       zod: 4.6.7
 
-  '@astrojs/svelte-renderer@0.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.0))(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
+  '@astrojs/svelte-renderer@0.1.1(svelte@5.57.3(@typescript-eslint/types@8.72.0))(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
     dependencies:
-      '@astrojs/runtime': 0.1.0
+      '@astrojs/runtime': 0.1.1
       svelte: 5.57.3(@typescript-eslint/types@8.72.0)
       vitefu: 1.1.3(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
     transitivePeerDependencies:
       - vite
 
-  '@astrojs/svelte@9.1.4(@types/node@24.19.2)(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(svelte@5.57.3(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(yaml@2.9.1)':
+  '@astrojs/svelte@9.1.5(@types/node@24.19.2)(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(esbuild@0.28.2)(svelte@5.57.3(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(yaml@2.9.1)':
     dependencies:
       '@astrojs/internal-helpers': 0.13.2
-      '@astrojs/svelte-renderer': 0.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.0))(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
+      '@astrojs/svelte-renderer': 0.1.1(svelte@5.57.3(@typescript-eslint/types@8.72.0))(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
       '@sveltejs/vite-plugin-svelte': 7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.0))(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
-      astro: 7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
       svelte: 5.57.3(@typescript-eslint/types@8.72.0)
       svelte2tsx: 0.7.63(svelte@5.57.3(@typescript-eslint/types@8.72.0))(typescript@6.0.3)
       typescript: 6.0.3
@@ -3201,11 +3201,11 @@ snapshots:
 
   '@astrojs/underscore-redirects@1.0.4': {}
 
-  '@astrojs/vite-plugin-astro@0.1.1(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
+  '@astrojs/vite-plugin-astro@0.1.2(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
     dependencies:
       '@astrojs/compiler-rs': 0.5.2
       '@astrojs/internal-helpers': 0.13.2
-      '@astrojs/runtime': 0.1.0
+      '@astrojs/runtime': 0.1.1
       common-ancestor-path: 2.0.0
       devalue: 6.0.3
       magic-string: 1.4.5
@@ -3657,9 +3657,9 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lucide/astro@1.65.0(astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
+  '@lucide/astro@1.65.0(astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))':
     dependencies:
-      astro: 7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
 
   '@lucide/svelte@1.65.0(svelte@5.57.3(@typescript-eslint/types@8.72.0))':
     dependencies:
@@ -4037,14 +4037,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro@7.4.10(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1):
+  astro@7.4.11(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1):
     dependencies:
       '@astrojs/compiler-rs': 0.5.2
       '@astrojs/internal-helpers': 0.13.2
-      '@astrojs/markdown-satteri': 0.4.8
-      '@astrojs/runtime': 0.1.0
+      '@astrojs/markdown-satteri': 0.4.9
+      '@astrojs/runtime': 0.1.1
       '@astrojs/telemetry': 3.4.2
-      '@astrojs/vite-plugin-astro': 0.1.1(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
+      '@astrojs/vite-plugin-astro': 0.1.2(vite@8.3.7(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))
       '@capsizecss/unpack': 4.0.1
       '@clack/prompts': 1.8.1
       '@oslojs/encoding': 1.1.0
